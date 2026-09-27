@@ -1,0 +1,34 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Python: sync",
+      "type": "process",
+      "command": "uv",
+      "args": ["sync", "--locked"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Python: format",
+      "type": "process",
+      "command": "uv",
+      "args": ["run", "--locked", "ruff", "format", "."],
+      "problemMatcher": []
+    },
+    {
+      "label": "Python: lint",
+      "type": "process",
+      "command": "uv",
+      "args": ["run", "--locked", "ruff", "check", "."],
+      "problemMatcher": []
+    },
+    {
+      "label": "Python: test",
+      "type": "process",
+      "command": "uv",
+      "args": ["run", "--locked", "pytest"],
+      "group": "test",
+      "problemMatcher": []
+    }
+  ]
+}

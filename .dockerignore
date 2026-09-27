@@ -1,0 +1,9 @@
+**
+!Dockerfile
+!pyproject.toml
+!uv.lock
+!.python-version
+!app/
+!app/**
+**/__pycache__/
+**/*.py[cod]
