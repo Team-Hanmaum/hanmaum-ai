@@ -1,9 +1,15 @@
 from fastapi import FastAPI
 
+from app.api import router
 from app.config import Settings
+from app.errors import install_error_handlers
+from app.providers import AnalysisProvider, create_provider
+from app.services import AnalysisService
 
 
-def create_app(settings: Settings | None = None) -> FastAPI:
+def create_app(
+    settings: Settings | None = None, provider: AnalysisProvider | None = None
+) -> FastAPI:
     settings = settings if settings is not None else Settings()
     public_docs = settings.app_env != "prod"
     app = FastAPI(
@@ -15,9 +21,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         openapi_url="/openapi.json" if public_docs else None,
     )
     app.state.settings = settings
-
-    @app.get("/health", tags=["health"])
-    async def health() -> dict[str, str]:
-        return {"status": "UP"}
-
+    app.state.analysis_service = AnalysisService(
+        provider if provider is not None else create_provider(settings),
+        settings.analysis_timeout_seconds,
+    )
+    install_error_handlers(app)
+    app.include_router(router)
     return app

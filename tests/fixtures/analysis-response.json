@@ -1,0 +1,15 @@
+{
+  "requestId": "00000000-0000-0000-0000-000000000001",
+  "suggestions": [
+    {
+      "operation": "UPDATE",
+      "type": "SCHEDULE",
+      "targetItemId": "00000000-0000-0000-0000-000000000002",
+      "expectedVersion": 2,
+      "candidateItemIds": [],
+      "title": "재진 일정 변경",
+      "evidence": "20일로 바뀌었대",
+      "changes": { "date": "2026-10-20" }
+    }
+  ]
+}

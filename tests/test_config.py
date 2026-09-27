@@ -1,29 +1,34 @@
 import pytest
-from fastapi.testclient import TestClient
+from httpx import ASGITransport, AsyncClient
 from pydantic import ValidationError
 
 from app.config import Settings
 from app.main import create_app
 
 
-def test_health_without_database_or_external_model():
+@pytest.mark.anyio
+async def test_health_without_database_or_external_model():
     app = create_app(Settings(_env_file=None, app_env="test", ai_provider="disabled"))
-    with TestClient(app) as client:
-        assert client.get("/health").json() == {"status": "UP"}
-        assert client.get("/docs").status_code == 200
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
+        assert (await client.get("/health")).json() == {"status": "UP"}
+        assert (await client.get("/docs")).status_code == 200
+        assert (await client.get("/health/ready")).status_code == 503
 
 
-def test_production_hides_api_documentation():
+@pytest.mark.anyio
+async def test_production_hides_api_documentation():
     settings = Settings(
         _env_file=None,
         app_env="prod",
         ai_provider="disabled",
         ai_internal_api_key="test-only-production-key-32-characters",
     )
-    with TestClient(create_app(settings)) as client:
-        assert client.get("/health").status_code == 200
-        assert client.get("/docs").status_code == 404
-        assert client.get("/openapi.json").status_code == 404
+    async with AsyncClient(
+        transport=ASGITransport(app=create_app(settings)), base_url="http://test"
+    ) as client:
+        assert (await client.get("/health")).status_code == 200
+        assert (await client.get("/docs")).status_code == 404
+        assert (await client.get("/openapi.json")).status_code == 404
 
 
 @pytest.mark.parametrize("api_key", ["", "local-development-only", "short"])
