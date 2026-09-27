@@ -1,0 +1,12 @@
+#!/bin/sh
+set -eu
+
+if git diff --cached --name-only --diff-filter=ACMR |
+  grep -Eq '(\.py$|^pyproject\.toml$|^uv\.lock$|^\.githooks/)'; then
+  if ! command -v uv >/dev/null 2>&1; then
+    echo 'uv is required. Install uv and reopen the terminal before committing.' >&2
+    exit 1
+  fi
+  uv run --locked ruff check .
+  uv run --locked ruff format --check .
+fi

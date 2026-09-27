@@ -26,11 +26,7 @@ class Settings(BaseSettings):
             raise ValueError("AI_INTERNAL_API_KEY must not be empty")
         if self.app_env == "prod":
             if key == LOCAL_API_KEY or len(key) < 32:
-                raise ValueError(
-                    "Production requires a separate API key of at least 32 characters"
-                )
+                raise ValueError("Production requires a separate API key of at least 32 characters")
             if self.ai_provider == "stub":
-                raise ValueError(
-                    "The stub provider is restricted to local/test environments"
-                )
+                raise ValueError("The stub provider is restricted to local/test environments")
         return self
