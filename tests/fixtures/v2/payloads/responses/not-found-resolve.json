@@ -1,0 +1,23 @@
+{
+  "requestId": "aaaaaaaa-0000-4000-8000-000000000001",
+  "suggestions": [
+    {
+      "operation": "RESOLVE",
+      "type": "QUESTION",
+      "targetItemId": null,
+      "expectedVersion": null,
+      "candidateItemIds": [],
+      "title": "기록 내용 검토",
+      "evidence": "준비물은 수건입니다.",
+      "changes": {
+        "answerText": "수건입니다."
+      },
+      "clearFields": [],
+      "relationKind": "UNDETERMINED",
+      "reviewReasons": [
+        "TARGET_NOT_FOUND"
+      ],
+      "basisReferences": []
+    }
+  ]
+}

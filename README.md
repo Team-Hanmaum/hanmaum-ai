@@ -205,12 +205,29 @@ AI는 Spring이 보낸 원문과 후보를 바탕으로 제안만 반환합니�
 이 레포는 DB를 직접 읽거나 수정하지 않습니다.
 분석 계약과 제약은 [API 계약 문서](docs/ai-contract.md)를 참고합니다.
 
+v2는 [확정 계약](docs/ai-contract-v2.md)과 [공통 fixture](tests/fixtures/v2/README.md)를
+먼저 준비한 단계입니다. 현재 실행 API와 기존 v1 fixture는 유지하며, v2 API·수신 기록 저장소와
+BE 저장·조회 구현은 후속 작업입니다. 공통 fixture 검사는 실제 모델 품질이나 양쪽 연동 완료를
+의미하지 않습니다.
+
+공통 데이터의 파일 목록·SHA-256·revision 및 사례 일관성을 확인합니다.
+
+```bash
+uv run --locked python scripts/fixture_manifest.py
+uv run --locked pytest tests/test_v2_fixture_bundle.py
+```
+
+BE에는 동일 revision의 `tests/fixtures/v2/` 전체를 전달합니다. 사례 형식, 원문 JSON 전송,
+동시성·저장·조회 시나리오의 실행 책임과 동기화 방법은 fixture README에 정리되어 있습니다.
+
 ## 개발 기준
 
 - 개발 기준 브랜치: `dev`
 - 배포 기준 브랜치: `main`
 - 작업 브랜치: `타입/이슈번호-기능명`
 - 커밋: `타입: 변경 내용 (#이슈번호)` 및 상세 본문
-- PR: `dev` 대상으로 생성하고 팀원 2명 이상의 승인 후 병합
+- PR: `dev` 대상으로 생성하고 팀원 1명 이상의 승인과 필수 검사 충족 후 병합
+
+이슈·브랜치·커밋·PR 및 AI 개발 세부 규칙은 [AGENTS.md](AGENTS.md)를 따릅니다.
 
 분석 결과는 사용자 확인 전 제안이며, 사용자 권한과 DB 변경은 Spring에서 담당합니다.

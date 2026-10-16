@@ -1,0 +1,88 @@
+{
+  "requestId": "aaaaaaaa-0000-4000-8000-000000000001",
+  "suggestions": [
+    {
+      "operation": "CREATE",
+      "type": "SCHEDULE",
+      "targetItemId": null,
+      "expectedVersion": null,
+      "candidateItemIds": [],
+      "title": "기록 내용 검토",
+      "evidence": "정기 방문을 10월 21일 오전 10시로 바꿔 주세요.",
+      "changes": {
+        "description": "새 기록 확인"
+      },
+      "clearFields": [],
+      "relationKind": "NEW",
+      "reviewReasons": [],
+      "basisReferences": []
+    },
+    {
+      "operation": "UPDATE",
+      "type": "SCHEDULE",
+      "targetItemId": "aaaaaaaa-0000-4000-8000-000000000100",
+      "expectedVersion": 3,
+      "candidateItemIds": [],
+      "title": "기록 내용 검토",
+      "evidence": "정기 방문을 10월 21일 오전 10시로 바꿔 주세요.",
+      "changes": {
+        "description": "새 기록 확인"
+      },
+      "clearFields": [],
+      "relationKind": "RELATED",
+      "reviewReasons": [],
+      "basisReferences": [
+        {
+          "itemId": "aaaaaaaa-0000-4000-8000-000000000100",
+          "basisIds": [
+            "aaaaaaaa-0000-4000-8000-000000000200"
+          ]
+        }
+      ]
+    },
+    {
+      "operation": "RESOLVE",
+      "type": "QUESTION",
+      "targetItemId": "aaaaaaaa-0000-4000-8000-000000000102",
+      "expectedVersion": 3,
+      "candidateItemIds": [],
+      "title": "기록 내용 검토",
+      "evidence": "준비물은 수건입니다.",
+      "changes": {
+        "answerText": "수건입니다."
+      },
+      "clearFields": [],
+      "relationKind": "RELATED",
+      "reviewReasons": [],
+      "basisReferences": [
+        {
+          "itemId": "aaaaaaaa-0000-4000-8000-000000000102",
+          "basisIds": [
+            "aaaaaaaa-0000-4000-8000-000000000202"
+          ]
+        }
+      ]
+    },
+    {
+      "operation": "LINK_EVIDENCE",
+      "type": "OBSERVATION",
+      "targetItemId": "aaaaaaaa-0000-4000-8000-000000000103",
+      "expectedVersion": 3,
+      "candidateItemIds": [],
+      "title": "기록 내용 검토",
+      "evidence": "정기 방문을 10월 21일 오전 10시로 바꿔 주세요.",
+      "changes": {},
+      "clearFields": [],
+      "relationKind": "DUPLICATE",
+      "reviewReasons": [],
+      "basisReferences": [
+        {
+          "itemId": "aaaaaaaa-0000-4000-8000-000000000103",
+          "basisIds": [
+            "aaaaaaaa-0000-4000-8000-000000000203"
+          ]
+        }
+      ]
+    }
+  ]
+}

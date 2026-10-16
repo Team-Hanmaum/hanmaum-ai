@@ -1,0 +1,28 @@
+{
+  "requestId": "aaaaaaaa-0000-4000-8000-000000000001",
+  "suggestions": [
+    {
+      "operation": "UPDATE",
+      "type": "TASK",
+      "targetItemId": "aaaaaaaa-0000-4000-8000-000000000101",
+      "expectedVersion": 3,
+      "candidateItemIds": [],
+      "title": "기록 내용 검토",
+      "evidence": "준비물 챙기기 내용을 바꿔 주세요. 새 내용은 아직 모르겠습니다.",
+      "changes": {},
+      "clearFields": [],
+      "relationKind": "UNDETERMINED",
+      "reviewReasons": [
+        "VALUE_UNCLEAR"
+      ],
+      "basisReferences": [
+        {
+          "itemId": "aaaaaaaa-0000-4000-8000-000000000101",
+          "basisIds": [
+            "aaaaaaaa-0000-4000-8000-000000000201"
+          ]
+        }
+      ]
+    }
+  ]
+}

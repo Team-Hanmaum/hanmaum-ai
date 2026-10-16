@@ -1,0 +1,153 @@
+{
+  "requestId": "aaaaaaaa-0000-4000-8000-000000000001",
+  "careSpaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+  "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+  "content": "정기 방문을 10월 21일 오전 10시로 바꿔 주세요. 준비물은 수건입니다. 담당자는 가족이 정해주세요. 방문 장소를 지워 주세요. 산책을 했습니다. 방문 안내를 받았습니다.",
+  "recordedAt": "2026-10-16T09:00:00.123456+09:00",
+  "timezone": "Asia/Seoul",
+  "candidates": [
+    {
+      "itemId": "aaaaaaaa-0000-4000-8000-000000000100",
+      "version": 3,
+      "type": "SCHEDULE",
+      "currentValues": {
+        "title": "정기 방문",
+        "description": null,
+        "status": "SCHEDULED",
+        "scheduledDate": "2026-10-20",
+        "scheduledTime": "09:00",
+        "location": "가온센터"
+      },
+      "basis": [
+        {
+          "basisId": "aaaaaaaa-0000-4000-8000-000000000200",
+          "kind": "SOURCE_RECORD",
+          "text": "aaaaaaaa-0000-4000-8000-000000000800"
+        },
+        {
+          "basisId": "aaaaaaaa-0000-4000-8000-000000000300",
+          "kind": "DIRECT_INPUT",
+          "text": "{\"title\":\"정기 방문\",\"description\":\"최초 직접 입력\"}"
+        }
+      ]
+    },
+    {
+      "itemId": "aaaaaaaa-0000-4000-8000-000000000101",
+      "version": 3,
+      "type": "TASK",
+      "currentValues": {
+        "title": "준비물 챙기기",
+        "description": null,
+        "status": "NOT_STARTED",
+        "dueDate": null,
+        "assigneeMembershipId": "aaaaaaaa-0000-4000-8000-000000000900"
+      },
+      "basis": [
+        {
+          "basisId": "aaaaaaaa-0000-4000-8000-000000000201",
+          "kind": "SOURCE_RECORD",
+          "text": "기존 기록: 준비물 챙기기"
+        },
+        {
+          "basisId": "aaaaaaaa-0000-4000-8000-000000000301",
+          "kind": "DIRECT_INPUT",
+          "text": "{\"title\":\"준비물 챙기기\",\"description\":\"최초 직접 입력\"}"
+        }
+      ]
+    },
+    {
+      "itemId": "aaaaaaaa-0000-4000-8000-000000000102",
+      "version": 3,
+      "type": "QUESTION",
+      "currentValues": {
+        "title": "준비물 확인",
+        "description": null,
+        "status": "CONFIRMED",
+        "answerText": null
+      },
+      "basis": [
+        {
+          "basisId": "aaaaaaaa-0000-4000-8000-000000000202",
+          "kind": "SOURCE_RECORD",
+          "text": "기존 기록: 준비물 확인"
+        },
+        {
+          "basisId": "aaaaaaaa-0000-4000-8000-000000000302",
+          "kind": "DIRECT_INPUT",
+          "text": "{\"title\":\"준비물 확인\",\"description\":\"최초 직접 입력\"}"
+        }
+      ]
+    },
+    {
+      "itemId": "aaaaaaaa-0000-4000-8000-000000000103",
+      "version": 3,
+      "type": "OBSERVATION",
+      "currentValues": {
+        "title": "산책 기록",
+        "description": null,
+        "observedDate": null,
+        "observedTimeText": null
+      },
+      "basis": [
+        {
+          "basisId": "aaaaaaaa-0000-4000-8000-000000000203",
+          "kind": "SOURCE_RECORD",
+          "text": "기존 기록: 산책 기록"
+        },
+        {
+          "basisId": "aaaaaaaa-0000-4000-8000-000000000303",
+          "kind": "DIRECT_INPUT",
+          "text": "{\"title\":\"산책 기록\",\"description\":\"최초 직접 입력\"}"
+        }
+      ]
+    },
+    {
+      "itemId": "aaaaaaaa-0000-4000-8000-000000000104",
+      "version": 3,
+      "type": "GUIDANCE",
+      "currentValues": {
+        "title": "방문 안내",
+        "description": null,
+        "sourceName": null,
+        "receivedDate": null
+      },
+      "basis": [
+        {
+          "basisId": "aaaaaaaa-0000-4000-8000-000000000204",
+          "kind": "SOURCE_RECORD",
+          "text": "기존 기록: 방문 안내"
+        },
+        {
+          "basisId": "aaaaaaaa-0000-4000-8000-000000000304",
+          "kind": "DIRECT_INPUT",
+          "text": "{\"title\":\"방문 안내\",\"description\":\"최초 직접 입력\"}"
+        }
+      ]
+    },
+    {
+      "itemId": "aaaaaaaa-0000-4000-8000-000000000105",
+      "version": 3,
+      "type": "SCHEDULE",
+      "currentValues": {
+        "title": "다른 방문",
+        "description": null,
+        "status": "SCHEDULED",
+        "scheduledDate": "2026-10-22",
+        "scheduledTime": null,
+        "location": null
+      },
+      "basis": [
+        {
+          "basisId": "aaaaaaaa-0000-4000-8000-000000000205",
+          "kind": "SOURCE_RECORD",
+          "text": "기존 기록: 다른 방문"
+        },
+        {
+          "basisId": "aaaaaaaa-0000-4000-8000-000000000305",
+          "kind": "DIRECT_INPUT",
+          "text": "{\"title\":\"다른 방문\",\"description\":\"최초 직접 입력\"}"
+        }
+      ]
+    }
+  ]
+}

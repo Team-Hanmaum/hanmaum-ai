@@ -1,0 +1,2137 @@
+[
+  {
+    "caseId": "B-same-body",
+    "category": "RECEIPT",
+    "purpose": "최초 요청 이후 같은 본문 재수신 차단",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 200,
+            "providerCalls": 1,
+            "bodyFile": "payloads/responses/update.json"
+          },
+          "be": {
+            "state": "COMPLETED",
+            "failureCode": null,
+            "storedProposalCount": 1,
+            "queryHttpStatus": 200
+          }
+        }
+      },
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 409,
+            "providerCalls": 0,
+            "code": "REQUEST_ALREADY_RECEIVED",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_DUPLICATE_REQUEST",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 1
+    }
+  },
+  {
+    "caseId": "B-existing-succeeded",
+    "category": "RECEIPT",
+    "purpose": "보존 기록의 실행 상태와 무관하게 차단",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 409,
+            "providerCalls": 0,
+            "code": "REQUEST_ALREADY_RECEIVED",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_DUPLICATE_REQUEST",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 0
+    },
+    "seedReceipt": {
+      "contractVersion": "v2",
+      "requestBodyFile": "payloads/requests/base.json",
+      "executionState": "SUCCEEDED",
+      "canonicalizationVersion": "fixture-rule-1",
+      "hmacKeyVersion": "fixture-key-1"
+    }
+  },
+  {
+    "caseId": "B-existing-failed",
+    "category": "RECEIPT",
+    "purpose": "보존 기록의 실행 상태와 무관하게 차단",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 409,
+            "providerCalls": 0,
+            "code": "REQUEST_ALREADY_RECEIVED",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_DUPLICATE_REQUEST",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 0
+    },
+    "seedReceipt": {
+      "contractVersion": "v2",
+      "requestBodyFile": "payloads/requests/base.json",
+      "executionState": "FAILED",
+      "canonicalizationVersion": "fixture-rule-1",
+      "hmacKeyVersion": "fixture-key-1"
+    }
+  },
+  {
+    "caseId": "B-existing-in_progress",
+    "category": "RECEIPT",
+    "purpose": "보존 기록의 실행 상태와 무관하게 차단",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 409,
+            "providerCalls": 0,
+            "code": "REQUEST_ALREADY_RECEIVED",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_DUPLICATE_REQUEST",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 0
+    },
+    "seedReceipt": {
+      "contractVersion": "v2",
+      "requestBodyFile": "payloads/requests/base.json",
+      "executionState": "IN_PROGRESS",
+      "canonicalizationVersion": "fixture-rule-1",
+      "hmacKeyVersion": "fixture-key-1"
+    }
+  },
+  {
+    "caseId": "B-restart",
+    "category": "RECEIPT",
+    "purpose": "재시작 후에도 보존된 수신 기록으로 차단",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 200,
+            "providerCalls": 1,
+            "bodyFile": "payloads/responses/update.json"
+          },
+          "be": {
+            "state": "COMPLETED",
+            "failureCode": null,
+            "storedProposalCount": 1,
+            "queryHttpStatus": 200
+          }
+        }
+      },
+      {
+        "action": "RESTART_AI_PRESERVE_RECEIPTS"
+      },
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 409,
+            "providerCalls": 0,
+            "code": "REQUEST_ALREADY_RECEIVED",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_DUPLICATE_REQUEST",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 1
+    }
+  },
+  {
+    "caseId": "B-store-unavailable-read",
+    "category": "RECEIPT",
+    "purpose": "수신 기록 READ 실패 시 모델 호출 0회",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "FAIL_RECEIPT_STORE",
+        "operation": "READ"
+      },
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 503,
+            "providerCalls": 0,
+            "code": "RECEIPT_STORE_UNAVAILABLE",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_RECEIPT_STORE_UNAVAILABLE",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 0
+    }
+  },
+  {
+    "caseId": "B-store-unavailable-register",
+    "category": "RECEIPT",
+    "purpose": "수신 기록 REGISTER 실패 시 모델 호출 0회",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "FAIL_RECEIPT_STORE",
+        "operation": "REGISTER"
+      },
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 503,
+            "providerCalls": 0,
+            "code": "RECEIPT_STORE_UNAVAILABLE",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_RECEIPT_STORE_UNAVAILABLE",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 0
+    }
+  },
+  {
+    "caseId": "B-concurrent",
+    "category": "RECEIPT",
+    "purpose": "서로 다른 AI 인스턴스의 동시 수신 중 최초 등록만 호출",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT_CONCURRENT",
+        "instanceCount": 2,
+        "requests": [
+          {
+            "method": "POST",
+            "path": "/v2/analyses",
+            "headers": {
+              "Content-Type": "application/json",
+              "X-Internal-Api-Key": "fixture-only-not-a-secret",
+              "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+            },
+            "bodyFile": "payloads/requests/base.json"
+          },
+          {
+            "method": "POST",
+            "path": "/v2/analyses",
+            "headers": {
+              "Content-Type": "application/json",
+              "X-Internal-Api-Key": "fixture-only-not-a-secret",
+              "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+            },
+            "bodyFile": "payloads/requests/base.json"
+          }
+        ],
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "aiResults": [
+            {
+              "httpStatus": 200,
+              "providerCalls": 1,
+              "bodyFile": "payloads/responses/update.json"
+            },
+            {
+              "httpStatus": 409,
+              "providerCalls": 0,
+              "code": "REQUEST_ALREADY_RECEIVED",
+              "messagePolicy": "NON_EMPTY_SANITIZED"
+            }
+          ],
+          "orderIndependent": true
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 1,
+      "receiptCount": 1,
+      "be": {
+        "assertion": "PER_RESPONSE_MAPPING",
+        "errorCode": "AI_DUPLICATE_REQUEST"
+      }
+    }
+  },
+  {
+    "caseId": "B-compare-uuid-case",
+    "category": "RECEIPT",
+    "purpose": "동일 본문 비교: uuid-case",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 200,
+            "providerCalls": 1,
+            "bodyFile": "payloads/responses/update.json"
+          },
+          "be": {
+            "state": "COMPLETED",
+            "failureCode": null,
+            "storedProposalCount": 1,
+            "queryHttpStatus": 200
+          }
+        }
+      },
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/compare-uuid-case.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 409,
+            "providerCalls": 0,
+            "code": "REQUEST_ALREADY_RECEIVED",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_DUPLICATE_REQUEST",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 1
+    },
+    "bodyEquality": true
+  },
+  {
+    "caseId": "B-compare-same-instant",
+    "category": "RECEIPT",
+    "purpose": "동일 본문 비교: same-instant",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 200,
+            "providerCalls": 1,
+            "bodyFile": "payloads/responses/update.json"
+          },
+          "be": {
+            "state": "COMPLETED",
+            "failureCode": null,
+            "storedProposalCount": 1,
+            "queryHttpStatus": 200
+          }
+        }
+      },
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/compare-same-instant.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 409,
+            "providerCalls": 0,
+            "code": "REQUEST_ALREADY_RECEIVED",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_DUPLICATE_REQUEST",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 1
+    },
+    "bodyEquality": true
+  },
+  {
+    "caseId": "B-compare-content-space",
+    "category": "RECEIPT",
+    "purpose": "동일 본문 비교: content-space",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 200,
+            "providerCalls": 1,
+            "bodyFile": "payloads/responses/update.json"
+          },
+          "be": {
+            "state": "COMPLETED",
+            "failureCode": null,
+            "storedProposalCount": 1,
+            "queryHttpStatus": 200
+          }
+        }
+      },
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/compare-content-space.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 409,
+            "providerCalls": 0,
+            "code": "REQUEST_ID_REUSED",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_REQUEST_ID_REUSED",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 1
+    },
+    "bodyEquality": false
+  },
+  {
+    "caseId": "B-compare-content-newline",
+    "category": "RECEIPT",
+    "purpose": "동일 본문 비교: content-newline",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 200,
+            "providerCalls": 1,
+            "bodyFile": "payloads/responses/update.json"
+          },
+          "be": {
+            "state": "COMPLETED",
+            "failureCode": null,
+            "storedProposalCount": 1,
+            "queryHttpStatus": 200
+          }
+        }
+      },
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/compare-content-newline.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 409,
+            "providerCalls": 0,
+            "code": "REQUEST_ID_REUSED",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_REQUEST_ID_REUSED",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 1
+    },
+    "bodyEquality": false
+  },
+  {
+    "caseId": "B-compare-content-character",
+    "category": "RECEIPT",
+    "purpose": "동일 본문 비교: content-character",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 200,
+            "providerCalls": 1,
+            "bodyFile": "payloads/responses/update.json"
+          },
+          "be": {
+            "state": "COMPLETED",
+            "failureCode": null,
+            "storedProposalCount": 1,
+            "queryHttpStatus": 200
+          }
+        }
+      },
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/compare-content-character.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 409,
+            "providerCalls": 0,
+            "code": "REQUEST_ID_REUSED",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_REQUEST_ID_REUSED",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 1
+    },
+    "bodyEquality": false
+  },
+  {
+    "caseId": "B-compare-basis-space",
+    "category": "RECEIPT",
+    "purpose": "동일 본문 비교: basis-space",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 200,
+            "providerCalls": 1,
+            "bodyFile": "payloads/responses/update.json"
+          },
+          "be": {
+            "state": "COMPLETED",
+            "failureCode": null,
+            "storedProposalCount": 1,
+            "queryHttpStatus": 200
+          }
+        }
+      },
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/compare-basis-space.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 409,
+            "providerCalls": 0,
+            "code": "REQUEST_ID_REUSED",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_REQUEST_ID_REUSED",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 1
+    },
+    "bodyEquality": false
+  },
+  {
+    "caseId": "B-compare-candidate-order",
+    "category": "RECEIPT",
+    "purpose": "동일 본문 비교: candidate-order",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 200,
+            "providerCalls": 1,
+            "bodyFile": "payloads/responses/update.json"
+          },
+          "be": {
+            "state": "COMPLETED",
+            "failureCode": null,
+            "storedProposalCount": 1,
+            "queryHttpStatus": 200
+          }
+        }
+      },
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/compare-candidate-order.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 409,
+            "providerCalls": 0,
+            "code": "REQUEST_ID_REUSED",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_REQUEST_ID_REUSED",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 1
+    },
+    "bodyEquality": false
+  },
+  {
+    "caseId": "B-compare-basis-order",
+    "category": "RECEIPT",
+    "purpose": "동일 본문 비교: basis-order",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 200,
+            "providerCalls": 1,
+            "bodyFile": "payloads/responses/update.json"
+          },
+          "be": {
+            "state": "COMPLETED",
+            "failureCode": null,
+            "storedProposalCount": 1,
+            "queryHttpStatus": 200
+          }
+        }
+      },
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/compare-basis-order.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 409,
+            "providerCalls": 0,
+            "code": "REQUEST_ID_REUSED",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_REQUEST_ID_REUSED",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 1
+    },
+    "bodyEquality": false
+  },
+  {
+    "caseId": "B-compare-version",
+    "category": "RECEIPT",
+    "purpose": "동일 본문 비교: version",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 200,
+            "providerCalls": 1,
+            "bodyFile": "payloads/responses/update.json"
+          },
+          "be": {
+            "state": "COMPLETED",
+            "failureCode": null,
+            "storedProposalCount": 1,
+            "queryHttpStatus": 200
+          }
+        }
+      },
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/compare-version.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 409,
+            "providerCalls": 0,
+            "code": "REQUEST_ID_REUSED",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_REQUEST_ID_REUSED",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 1
+    },
+    "bodyEquality": false
+  },
+  {
+    "caseId": "B-compare-field-value",
+    "category": "RECEIPT",
+    "purpose": "동일 본문 비교: field-value",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 200,
+            "providerCalls": 1,
+            "bodyFile": "payloads/responses/update.json"
+          },
+          "be": {
+            "state": "COMPLETED",
+            "failureCode": null,
+            "storedProposalCount": 1,
+            "queryHttpStatus": 200
+          }
+        }
+      },
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/compare-field-value.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 409,
+            "providerCalls": 0,
+            "code": "REQUEST_ID_REUSED",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_REQUEST_ID_REUSED",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 1
+    },
+    "bodyEquality": false
+  },
+  {
+    "caseId": "B-compare-basis-id",
+    "category": "RECEIPT",
+    "purpose": "동일 본문 비교: basis-id",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 200,
+            "providerCalls": 1,
+            "bodyFile": "payloads/responses/update.json"
+          },
+          "be": {
+            "state": "COMPLETED",
+            "failureCode": null,
+            "storedProposalCount": 1,
+            "queryHttpStatus": 200
+          }
+        }
+      },
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/compare-basis-id.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 409,
+            "providerCalls": 0,
+            "code": "REQUEST_ID_REUSED",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_REQUEST_ID_REUSED",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 1
+    },
+    "bodyEquality": false
+  },
+  {
+    "caseId": "B-compare-direct-json-format",
+    "category": "RECEIPT",
+    "purpose": "동일 본문 비교: direct-json-format",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 200,
+            "providerCalls": 1,
+            "bodyFile": "payloads/responses/update.json"
+          },
+          "be": {
+            "state": "COMPLETED",
+            "failureCode": null,
+            "storedProposalCount": 1,
+            "queryHttpStatus": 200
+          }
+        }
+      },
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/compare-direct-json-format.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 409,
+            "providerCalls": 0,
+            "code": "REQUEST_ID_REUSED",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_REQUEST_ID_REUSED",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 1
+    },
+    "bodyEquality": false
+  },
+  {
+    "caseId": "B-compare-key-order",
+    "category": "RECEIPT",
+    "purpose": "JSON 표현만 다르면 동일 본문",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 200,
+            "providerCalls": 1,
+            "bodyFile": "payloads/responses/update.json"
+          },
+          "be": {
+            "state": "COMPLETED",
+            "failureCode": null,
+            "storedProposalCount": 1,
+            "queryHttpStatus": 200
+          }
+        }
+      },
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/compare-key-order.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 409,
+            "providerCalls": 0,
+            "code": "REQUEST_ALREADY_RECEIVED",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_DUPLICATE_REQUEST",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 1
+    },
+    "bodyEquality": true
+  },
+  {
+    "caseId": "B-compare-unicode-escape",
+    "category": "RECEIPT",
+    "purpose": "JSON 표현만 다르면 동일 본문",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 200,
+            "providerCalls": 1,
+            "bodyFile": "payloads/responses/update.json"
+          },
+          "be": {
+            "state": "COMPLETED",
+            "failureCode": null,
+            "storedProposalCount": 1,
+            "queryHttpStatus": 200
+          }
+        }
+      },
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/compare-unicode-escape.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 409,
+            "providerCalls": 0,
+            "code": "REQUEST_ALREADY_RECEIVED",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_DUPLICATE_REQUEST",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 1
+    },
+    "bodyEquality": true
+  },
+  {
+    "caseId": "B-compare-unicode-normalization",
+    "category": "RECEIPT",
+    "purpose": "문자열 내용의 정규화 금지",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/compare-unicode-normalization-left.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 200,
+            "providerCalls": 1,
+            "bodyFile": "payloads/responses/update.json"
+          },
+          "be": {
+            "state": "COMPLETED",
+            "failureCode": null,
+            "storedProposalCount": 1,
+            "queryHttpStatus": 200
+          }
+        }
+      },
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/compare-unicode-normalization-right.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 409,
+            "providerCalls": 0,
+            "code": "REQUEST_ID_REUSED",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_REQUEST_ID_REUSED",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 1
+    },
+    "bodyEquality": false
+  },
+  {
+    "caseId": "B-compare-uuid-inside-text",
+    "category": "RECEIPT",
+    "purpose": "문자열 내용의 정규화 금지",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/compare-uuid-inside-text-left.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 200,
+            "providerCalls": 1,
+            "bodyFile": "payloads/responses/update.json"
+          },
+          "be": {
+            "state": "COMPLETED",
+            "failureCode": null,
+            "storedProposalCount": 1,
+            "queryHttpStatus": 200
+          }
+        }
+      },
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/compare-uuid-inside-text-right.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 409,
+            "providerCalls": 0,
+            "code": "REQUEST_ID_REUSED",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_REQUEST_ID_REUSED",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 1
+    },
+    "bodyEquality": false
+  },
+  {
+    "caseId": "B-fraction-seven",
+    "category": "RECEIPT",
+    "purpose": "중복 비교보다 앞서 초과 시간 정밀도 거부",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/invalid-fraction-seven.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 422,
+            "providerCalls": 0,
+            "code": "INVALID_REQUEST",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_INTEGRATION_ERROR",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 0
+    }
+  },
+  {
+    "caseId": "B-fraction-seven-zero",
+    "category": "RECEIPT",
+    "purpose": "중복 비교보다 앞서 초과 시간 정밀도 거부",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/invalid-fraction-seven-zero.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 422,
+            "providerCalls": 0,
+            "code": "INVALID_REQUEST",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_INTEGRATION_ERROR",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 0
+    }
+  },
+  {
+    "caseId": "B-rotate-canonicalizationVersion",
+    "category": "RECEIPT",
+    "purpose": "규칙·키 버전 변경으로 기존 요청 우회 금지",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 200,
+            "providerCalls": 1,
+            "bodyFile": "payloads/responses/update.json"
+          },
+          "be": {
+            "state": "COMPLETED",
+            "failureCode": null,
+            "storedProposalCount": 1,
+            "queryHttpStatus": 200
+          }
+        }
+      },
+      {
+        "action": "ROTATE_COMPARISON_METADATA",
+        "field": "canonicalizationVersion",
+        "newVersion": "fixture-version-2",
+        "oldComparisonAvailable": true
+      },
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 409,
+            "providerCalls": 0,
+            "code": "REQUEST_ALREADY_RECEIVED",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_DUPLICATE_REQUEST",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 1
+    }
+  },
+  {
+    "caseId": "B-rotate-hmacKeyVersion",
+    "category": "RECEIPT",
+    "purpose": "규칙·키 버전 변경으로 기존 요청 우회 금지",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 200,
+            "providerCalls": 1,
+            "bodyFile": "payloads/responses/update.json"
+          },
+          "be": {
+            "state": "COMPLETED",
+            "failureCode": null,
+            "storedProposalCount": 1,
+            "queryHttpStatus": 200
+          }
+        }
+      },
+      {
+        "action": "ROTATE_COMPARISON_METADATA",
+        "field": "hmacKeyVersion",
+        "newVersion": "fixture-version-2",
+        "oldComparisonAvailable": true
+      },
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 409,
+            "providerCalls": 0,
+            "code": "REQUEST_ALREADY_RECEIVED",
+            "messagePolicy": "NON_EMPTY_SANITIZED"
+          },
+          "be": {
+            "state": "FAILED",
+            "failureCode": "AI_DUPLICATE_REQUEST",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 1
+    }
+  },
+  {
+    "caseId": "B-uncomparable-record",
+    "category": "RECEIPT",
+    "purpose": "기존 기록을 안전하게 비교할 수 없으면 호출 차단",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "ROTATE_COMPARISON_METADATA",
+        "field": "hmacKeyVersion",
+        "newVersion": "fixture-version-2",
+        "oldComparisonAvailable": false
+      },
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "outcome": "BLOCKED",
+            "providerCalls": 0
+          },
+          "be": {
+            "assertion": "NO_NEW_PROPOSALS",
+            "storedProposalCount": 0
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 0
+    },
+    "seedReceipt": {
+      "contractVersion": "v2",
+      "requestBodyFile": "payloads/requests/base.json",
+      "executionState": "SUCCEEDED",
+      "canonicalizationVersion": "fixture-rule-1",
+      "hmacKeyVersion": "fixture-key-1"
+    }
+  },
+  {
+    "caseId": "B-contract-version-key",
+    "category": "RECEIPT",
+    "purpose": "같은 UUID라도 계약 버전을 수신 기록 키에 포함",
+    "contractVersion": "v2",
+    "contractSections": [
+      10,
+      11,
+      13,
+      14
+    ],
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "request": {
+          "method": "POST",
+          "path": "/v2/analyses",
+          "headers": {
+            "Content-Type": "application/json",
+            "X-Internal-Api-Key": "fixture-only-not-a-secret",
+            "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+          },
+          "bodyFile": "payloads/requests/base.json"
+        },
+        "provider": {
+          "mode": "RETURN",
+          "bodyFile": "payloads/responses/update.json"
+        },
+        "expected": {
+          "ai": {
+            "httpStatus": 200,
+            "providerCalls": 1,
+            "bodyFile": "payloads/responses/update.json"
+          },
+          "be": {
+            "state": "COMPLETED",
+            "failureCode": null,
+            "storedProposalCount": 1,
+            "queryHttpStatus": 200
+          }
+        }
+      }
+    ],
+    "expected": {
+      "totalProviderCalls": 1
+    },
+    "seedReceipt": {
+      "contractVersion": "v1",
+      "requestBodyFile": "payloads/requests/v1-seed.json",
+      "executionState": "SUCCEEDED",
+      "canonicalizationVersion": "fixture-rule-1",
+      "hmacKeyVersion": "fixture-key-1"
+    }
+  }
+]

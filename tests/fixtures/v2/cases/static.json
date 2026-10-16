@@ -1,0 +1,6527 @@
+[
+  {
+    "caseId": "A-all-current-values",
+    "category": "STATIC",
+    "purpose": "다섯 유형의 모든 키, 명시적 null, CONFIRMED+답변 null, 기존 담당자와 두 종류 근거 입력",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/update.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-empty-suggestions",
+    "category": "STATIC",
+    "purpose": "정상 빈 제안은 COMPLETED·저장 0건",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/empty.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/empty.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-create-schedule",
+    "category": "STATIC",
+    "purpose": "CREATE SCHEDULE 기본 정상 조합",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/create-schedule.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/create-schedule.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-update-schedule",
+    "category": "STATIC",
+    "purpose": "UPDATE SCHEDULE 기본 정상 조합",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update-schedule.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/update-schedule.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-link_evidence-schedule",
+    "category": "STATIC",
+    "purpose": "LINK_EVIDENCE SCHEDULE 기본 정상 조합",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/link_evidence-schedule.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/link_evidence-schedule.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-create-task",
+    "category": "STATIC",
+    "purpose": "CREATE TASK 기본 정상 조합",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/create-task.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/create-task.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-update-task",
+    "category": "STATIC",
+    "purpose": "UPDATE TASK 기본 정상 조합",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update-task.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/update-task.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-link_evidence-task",
+    "category": "STATIC",
+    "purpose": "LINK_EVIDENCE TASK 기본 정상 조합",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/link_evidence-task.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/link_evidence-task.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-create-question",
+    "category": "STATIC",
+    "purpose": "CREATE QUESTION 기본 정상 조합",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/create-question.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/create-question.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-update-question",
+    "category": "STATIC",
+    "purpose": "UPDATE QUESTION 기본 정상 조합",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update-question.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/update-question.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-link_evidence-question",
+    "category": "STATIC",
+    "purpose": "LINK_EVIDENCE QUESTION 기본 정상 조합",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/link_evidence-question.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/link_evidence-question.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-create-observation",
+    "category": "STATIC",
+    "purpose": "CREATE OBSERVATION 기본 정상 조합",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/create-observation.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/create-observation.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-update-observation",
+    "category": "STATIC",
+    "purpose": "UPDATE OBSERVATION 기본 정상 조합",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update-observation.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/update-observation.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-link_evidence-observation",
+    "category": "STATIC",
+    "purpose": "LINK_EVIDENCE OBSERVATION 기본 정상 조합",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/link_evidence-observation.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/link_evidence-observation.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-create-guidance",
+    "category": "STATIC",
+    "purpose": "CREATE GUIDANCE 기본 정상 조합",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/create-guidance.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/create-guidance.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-update-guidance",
+    "category": "STATIC",
+    "purpose": "UPDATE GUIDANCE 기본 정상 조합",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update-guidance.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/update-guidance.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-link_evidence-guidance",
+    "category": "STATIC",
+    "purpose": "LINK_EVIDENCE GUIDANCE 기본 정상 조합",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/link_evidence-guidance.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/link_evidence-guidance.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-resolve-answer",
+    "category": "STATIC",
+    "purpose": "새 답변은 changes.answerText에만 존재",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/resolve.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/resolve.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-existing-answer",
+    "category": "STATIC",
+    "purpose": "기존 확정 답변을 새 미확정 답변과 분리",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/existing-answer.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/existing-answer.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/existing-answer.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-empty-update-assignee_unresolved-19",
+    "category": "STATIC",
+    "purpose": "지정 판단이 필요한 빈 UPDATE 허용: ASSIGNEE_UNRESOLVED",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/empty-update-19.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/empty-update-19.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/empty-update-19.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-empty-update-assignee_unresolved-20",
+    "category": "STATIC",
+    "purpose": "변경 판단이 필요한 빈 UPDATE 허용: ASSIGNEE_UNRESOLVED",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/empty-update-20.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/empty-update-20.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/empty-update-20.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-empty-update-assignee_unresolved-21",
+    "category": "STATIC",
+    "purpose": "해제 판단이 필요한 빈 UPDATE 허용: ASSIGNEE_UNRESOLVED",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/empty-update-21.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/empty-update-21.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/empty-update-21.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-empty-update-value_unclear-22",
+    "category": "STATIC",
+    "purpose": "새 값 불명확 판단이 필요한 빈 UPDATE 허용: VALUE_UNCLEAR",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/empty-update-22.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/empty-update-22.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/empty-update-22.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-clear-field",
+    "category": "STATIC",
+    "purpose": "UPDATE의 명시적 삭제 제안",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/clear-field.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/clear-field.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-ambiguous-update",
+    "category": "STATIC",
+    "purpose": "UPDATE 후보 1개 이상·각 후보 근거 포함",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/ambiguous-update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/ambiguous-update.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-not-found-update",
+    "category": "STATIC",
+    "purpose": "UPDATE 대상 없음·빈 근거 허용",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/not-found-update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/not-found-update.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-ambiguous-resolve",
+    "category": "STATIC",
+    "purpose": "RESOLVE 후보 1개 이상·각 후보 근거 포함",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/ambiguous-resolve.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/ambiguous-resolve.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-not-found-resolve",
+    "category": "STATIC",
+    "purpose": "RESOLVE 대상 없음·빈 근거 허용",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/not-found-resolve.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/not-found-resolve.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-ambiguous-link_evidence",
+    "category": "STATIC",
+    "purpose": "LINK_EVIDENCE 후보 1개 이상·각 후보 근거 포함",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/ambiguous-link_evidence.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/ambiguous-link_evidence.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-not-found-link_evidence",
+    "category": "STATIC",
+    "purpose": "LINK_EVIDENCE 대상 없음·빈 근거 허용",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/not-found-link_evidence.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/not-found-link_evidence.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-ambiguous-two",
+    "category": "STATIC",
+    "purpose": "두 모호한 후보 각각의 근거 포함",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/ambiguous-two.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/ambiguous-two.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-conflict-update",
+    "category": "STATIC",
+    "purpose": "원문 evidence와 기존 비교 근거를 함께 제공",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/conflict-update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/conflict-update.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-conflict-resolve",
+    "category": "STATIC",
+    "purpose": "원문 evidence와 기존 비교 근거를 함께 제공",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/conflict-resolve.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/conflict-resolve.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-create-compared",
+    "category": "STATIC",
+    "purpose": "대상 목록과 별개인 실제 비교 근거 참조 허용",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/create-compared.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/create-compared.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-not-found-compared",
+    "category": "STATIC",
+    "purpose": "대상 목록과 별개인 실제 비교 근거 참조 허용",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/not-found-compared.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/not-found-compared.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-extra-compared",
+    "category": "STATIC",
+    "purpose": "대상 목록과 별개인 실제 비교 근거 참조 허용",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/extra-compared.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/extra-compared.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-uuid-case",
+    "category": "STATIC",
+    "purpose": "대상 및 근거의 UUID 대소문자 값 비교",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/uuid-case.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/uuid-case.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-display-title",
+    "category": "STATIC",
+    "purpose": "제안 제목과 changes.title은 별개",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/display-title.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/display-title.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-missing-root",
+    "category": "STATIC",
+    "purpose": "필수 루트 키 누락",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-missing-root.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-unknown-root",
+    "category": "STATIC",
+    "purpose": "알 수 없는 키",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-unknown-root.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-snake-case",
+    "category": "STATIC",
+    "purpose": "camelCase 대신 snake_case 키 거부",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-snake-case.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-summary",
+    "category": "STATIC",
+    "purpose": "v1 summary로 v2 입력 대체 금지",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-summary.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-missing-null-key",
+    "category": "STATIC",
+    "purpose": "nullable 키도 생략 불가",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-missing-null-key.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-other-type-field",
+    "category": "STATIC",
+    "purpose": "다른 유형 currentValues 키 거부",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-other-type-field.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-unknown-candidate",
+    "category": "STATIC",
+    "purpose": "알 수 없는 후보 키",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-unknown-candidate.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-unknown-basis",
+    "category": "STATIC",
+    "purpose": "알 수 없는 근거 키",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-unknown-basis.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-version-string",
+    "category": "STATIC",
+    "purpose": "version은 JSON 정수만 허용",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-version-string.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-version-decimal",
+    "category": "STATIC",
+    "purpose": "version은 JSON 정수만 허용",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-version-decimal.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-version-boolean",
+    "category": "STATIC",
+    "purpose": "version은 JSON 정수만 허용",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-version-boolean.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-text-number",
+    "category": "STATIC",
+    "purpose": "잘못된 currentValues 타입·형식 거부",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-text-number.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-date",
+    "category": "STATIC",
+    "purpose": "잘못된 currentValues 타입·형식 거부",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-date.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-time",
+    "category": "STATIC",
+    "purpose": "잘못된 currentValues 타입·형식 거부",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-time.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-state",
+    "category": "STATIC",
+    "purpose": "잘못된 currentValues 타입·형식 거부",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-state.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-state-null",
+    "category": "STATIC",
+    "purpose": "잘못된 currentValues 타입·형식 거부",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-state-null.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-observation-state",
+    "category": "STATIC",
+    "purpose": "관찰에는 status가 없음",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-observation-state.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-guidance-state",
+    "category": "STATIC",
+    "purpose": "안내에는 status가 없음",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-guidance-state.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-assignee-uuid",
+    "category": "STATIC",
+    "purpose": "잘못된 기존 담당자 UUID 거부",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-assignee-uuid.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-basis-kind",
+    "category": "STATIC",
+    "purpose": "잘못된 근거 kind 거부",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-basis-kind.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-duplicate-candidate",
+    "category": "STATIC",
+    "purpose": "후보 UUID 값 중복 거부",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-duplicate-candidate.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-duplicate-basis",
+    "category": "STATIC",
+    "purpose": "후보 내 근거 UUID 값 중복 거부",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-duplicate-basis.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-timezone",
+    "category": "STATIC",
+    "purpose": "합의한 Asia/Seoul 외 timezone 거부",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-timezone.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-fraction-seven",
+    "category": "STATIC",
+    "purpose": "recordedAt 원문 형식·정밀도 검증",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-fraction-seven.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-fraction-seven-zero",
+    "category": "STATIC",
+    "purpose": "recordedAt 원문 형식·정밀도 검증",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-fraction-seven-zero.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-no-offset",
+    "category": "STATIC",
+    "purpose": "recordedAt 원문 형식·정밀도 검증",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-no-offset.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-no-seconds",
+    "category": "STATIC",
+    "purpose": "recordedAt 원문 형식·정밀도 검증",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-no-seconds.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-numeric-time",
+    "category": "STATIC",
+    "purpose": "recordedAt 원문 형식·정밀도 검증",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-numeric-time.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-duplicate-root-key",
+    "category": "STATIC",
+    "purpose": "JSON 객체 변환 전 동일 루트 키 거부",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-duplicate-root-key.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-request-duplicate-nested-key",
+    "category": "STATIC",
+    "purpose": "JSON 객체 변환 전 중첩 키 중복 거부",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/invalid-duplicate-nested-key.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-no-fraction",
+    "category": "STATIC",
+    "purpose": "지원하는 recordedAt 소수초 범위",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/no-fraction.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/update.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-fraction-one",
+    "category": "STATIC",
+    "purpose": "지원하는 recordedAt 소수초 범위",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/fraction-one.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/update.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-auth-missing",
+    "category": "STATIC",
+    "purpose": "내부 인증키 누락",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 401,
+        "providerCalls": 0,
+        "code": "UNAUTHORIZED",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-auth-invalid",
+    "category": "STATIC",
+    "purpose": "내부 인증키 불일치",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "wrong-fixture-key",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 401,
+        "providerCalls": 0,
+        "code": "UNAUTHORIZED",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-header-mismatch",
+    "category": "STATIC",
+    "purpose": "헤더와 본문 requestId 값 불일치",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000009"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 400,
+        "providerCalls": 0,
+        "code": "REQUEST_ID_MISMATCH",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-header-uuid-case",
+    "category": "STATIC",
+    "purpose": "헤더 UUID 표현만 다른 경우 정상",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "AAAAAAAA-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyFile": "payloads/responses/update.json"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-missing-key",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: missing-key",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-missing-key.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-unknown-key",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: unknown-key",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-unknown-key.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-empty-update",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: empty-update",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-empty-update.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-target-only-empty",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: target-only-empty",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-target-only-empty.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-assignee-change",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: assignee-change",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-assignee-change.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-assignee-clear",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: assignee-clear",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-assignee-clear.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-target-id",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: target-id",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-target-id.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-target-version",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: target-version",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-target-version.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-target-version-string",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: target-version-string",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-target-version-string.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-target-type",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: target-type",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-target-type.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-target-null-version",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: target-null-version",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-target-null-version.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-target-and-candidates",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: target-and-candidates",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-target-and-candidates.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-target-and-reason",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: target-and-reason",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-target-and-reason.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-no-target-reason",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: no-target-reason",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-no-target-reason.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-both-target-reasons",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: both-target-reasons",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-both-target-reasons.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-basis-missing",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: basis-missing",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-basis-missing.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-basis-unknown",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: basis-unknown",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-basis-unknown.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-basis-other-owner",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: basis-other-owner",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-basis-other-owner.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-basis-empty",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: basis-empty",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-basis-empty.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-basis-duplicate-id",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: basis-duplicate-id",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-basis-duplicate-id.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-basis-duplicate-item",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: basis-duplicate-item",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-basis-duplicate-item.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-basis-other-target-only",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: basis-other-target-only",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-basis-other-target-only.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-conflict-no-basis",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: conflict-no-basis",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-conflict-no-basis.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-conflict-no-reason",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: conflict-no-reason",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-conflict-no-reason.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-evidence-absent",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: evidence-absent",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-evidence-absent.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-evidence-blank",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: evidence-blank",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-evidence-blank.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-undetermined-no-reason",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: undetermined-no-reason",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-undetermined-no-reason.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-assignee-non-task",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: assignee-non-task",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-assignee-non-task.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-duplicate-reason",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: duplicate-reason",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-duplicate-reason.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-unknown-reason",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: unknown-reason",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-unknown-reason.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-unknown-relation",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: unknown-relation",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-unknown-relation.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-unknown-operation",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: unknown-operation",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-unknown-operation.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-clear-overlap",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: clear-overlap",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-clear-overlap.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-clear-duplicate",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: clear-duplicate",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-clear-duplicate.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-clear-wrong-type",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: clear-wrong-type",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-clear-wrong-type.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-changes-null",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: changes-null",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-changes-null.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-changes-number",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: changes-number",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-changes-number.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-changes-empty-delete",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: changes-empty-delete",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-changes-empty-delete.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-changes-other-type",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: changes-other-type",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-changes-other-type.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-changes-date",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: changes-date",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-changes-date.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-changes-time",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: changes-time",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-changes-time.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-changes-state",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: changes-state",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-changes-state.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-update-new",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: update-new",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-update-new.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-update-duplicate",
+    "category": "STATIC",
+    "purpose": "무효 제공자 결과 전체 거부: update-duplicate",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-update-duplicate.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-resolve-missing",
+    "category": "STATIC",
+    "purpose": "RESOLVE 답변 누락·빈 값 거부",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-resolve-missing.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-resolve-null",
+    "category": "STATIC",
+    "purpose": "RESOLVE 답변 누락·빈 값 거부",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-resolve-null.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-resolve-empty",
+    "category": "STATIC",
+    "purpose": "RESOLVE 답변 누락·빈 값 거부",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-resolve-empty.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-resolve-blank",
+    "category": "STATIC",
+    "purpose": "RESOLVE 답변 누락·빈 값 거부",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-resolve-blank.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-resolve-extra-title",
+    "category": "STATIC",
+    "purpose": "RESOLVE 전용 필드·유형·관계 제한",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-resolve-extra-title.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-resolve-root-answer",
+    "category": "STATIC",
+    "purpose": "RESOLVE 전용 필드·유형·관계 제한",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-resolve-root-answer.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-resolve-clear",
+    "category": "STATIC",
+    "purpose": "RESOLVE 전용 필드·유형·관계 제한",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-resolve-clear.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-resolve-wrong-type",
+    "category": "STATIC",
+    "purpose": "RESOLVE 전용 필드·유형·관계 제한",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-resolve-wrong-type.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-resolve-duplicate-relation",
+    "category": "STATIC",
+    "purpose": "RESOLVE 전용 필드·유형·관계 제한",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-resolve-duplicate-relation.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-link-changes",
+    "category": "STATIC",
+    "purpose": "LINK_EVIDENCE는 값 변경 없음",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-link-changes.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-link-clear",
+    "category": "STATIC",
+    "purpose": "LINK_EVIDENCE는 값 변경 없음",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-link-clear.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-link-related",
+    "category": "STATIC",
+    "purpose": "LINK_EVIDENCE는 값 변경 없음",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-link-related.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-create-target",
+    "category": "STATIC",
+    "purpose": "CREATE의 대상·관계·삭제 제한",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-create-target.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-create-candidate",
+    "category": "STATIC",
+    "purpose": "CREATE의 대상·관계·삭제 제한",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-create-candidate.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-create-target-reason",
+    "category": "STATIC",
+    "purpose": "CREATE의 대상·관계·삭제 제한",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-create-target-reason.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-create-relation",
+    "category": "STATIC",
+    "purpose": "CREATE의 대상·관계·삭제 제한",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-create-relation.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-create-clear",
+    "category": "STATIC",
+    "purpose": "CREATE의 대상·관계·삭제 제한",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-create-clear.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-ambiguous-missing-one-basis",
+    "category": "STATIC",
+    "purpose": "모호한 후보의 유형·소속·중복·근거 검증",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-ambiguous-missing-one-basis.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-ambiguous-duplicate-candidate",
+    "category": "STATIC",
+    "purpose": "모호한 후보의 유형·소속·중복·근거 검증",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-ambiguous-duplicate-candidate.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-ambiguous-wrong-type-candidate",
+    "category": "STATIC",
+    "purpose": "모호한 후보의 유형·소속·중복·근거 검증",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-ambiguous-wrong-type-candidate.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-ambiguous-unknown-candidate",
+    "category": "STATIC",
+    "purpose": "모호한 후보의 유형·소속·중복·근거 검증",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-ambiguous-unknown-candidate.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-ambiguous-no-reason",
+    "category": "STATIC",
+    "purpose": "모호한 후보의 유형·소속·중복·근거 검증",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-ambiguous-no-reason.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-wrong-request-id",
+    "category": "STATIC",
+    "purpose": "응답 requestId 불일치",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-wrong-request-id.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-unknown-root",
+    "category": "STATIC",
+    "purpose": "알 수 없는 응답 루트 키",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-unknown-root.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-response-mixed",
+    "category": "STATIC",
+    "purpose": "유효·무효 제안 혼합 응답의 부분 저장 금지",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyFile": "payloads/responses/invalid-mixed.json"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-unavailable",
+    "category": "STATIC",
+    "purpose": "확정 제공자 오류 매핑",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "UNAVAILABLE"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "AI_UNAVAILABLE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_SERVICE_UNAVAILABLE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-disabled",
+    "category": "STATIC",
+    "purpose": "확정 제공자 오류 매핑",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "DISABLED"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 503,
+        "providerCalls": 0,
+        "code": "AI_NOT_CONFIGURED",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  },
+  {
+    "caseId": "A-timeout",
+    "category": "STATIC",
+    "purpose": "확정 제공자 오류 매핑",
+    "contractVersion": "v2",
+    "contractSections": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "provider": {
+      "mode": "TIMEOUT"
+    },
+    "expected": {
+      "ai": {
+        "httpStatus": 504,
+        "providerCalls": 1,
+        "code": "AI_TIMEOUT",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_TIMEOUT",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      }
+    }
+  }
+]
