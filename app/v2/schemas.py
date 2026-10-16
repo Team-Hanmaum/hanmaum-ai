@@ -57,6 +57,12 @@ def recorded_timestamp(value: str) -> str:
     return value  # HMAC canonicalization is not the responsibility of these models.
 
 
+def immutable_array(value: object) -> object:
+    # Strict tuple validation needs this conversion for incoming JSON arrays.
+    # Other types are left to Pydantic's strict validator, not coerced to arrays.
+    return tuple(value) if isinstance(value, list) else value
+
+
 NonBlank = Annotated[str, AfterValidator(non_blank)]
 UuidValue = Annotated[UUID, BeforeValidator(uuid_value)]
 CalendarDate = Annotated[str, AfterValidator(calendar_date)]
@@ -87,7 +93,13 @@ class ContractModel(BaseModel):
     )
 
 
-class CurrentValues(ContractModel):
+class RequestSnapshotModel(ContractModel):
+    """Read-only input fields; nested collections must also use immutable types."""
+
+    model_config = ConfigDict(frozen=True)
+
+
+class CurrentValues(RequestSnapshotModel):
     title: str | None
     description: str | None
 
@@ -120,16 +132,16 @@ class GuidanceValues(CurrentValues):
     received_date: CalendarDate | None
 
 
-class Basis(ContractModel):
+class Basis(RequestSnapshotModel):
     basis_id: UuidValue
     kind: Literal["SOURCE_RECORD", "DIRECT_INPUT"]
     text: NonBlank
 
 
-class CandidateBase(ContractModel):
+class CandidateBase(RequestSnapshotModel):
     item_id: UuidValue
     version: StrictInt
-    basis: list[Basis]
+    basis: Annotated[tuple[Basis, ...], BeforeValidator(immutable_array)]
 
     @model_validator(mode="after")
     def unique_basis(self) -> Self:
@@ -174,14 +186,14 @@ CandidateItem = Annotated[
 ]
 
 
-class AnalysisRequest(ContractModel):
+class AnalysisRequest(RequestSnapshotModel):
     request_id: UuidValue
     care_space_id: UuidValue
     record_id: UuidValue
     content: NonBlank
     recorded_at: RecordedTimestamp
     timezone: Literal["Asia/Seoul"]
-    candidates: list[CandidateItem]
+    candidates: Annotated[tuple[CandidateItem, ...], BeforeValidator(immutable_array)]
 
     @model_validator(mode="after")
     def unique_candidates(self) -> Self:

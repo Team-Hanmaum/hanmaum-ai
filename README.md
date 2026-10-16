@@ -229,6 +229,9 @@ uv run --locked pytest tests/test_v2_contract.py
 `app.v2.validation.parse_request(raw)`는 UTF-8 원문 JSON에서 중복 키와 시간 정밀도를
 검사하고 v2 요청 모델을 반환합니다. 요청 본문을 미리 JSON 객체로 바꾸면 중복 키를 잃으므로
 이 진입점에 원문 바이트를 전달합니다.
+반환된 요청은 후보·현재 값·근거까지 읽기 전용이며 후보·근거 배열은 내부적으로 tuple로 보존합니다.
+JSON 직렬화에서는 기존 배열 형식이 유지됩니다. 제공자가 입력을 가공해야 하면
+`request.model_dump(mode="json")`으로 별도 사본을 전달하고, 응답 검증에는 최초 요청을 유지합니다.
 `validate_response(request, payload)`는 제공자 결과의 원문 JSON 또는 객체를 받아
 필드·작업 조합과 대상·버전·근거 참조를 검증하고, 하나라도 위반하면 전체 응답을 거부합니다.
 요청 위반은 `AnalysisFailure(422, INVALID_REQUEST)`, 결과 위반은
@@ -238,6 +241,10 @@ uv run --locked pytest tests/test_v2_contract.py
 수신 기록 30개·BE 통합 25개는 후속 구현의 실행 검증 대상입니다.
 정확한 caseId 구분과 책임은 [v2 계약의 구현 범위](docs/ai-contract-v2.md#현재-ai-구현과-테스트-범위)에 정리했습니다.
 fixture 검사나 모델 검증 통과는 실제 HTTP·호출 횟수·DB 통합·모델 품질 검증 완료를 의미하지 않습니다.
+현재 파서는 전체 본문을 전달받는 계약 검증 함수이며 자원 사용량을 제한하는 수신 계층이 아닙니다.
+v2 HTTP·제공자 연결 전에 본문·응답 크기와 컬렉션·문자열 제한, 초과 오류 처리를 합의하고,
+본문을 전부 버퍼링하거나 JSON으로 디코딩하기 전의 읽기 단계부터 보호해야 합니다.
+크기 제한은 계약 15절의 미정 사항이므로 이번 모델에 임의의 숫자나 v1 제한을 추가하지 않습니다.
 
 BE에는 동일 revision의 `tests/fixtures/v2/` 전체를 전달합니다. 사례 형식, 원문 JSON 전송,
 동시성·저장·조회 시나리오의 실행 책임과 동기화 방법은 fixture README에 정리되어 있습니다.

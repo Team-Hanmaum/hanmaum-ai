@@ -20,6 +20,12 @@ def reject_constant(value: str) -> None:
 
 
 def load_json(raw: bytes | str) -> object:
+    """Decode a buffered contract payload, not a resource-limiting ingestion boundary.
+
+    Before HTTP/provider integration, agree v2 limits and enforce them while reading
+    the payload, before buffering or decoding it. Contract section 15 leaves those
+    values unresolved; this module must not invent wire-level size/count limits.
+    """
     # Decode explicitly: json.loads(bytes) also accepts UTF-16/32, unlike this wire contract.
     if isinstance(raw, bytes):
         raw = raw.decode("utf-8")
@@ -29,7 +35,7 @@ def load_json(raw: bytes | str) -> object:
 
 
 def parse_request(raw: bytes | str) -> AnalysisRequest:
-    """Parse original JSON before duplicate keys or timestamp precision can be lost."""
+    """Parse original JSON into a deeply immutable response-validation snapshot."""
     try:
         return AnalysisRequest.model_validate(load_json(raw))
     except (ValueError, RecursionError):
@@ -43,6 +49,8 @@ def validate_response(request: AnalysisRequest, payload: object) -> AnalysisResp
 
     Raw bytes/text retain duplicate keys for rejection. An already decoded provider object
     cannot recover duplicates; its adapter must reject duplicates when decoding raw output.
+    Keep the original parse_request snapshot for this check. Providers needing mutable
+    input may receive request.model_dump(mode="json"), not a replacement validation basis.
     No partial list is returned if any suggestion fails.
     """
     try:

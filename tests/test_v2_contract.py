@@ -1,11 +1,13 @@
 """Exercise real v2 contract code using the unchanged shared fixture revision."""
 
 import json
+import operator
 from copy import deepcopy
 from pathlib import Path
 from uuid import UUID
 
 import pytest
+from pydantic import ValidationError
 
 from app.errors import AnalysisFailure
 from app.v2.validation import parse_request, validate_response
@@ -308,4 +310,83 @@ def test_uuid_case_cannot_bypass_duplicate_response_ids(collection):
         suggestion["basisReferences"].append(reference)
     with pytest.raises(AnalysisFailure) as caught:
         validate_response(parse_request(raw("payloads/requests/base.json")), provider)
+    assert_failure(caught.value, 502, "INVALID_AI_RESPONSE")
+
+
+@pytest.mark.parametrize(
+    "mutate",
+    [
+        lambda r: setattr(r, "content", "synthetic-new-evidence"),
+        lambda r: setattr(r, "request_id", UUID(int=999)),
+        lambda r: setattr(r.candidates[0], "version", 999),
+        lambda r: setattr(r.candidates[0], "item_id", UUID(int=999)),
+        lambda r: setattr(r.candidates[0].basis[0], "basis_id", UUID(int=999)),
+        lambda r: setattr(r.candidates[0].basis[0], "text", "replacement basis"),
+        lambda r: r.candidates.clear(),
+        lambda r: r.candidates.reverse(),
+        lambda r: r.candidates.append(r.candidates[0]),
+        lambda r: operator.setitem(r.candidates, 0, r.candidates[1]),
+        lambda r: r.candidates[0].basis.clear(),
+        lambda r: r.candidates[0].basis.append(r.candidates[1].basis[0]),
+        lambda r: operator.setitem(r.candidates[0].basis, 0, r.candidates[1].basis[0]),
+    ],
+    ids=[
+        "source-content",
+        "request-id",
+        "candidate-version",
+        "candidate-id",
+        "basis-id",
+        "basis-text",
+        "clear-candidates",
+        "reorder-candidates",
+        "append-candidate",
+        "replace-candidate",
+        "clear-basis",
+        "append-basis",
+        "replace-basis",
+    ],
+)
+def test_parsed_request_is_an_immutable_validation_snapshot(mutate):
+    request = parse_request(raw("payloads/requests/base.json"))
+    original = request.model_dump(mode="json")
+    with pytest.raises((ValidationError, AttributeError, TypeError)):
+        mutate(request)
+    assert request.model_dump(mode="json") == original
+    assert validate_response(request, response_data()).suggestions
+
+
+@pytest.mark.parametrize("candidate_index", range(5))
+def test_current_values_are_immutable_for_every_item_type(candidate_index):
+    request = parse_request(raw("payloads/requests/base.json"))
+    original = request.model_dump(mode="json")
+    with pytest.raises(ValidationError):
+        request.candidates[candidate_index].current_values.title = "provider replacement"
+    assert request.model_dump(mode="json") == original
+
+
+@pytest.mark.parametrize("change", ["content", "version", "target", "basis"])
+def test_provider_copy_cannot_replace_original_response_validation_basis(change):
+    request = parse_request(raw("payloads/requests/base.json"))
+    # Provider input is a separate JSON-shaped copy; validation retains the parsed snapshot.
+    provider_input = request.model_dump(mode="json")
+    assert provider_input == request_data()  # Tuples must still serialize as wire JSON arrays.
+    response = response_data()
+    suggestion = response["suggestions"][0]
+    replacement = str(UUID(int=999))
+    if change == "content":
+        provider_input["content"] = "synthetic-new-evidence"
+        suggestion["evidence"] = provider_input["content"]
+    elif change == "version":
+        provider_input["candidates"][0]["version"] = 999
+        suggestion["expectedVersion"] = provider_input["candidates"][0]["version"]
+    elif change == "target":
+        provider_input["candidates"][0]["itemId"] = replacement
+        suggestion["targetItemId"] = replacement
+        suggestion["basisReferences"][0]["itemId"] = replacement
+    else:
+        provider_input["candidates"][0]["basis"][0]["basisId"] = replacement
+        suggestion["basisReferences"][0]["basisIds"] = [replacement]
+    assert request.model_dump(mode="json") == request_data()
+    with pytest.raises(AnalysisFailure) as caught:
+        validate_response(request, response)
     assert_failure(caught.value, 502, "INVALID_AI_RESPONSE")
