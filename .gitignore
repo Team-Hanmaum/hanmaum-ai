@@ -18,6 +18,9 @@ build/
 *.pem
 *.key
 *.log
+# Local AI receipt stores and SQLite sidecar files
+*.sqlite3
+*.sqlite3-*
 
 # Editor-local state
 .idea/

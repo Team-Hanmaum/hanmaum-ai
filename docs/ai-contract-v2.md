@@ -2,7 +2,7 @@
 
 2026-10-16 사용자 확정 계약. 아래 조항은 합의된 최종본을 보존하며 새 정책을 추가하지 않는다.
 
-현재 실행 API는 v1이다. AI의 v2 요청·응답 모델과 계약 검증은 별도 모듈로 구현했으며, v2 API·수신 기록·BE 저장 구현 및 양쪽 연동 검증 완료를 의미하지 않는다.
+현재 실행 API는 v1이다. AI의 v2 모델·계약 검증과 내부 수신 기록·HMAC·중복 호출 차단을 별도 모듈로 구현했다. v2 API·실제 모델·BE 저장 및 양쪽 연동 검증 완료를 의미하지 않는다.
 
 공통 사례와 사용 방법: [v2 fixture](../tests/fixtures/v2/README.md). 기존 계약: [v1](ai-contract.md).
 
@@ -13,6 +13,7 @@
 
 - `app/v2/schemas.py`: 유형별 완전한 currentValues, 두 종류 근거, v2 제안 필드와 작업·관계·대상·변경분 조합 검증.
 - `app/v2/validation.py`: 원문 JSON의 중복 키·UTF-8·엄격한 타입·시간 정밀도 검증과 요청·결과 간 ID·유형·버전·원문 evidence·근거 소속·최소 참조 검증.
+- `app/v2/comparison.py`, `receipts.py`, `services.py`: 정규화·버전별 HMAC 비교, SQLite 영속 수신 기록·원자적 등록과 가짜 제공자를 통한 내부 호출 제어. 적용 조건·키 관리·사용법은 [수신 기록 구현 문서](v2-receipts.md) 참조.
 - `parse_request(raw)`는 원문 bytes 또는 str을 받고 검증된 AnalysisRequest를 반환한다. `model_validate_json`이나 선행 JSON 디코딩으로 이 진입점을 대체하면 중복 키를 잃을 수 있다.
 - 반환된 요청은 변경 불가능한 검증 스냅샷이다. 요청·후보·모든 유형의 currentValues·근거 모델의 필드 변경을 막고, 후보·근거 배열은 내부적으로 tuple을 사용한다. JSON 직렬화에서는 기존 배열 형식·순서·원문이 유지된다.
 - `validate_response(request, payload)`는 원문 JSON 또는 제공자가 반환한 객체를 받고 전체 검증 후 AnalysisResponse를 반환한다. 이미 디코딩된 객체의 중복 키는 복구할 수 없으므로 제공자 어댑터도 원문 디코딩 시 이를 거부해야 한다.
@@ -30,14 +31,16 @@ fixture 자체의 무결성·시나리오 형식 검사는 기존 `tests/test_v2
 | `A-auth-missing`, `A-auth-invalid` | 제외 | 내부 HTTP 인증 |
 | `A-header-mismatch`, `A-header-uuid-case` | 제외 | HTTP 헤더와 본문 UUID 비교 |
 | `A-unavailable`, `A-disabled`, `A-timeout` | 제외 | 제공자 호출·설정·예외·타임아웃 처리 |
-| `cases/receipts.json`의 모든 B-* 30개 | 기존 fixture 일관성 검사만 유지 | 실제 수신 기록·동시성·재시작·키 교체 |
+| `cases/receipts.json`의 모든 B-* 30개 | 실제 SQLite·내부 서비스·가짜 제공자의 순차·동시 수신·재시작·비교 규칙/키 버전 변경 검증 | HTTP 응답·BE 오류 매핑·운영 키 교체 절차 |
 | `cases/backend.json`의 모든 C-* 25개 | 기존 fixture 일관성 검사 및 직접 입력 근거 응답의 계약 검증 | BE DB·상태 변경·저장·권한·조회 통합 |
 
 139개 적용 caseId는 `tests/test_v2_contract.py`의 CONTRACT_CASES, 7개 제외 caseId·사유는 DEFERRED_STATIC에 명시한다. 신규 사례가 분류 없이 빠지지 않도록 revision·목록·기대 오류 범위를 검사한다.
 별도 경계 테스트에서 시간 정밀도·유효하지 않은 날짜와 오프셋, JSON 오류·응답 중복 키, 원문 보존, UUID 대소문자 중복, nullable 키 누락, v1 제한의 비전파와 안전한 오류를 확인한다.
 요청 필드·중첩 모델·배열 변경 차단과 제공자용 사본 변경 후 원래 요청에 맞지 않는 evidence·대상·버전·근거 응답의 거부도 회귀 검증한다.
 
-이 단계에서는 `/v2/analyses`를 등록하거나 제공자를 호출하지 않는다. 422·502는 검증 예외의 상태·코드이며 실제 HTTP 응답 완료 주장이 아니다. 기존 v1 라우트·서비스·테스트는 유지한다.
+수신 기록 테스트는 `uv run --locked pytest tests/test_v2_receipts.py`로 실행한다. B-* 30개 시나리오와 별도 프로세스 경쟁·재시작·저장소 장애·취소·실패 이후 재수신 차단을 실제 SQLite와 가짜 제공자로 검증한다. 공유 fixture README는 도입 시점의 자료이며 최신 AI 실행 검증 범위는 이 문서를 따른다.
+
+`/v2/analyses`는 아직 등록하지 않았다. 내부 서비스 테스트의 상태·코드는 예외 속성이며 실제 HTTP 응답 완료 주장이 아니다. 기존 v1 라우트·서비스·테스트를 유지하고 실제 모델은 호출하지 않는다. 비교 불가의 외부 오류 매핑, 크기 제한과 초과 오류, 보관·정리 정책은 후속 합의 항목으로 남긴다.
 
 자원 보호의 남은 조건:
 - 현재 파서는 이미 버퍼링된 본문 전체를 디코딩하므로 자체적으로 메모리·CPU 상한을 보장하지 않는다. 큰 본문에 대한 자원 고갈 위험은 계약 검증 통과와 별개다.
