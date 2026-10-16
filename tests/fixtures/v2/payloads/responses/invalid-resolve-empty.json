@@ -1,0 +1,28 @@
+{
+  "requestId": "aaaaaaaa-0000-4000-8000-000000000001",
+  "suggestions": [
+    {
+      "operation": "RESOLVE",
+      "type": "QUESTION",
+      "targetItemId": "aaaaaaaa-0000-4000-8000-000000000102",
+      "expectedVersion": 3,
+      "candidateItemIds": [],
+      "title": "기록 내용 검토",
+      "evidence": "준비물은 수건입니다.",
+      "changes": {
+        "answerText": ""
+      },
+      "clearFields": [],
+      "relationKind": "RELATED",
+      "reviewReasons": [],
+      "basisReferences": [
+        {
+          "itemId": "aaaaaaaa-0000-4000-8000-000000000102",
+          "basisIds": [
+            "aaaaaaaa-0000-4000-8000-000000000202"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "requestId": "aaaaaaaa-0000-4000-8000-000000000001",
+  "suggestions": [
+    {
+      "operation": "UPDATE",
+      "type": "SCHEDULE",
+      "targetItemId": "aaaaaaaa-0000-4000-8000-000000000100",
+      "expectedVersion": 3,
+      "candidateItemIds": [
+        "aaaaaaaa-0000-4000-8000-000000000100"
+      ],
+      "title": "기록 내용 검토",
+      "evidence": "정기 방문을 10월 21일 오전 10시로 바꿔 주세요.",
+      "changes": {
+        "description": "새 기록 확인"
+      },
+      "clearFields": [],
+      "relationKind": "RELATED",
+      "reviewReasons": [],
+      "basisReferences": [
+        {
+          "itemId": "aaaaaaaa-0000-4000-8000-000000000100",
+          "basisIds": [
+            "aaaaaaaa-0000-4000-8000-000000000200"
+          ]
+        }
+      ]
+    }
+  ]
+}

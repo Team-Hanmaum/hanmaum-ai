@@ -1,0 +1,55 @@
+{
+  "contractVersion": "v2",
+  "mappings": [
+    {
+      "httpStatus": 400,
+      "aiCode": "REQUEST_ID_MISMATCH",
+      "beFailureCode": "AI_INTEGRATION_ERROR"
+    },
+    {
+      "httpStatus": 401,
+      "aiCode": "UNAUTHORIZED",
+      "beFailureCode": "AI_INTEGRATION_ERROR"
+    },
+    {
+      "httpStatus": 422,
+      "aiCode": "INVALID_REQUEST",
+      "beFailureCode": "AI_INTEGRATION_ERROR"
+    },
+    {
+      "httpStatus": 409,
+      "aiCode": "REQUEST_ALREADY_RECEIVED",
+      "beFailureCode": "AI_DUPLICATE_REQUEST"
+    },
+    {
+      "httpStatus": 409,
+      "aiCode": "REQUEST_ID_REUSED",
+      "beFailureCode": "AI_REQUEST_ID_REUSED"
+    },
+    {
+      "httpStatus": 502,
+      "aiCode": "INVALID_AI_RESPONSE",
+      "beFailureCode": "AI_INVALID_RESPONSE"
+    },
+    {
+      "httpStatus": 502,
+      "aiCode": "AI_UNAVAILABLE",
+      "beFailureCode": "AI_SERVICE_UNAVAILABLE"
+    },
+    {
+      "httpStatus": 503,
+      "aiCode": "AI_NOT_CONFIGURED",
+      "beFailureCode": "AI_INTEGRATION_ERROR"
+    },
+    {
+      "httpStatus": 503,
+      "aiCode": "RECEIPT_STORE_UNAVAILABLE",
+      "beFailureCode": "AI_RECEIPT_STORE_UNAVAILABLE"
+    },
+    {
+      "httpStatus": 504,
+      "aiCode": "AI_TIMEOUT",
+      "beFailureCode": "AI_TIMEOUT"
+    }
+  ]
+}
