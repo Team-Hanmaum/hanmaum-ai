@@ -38,6 +38,15 @@
         "careItemWrites": 0,
         "queryHttpStatus": 200
       }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
     }
   },
   {
@@ -77,6 +86,15 @@
         "storedProposalCount": 0,
         "queryHttpStatus": 200
       }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
     }
   },
   {
@@ -119,8 +137,18 @@
       "be": {
         "state": "DISCARDED",
         "storedProposalCount": 0,
-        "queryHttpStatus": 200
+        "queryHttpStatus": 404,
+        "queryErrorCode": "RESOURCE_NOT_FOUND"
       }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
     }
   },
   {
@@ -153,8 +181,9 @@
         "action": "DETACH_BASIS",
         "itemId": "aaaaaaaa-0000-4000-8000-000000000100",
         "basisId": "aaaaaaaa-0000-4000-8000-000000000200",
-        "keepBasisRow": true,
-        "keepDocument": true
+        "basisKind": "SOURCE_RECORD",
+        "removeCareItemBasisRow": true,
+        "preserveBasisContent": true
       }
     ],
     "expected": {
@@ -168,6 +197,15 @@
         "storedProposalCount": 0,
         "queryHttpStatus": 200
       }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
     }
   },
   {
@@ -213,6 +251,15 @@
         "storedProposalCount": 0,
         "queryHttpStatus": 200
       }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
     }
   },
   {
@@ -245,8 +292,9 @@
         "action": "DETACH_BASIS",
         "itemId": "aaaaaaaa-0000-4000-8000-000000000104",
         "basisId": "aaaaaaaa-0000-4000-8000-000000000204",
-        "keepBasisRow": true,
-        "keepDocument": true
+        "basisKind": "SOURCE_RECORD",
+        "removeCareItemBasisRow": true,
+        "preserveBasisContent": true
       }
     ],
     "expected": {
@@ -260,6 +308,15 @@
         "storedProposalCount": 0,
         "queryHttpStatus": 200
       }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
     }
   },
   {
@@ -292,8 +349,9 @@
         "action": "DETACH_BASIS",
         "itemId": "aaaaaaaa-0000-4000-8000-000000000100",
         "basisId": "aaaaaaaa-0000-4000-8000-000000000200",
-        "keepBasisRow": true,
-        "keepDocument": true
+        "basisKind": "SOURCE_RECORD",
+        "removeCareItemBasisRow": true,
+        "preserveBasisContent": true
       }
     ],
     "expected": {
@@ -309,6 +367,15 @@
         "visibleValidBasisCount": 0,
         "queryHttpStatus": 200
       }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
     }
   },
   {
@@ -354,6 +421,15 @@
         "storedProposalCount": 0,
         "queryHttpStatus": 200
       }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "OTHER_ACTIVE_SPACE_MEMBER"
     }
   },
   {
@@ -400,6 +476,15 @@
         "transactionRolledBack": true,
         "queryHttpStatus": 200
       }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
     }
   },
   {
@@ -439,6 +524,15 @@
         "storedProposalCount": 0,
         "queryHttpStatus": 200
       }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
     }
   },
   {
@@ -488,6 +582,15 @@
         ],
         "queryHttpStatus": 200
       }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
     }
   },
   {
@@ -546,6 +649,15 @@
         ],
         "queryHttpStatus": 200
       }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
     }
   },
   {
@@ -586,6 +698,15 @@
         "mergedValues": null,
         "queryHttpStatus": 200
       }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
     }
   },
   {
@@ -632,6 +753,15 @@
         "mergedValues": null,
         "queryHttpStatus": 200
       }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
     }
   },
   {
@@ -675,6 +805,15 @@
         "exposeProviderMessage": false,
         "queryHttpStatus": 200
       }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
     }
   },
   {
@@ -718,6 +857,15 @@
         "exposeProviderMessage": false,
         "queryHttpStatus": 200
       }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
     }
   },
   {
@@ -762,8 +910,622 @@
         "storedAtCompletion": 4,
         "deletedSourceTextVisible": false,
         "deletedSourceTextStoredInDerivedCopies": false,
-        "queryHttpStatus": 200
+        "queryHttpStatus": 404,
+        "queryErrorCode": "RESOURCE_NOT_FOUND"
       }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
+    }
+  },
+  {
+    "caseId": "C-direct-basis-detached",
+    "category": "BACKEND",
+    "purpose": "완료 전 응답이 참조한 DIRECT_INPUT 근거 연결 행 제거 시 결과 폐기·저장 0건; 현재 문서·후보 버전 유지",
+    "contractVersion": "v2",
+    "contractSections": [
+      12,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "aiResponse": {
+      "httpStatus": 200,
+      "bodyFile": "payloads/responses/update-direct-input.json"
+    },
+    "events": [
+      {
+        "phase": "BEFORE_COMPLETION",
+        "action": "DETACH_BASIS",
+        "itemId": "aaaaaaaa-0000-4000-8000-000000000100",
+        "basisId": "aaaaaaaa-0000-4000-8000-000000000300",
+        "basisKind": "DIRECT_INPUT",
+        "removeCareItemBasisRow": true,
+        "preserveBasisContent": true
+      }
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "bodyFile": "payloads/responses/update-direct-input.json",
+        "providerCalls": 1
+      },
+      "be": {
+        "state": "DISCARDED",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200,
+        "currentDocumentUnchanged": true,
+        "candidateVersionUnchanged": true,
+        "basisAfterEvent": {
+          "careItemBasisRowExists": false,
+          "documentExists": true,
+          "documentValid": true
+        }
+      }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
+    },
+    "setup": {
+      "directInputDocuments": [
+        {
+          "itemId": "aaaaaaaa-0000-4000-8000-000000000100",
+          "basisId": "aaaaaaaa-0000-4000-8000-000000000300",
+          "currentDocumentId": "aaaaaaaa-0000-4000-8000-000000000700",
+          "basisDocumentId": "aaaaaaaa-0000-4000-8000-000000000800"
+        }
+      ]
+    }
+  },
+  {
+    "caseId": "C-direct-document-invalidated",
+    "category": "BACKEND",
+    "purpose": "완료 전 응답이 참조한 DIRECT_INPUT 근거 원본 문서 무효화 시 결과 폐기·저장 0건; 현재 문서·후보 버전 유지",
+    "contractVersion": "v2",
+    "contractSections": [
+      12,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "aiResponse": {
+      "httpStatus": 200,
+      "bodyFile": "payloads/responses/update-direct-input.json"
+    },
+    "events": [
+      {
+        "phase": "BEFORE_COMPLETION",
+        "action": "INVALIDATE_DIRECT_DOCUMENT",
+        "itemId": "aaaaaaaa-0000-4000-8000-000000000100",
+        "basisId": "aaaaaaaa-0000-4000-8000-000000000300",
+        "basisKind": "DIRECT_INPUT",
+        "documentId": "aaaaaaaa-0000-4000-8000-000000000800",
+        "redactBody": true,
+        "retainCareItemBasisRow": true
+      }
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "bodyFile": "payloads/responses/update-direct-input.json",
+        "providerCalls": 1
+      },
+      "be": {
+        "state": "DISCARDED",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200,
+        "currentDocumentUnchanged": true,
+        "candidateVersionUnchanged": true,
+        "basisAfterEvent": {
+          "careItemBasisRowExists": true,
+          "documentExists": true,
+          "documentValid": false
+        }
+      }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
+    },
+    "setup": {
+      "directInputDocuments": [
+        {
+          "itemId": "aaaaaaaa-0000-4000-8000-000000000100",
+          "basisId": "aaaaaaaa-0000-4000-8000-000000000300",
+          "currentDocumentId": "aaaaaaaa-0000-4000-8000-000000000700",
+          "basisDocumentId": "aaaaaaaa-0000-4000-8000-000000000800"
+        }
+      ]
+    }
+  },
+  {
+    "caseId": "C-direct-basis-detached-query",
+    "category": "BACKEND",
+    "purpose": "저장 완료 후 응답이 참조한 DIRECT_INPUT 근거 연결 행 제거 시 정상 제안·근거로 노출하지 않음; 현재 문서·후보 버전 유지",
+    "contractVersion": "v2",
+    "contractSections": [
+      12,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "aiResponse": {
+      "httpStatus": 200,
+      "bodyFile": "payloads/responses/update-direct-input.json"
+    },
+    "events": [
+      {
+        "phase": "AFTER_COMPLETION",
+        "action": "DETACH_BASIS",
+        "itemId": "aaaaaaaa-0000-4000-8000-000000000100",
+        "basisId": "aaaaaaaa-0000-4000-8000-000000000300",
+        "basisKind": "DIRECT_INPUT",
+        "removeCareItemBasisRow": true,
+        "preserveBasisContent": true
+      }
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "bodyFile": "payloads/responses/update-direct-input.json",
+        "providerCalls": 1
+      },
+      "be": {
+        "completionState": "COMPLETED",
+        "storedAtCompletion": 1,
+        "visibleValidProposalCount": 0,
+        "visibleValidBasisCount": 0,
+        "queryHttpStatus": 200,
+        "currentDocumentUnchanged": true,
+        "candidateVersionUnchanged": true,
+        "basisAfterEvent": {
+          "careItemBasisRowExists": false,
+          "documentExists": true,
+          "documentValid": true
+        }
+      }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
+    },
+    "setup": {
+      "directInputDocuments": [
+        {
+          "itemId": "aaaaaaaa-0000-4000-8000-000000000100",
+          "basisId": "aaaaaaaa-0000-4000-8000-000000000300",
+          "currentDocumentId": "aaaaaaaa-0000-4000-8000-000000000700",
+          "basisDocumentId": "aaaaaaaa-0000-4000-8000-000000000800"
+        }
+      ]
+    }
+  },
+  {
+    "caseId": "C-direct-document-invalidated-query",
+    "category": "BACKEND",
+    "purpose": "저장 완료 후 응답이 참조한 DIRECT_INPUT 근거 원본 문서 무효화 시 정상 제안·근거로 노출하지 않음; 현재 문서·후보 버전 유지",
+    "contractVersion": "v2",
+    "contractSections": [
+      12,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "aiResponse": {
+      "httpStatus": 200,
+      "bodyFile": "payloads/responses/update-direct-input.json"
+    },
+    "events": [
+      {
+        "phase": "AFTER_COMPLETION",
+        "action": "INVALIDATE_DIRECT_DOCUMENT",
+        "itemId": "aaaaaaaa-0000-4000-8000-000000000100",
+        "basisId": "aaaaaaaa-0000-4000-8000-000000000300",
+        "basisKind": "DIRECT_INPUT",
+        "documentId": "aaaaaaaa-0000-4000-8000-000000000800",
+        "redactBody": true,
+        "retainCareItemBasisRow": true
+      }
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "bodyFile": "payloads/responses/update-direct-input.json",
+        "providerCalls": 1
+      },
+      "be": {
+        "completionState": "COMPLETED",
+        "storedAtCompletion": 1,
+        "visibleValidProposalCount": 0,
+        "visibleValidBasisCount": 0,
+        "queryHttpStatus": 200,
+        "currentDocumentUnchanged": true,
+        "candidateVersionUnchanged": true,
+        "basisAfterEvent": {
+          "careItemBasisRowExists": true,
+          "documentExists": true,
+          "documentValid": false
+        }
+      }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
+    },
+    "setup": {
+      "directInputDocuments": [
+        {
+          "itemId": "aaaaaaaa-0000-4000-8000-000000000100",
+          "basisId": "aaaaaaaa-0000-4000-8000-000000000300",
+          "currentDocumentId": "aaaaaaaa-0000-4000-8000-000000000700",
+          "basisDocumentId": "aaaaaaaa-0000-4000-8000-000000000800"
+        }
+      ]
+    }
+  },
+  {
+    "caseId": "C-unreferenced-direct-basis",
+    "category": "BACKEND",
+    "purpose": "완료 전 응답이 참조하지 않은 입력 DIRECT_INPUT 근거 연결 행 제거 시 결과 폐기·저장 0건; 현재 문서·후보 버전 유지",
+    "contractVersion": "v2",
+    "contractSections": [
+      12,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "aiResponse": {
+      "httpStatus": 200,
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "events": [
+      {
+        "phase": "BEFORE_COMPLETION",
+        "action": "DETACH_BASIS",
+        "itemId": "aaaaaaaa-0000-4000-8000-000000000104",
+        "basisId": "aaaaaaaa-0000-4000-8000-000000000304",
+        "basisKind": "DIRECT_INPUT",
+        "removeCareItemBasisRow": true,
+        "preserveBasisContent": true
+      }
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "bodyFile": "payloads/responses/update.json",
+        "providerCalls": 1
+      },
+      "be": {
+        "state": "DISCARDED",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200,
+        "currentDocumentUnchanged": true,
+        "candidateVersionUnchanged": true,
+        "basisAfterEvent": {
+          "careItemBasisRowExists": false,
+          "documentExists": true,
+          "documentValid": true
+        }
+      }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
+    },
+    "setup": {
+      "directInputDocuments": [
+        {
+          "itemId": "aaaaaaaa-0000-4000-8000-000000000104",
+          "basisId": "aaaaaaaa-0000-4000-8000-000000000304",
+          "currentDocumentId": "aaaaaaaa-0000-4000-8000-000000000704",
+          "basisDocumentId": "aaaaaaaa-0000-4000-8000-000000000804"
+        }
+      ]
+    }
+  },
+  {
+    "caseId": "C-unreferenced-direct-document",
+    "category": "BACKEND",
+    "purpose": "완료 전 응답이 참조하지 않은 입력 DIRECT_INPUT 근거 원본 문서 무효화 시 결과 폐기·저장 0건; 현재 문서·후보 버전 유지",
+    "contractVersion": "v2",
+    "contractSections": [
+      12,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "aiResponse": {
+      "httpStatus": 200,
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "events": [
+      {
+        "phase": "BEFORE_COMPLETION",
+        "action": "INVALIDATE_DIRECT_DOCUMENT",
+        "itemId": "aaaaaaaa-0000-4000-8000-000000000104",
+        "basisId": "aaaaaaaa-0000-4000-8000-000000000304",
+        "basisKind": "DIRECT_INPUT",
+        "documentId": "aaaaaaaa-0000-4000-8000-000000000804",
+        "redactBody": true,
+        "retainCareItemBasisRow": true
+      }
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "bodyFile": "payloads/responses/update.json",
+        "providerCalls": 1
+      },
+      "be": {
+        "state": "DISCARDED",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200,
+        "currentDocumentUnchanged": true,
+        "candidateVersionUnchanged": true,
+        "basisAfterEvent": {
+          "careItemBasisRowExists": true,
+          "documentExists": true,
+          "documentValid": false
+        }
+      }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
+    },
+    "setup": {
+      "directInputDocuments": [
+        {
+          "itemId": "aaaaaaaa-0000-4000-8000-000000000104",
+          "basisId": "aaaaaaaa-0000-4000-8000-000000000304",
+          "currentDocumentId": "aaaaaaaa-0000-4000-8000-000000000704",
+          "basisDocumentId": "aaaaaaaa-0000-4000-8000-000000000804"
+        }
+      ]
+    }
+  },
+  {
+    "caseId": "C-unreferenced-direct-basis-query",
+    "category": "BACKEND",
+    "purpose": "저장 완료 후 응답이 참조하지 않은 입력 DIRECT_INPUT 근거 연결 행 제거 시 정상 제안·근거로 노출하지 않음; 현재 문서·후보 버전 유지",
+    "contractVersion": "v2",
+    "contractSections": [
+      12,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "aiResponse": {
+      "httpStatus": 200,
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "events": [
+      {
+        "phase": "AFTER_COMPLETION",
+        "action": "DETACH_BASIS",
+        "itemId": "aaaaaaaa-0000-4000-8000-000000000104",
+        "basisId": "aaaaaaaa-0000-4000-8000-000000000304",
+        "basisKind": "DIRECT_INPUT",
+        "removeCareItemBasisRow": true,
+        "preserveBasisContent": true
+      }
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "bodyFile": "payloads/responses/update.json",
+        "providerCalls": 1
+      },
+      "be": {
+        "completionState": "COMPLETED",
+        "storedAtCompletion": 1,
+        "visibleValidProposalCount": 0,
+        "visibleValidBasisCount": 0,
+        "queryHttpStatus": 200,
+        "currentDocumentUnchanged": true,
+        "candidateVersionUnchanged": true,
+        "basisAfterEvent": {
+          "careItemBasisRowExists": false,
+          "documentExists": true,
+          "documentValid": true
+        }
+      }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
+    },
+    "setup": {
+      "directInputDocuments": [
+        {
+          "itemId": "aaaaaaaa-0000-4000-8000-000000000104",
+          "basisId": "aaaaaaaa-0000-4000-8000-000000000304",
+          "currentDocumentId": "aaaaaaaa-0000-4000-8000-000000000704",
+          "basisDocumentId": "aaaaaaaa-0000-4000-8000-000000000804"
+        }
+      ]
+    }
+  },
+  {
+    "caseId": "C-unreferenced-direct-document-query",
+    "category": "BACKEND",
+    "purpose": "저장 완료 후 응답이 참조하지 않은 입력 DIRECT_INPUT 근거 원본 문서 무효화 시 정상 제안·근거로 노출하지 않음; 현재 문서·후보 버전 유지",
+    "contractVersion": "v2",
+    "contractSections": [
+      12,
+      13,
+      14
+    ],
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyFile": "payloads/requests/base.json"
+    },
+    "aiResponse": {
+      "httpStatus": 200,
+      "bodyFile": "payloads/responses/update.json"
+    },
+    "events": [
+      {
+        "phase": "AFTER_COMPLETION",
+        "action": "INVALIDATE_DIRECT_DOCUMENT",
+        "itemId": "aaaaaaaa-0000-4000-8000-000000000104",
+        "basisId": "aaaaaaaa-0000-4000-8000-000000000304",
+        "basisKind": "DIRECT_INPUT",
+        "documentId": "aaaaaaaa-0000-4000-8000-000000000804",
+        "redactBody": true,
+        "retainCareItemBasisRow": true
+      }
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "bodyFile": "payloads/responses/update.json",
+        "providerCalls": 1
+      },
+      "be": {
+        "completionState": "COMPLETED",
+        "storedAtCompletion": 1,
+        "visibleValidProposalCount": 0,
+        "visibleValidBasisCount": 0,
+        "queryHttpStatus": 200,
+        "currentDocumentUnchanged": true,
+        "candidateVersionUnchanged": true,
+        "basisAfterEvent": {
+          "careItemBasisRowExists": true,
+          "documentExists": true,
+          "documentValid": false
+        }
+      }
+    },
+    "publicQuery": {
+      "method": "GET",
+      "pathTemplate": "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}",
+      "spaceId": "aaaaaaaa-0000-4000-8000-000000000002",
+      "recordId": "aaaaaaaa-0000-4000-8000-000000000003",
+      "analysisIdFrom": "CURRENT_RUN",
+      "phase": "AFTER_SCENARIO",
+      "viewer": "ACTIVE_SPACE_MEMBER"
+    },
+    "setup": {
+      "directInputDocuments": [
+        {
+          "itemId": "aaaaaaaa-0000-4000-8000-000000000104",
+          "basisId": "aaaaaaaa-0000-4000-8000-000000000304",
+          "currentDocumentId": "aaaaaaaa-0000-4000-8000-000000000704",
+          "basisDocumentId": "aaaaaaaa-0000-4000-8000-000000000804"
+        }
+      ]
     }
   }
 ]

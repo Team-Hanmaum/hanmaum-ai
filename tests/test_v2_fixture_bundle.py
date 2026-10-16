@@ -83,10 +83,14 @@ def test_case_metadata_and_references(case):
             if key.endswith("File"):
                 assert bundle_path(ROOT, value).is_file()
         if "method" in obj:
-            assert obj["method"] == "POST"
-            assert obj["path"] == "/v2/analyses"
-            assert obj["headers"]["Content-Type"] == "application/json"
-            assert "bodyFile" in obj
+            if obj is case.get("publicQuery"):
+                assert case["category"] == "BACKEND"
+                assert obj["method"] == "GET"
+            else:
+                assert obj["method"] == "POST"
+                assert obj["path"] == "/v2/analyses"
+                assert obj["headers"]["Content-Type"] == "application/json"
+                assert "bodyFile" in obj
         if "ai" in obj and "be" in obj and "code" in obj["ai"]:
             ai, be = obj["ai"], obj["be"]
             assert MAPPING[(ai["httpStatus"], ai["code"])] == be["failureCode"]
@@ -300,8 +304,26 @@ def test_required_categories_and_error_mapping_coverage():
 
 @pytest.mark.parametrize("case", CASES["BACKEND"], ids=lambda case: case["caseId"])
 def test_backend_scenario_consistency(case):
+    request = payload(case["request"]["bodyFile"])
     be = case["expected"]["be"]
-    assert be["queryHttpStatus"] == 200
+    query = case["publicQuery"]
+    assert query["pathTemplate"] == (
+        "/api/spaces/{spaceId}/source-records/{recordId}/analyses/{analysisId}"
+    )
+    assert query["spaceId"] == request["careSpaceId"]
+    assert query["recordId"] == request["recordId"]
+    assert query["analysisIdFrom"] == "CURRENT_RUN"
+    assert query["phase"] == "AFTER_SCENARIO"
+    requester_inactive = any(e["action"] == "END_REQUESTER_MEMBERSHIP" for e in case["events"])
+    assert query["viewer"] == (
+        "OTHER_ACTIVE_SPACE_MEMBER" if requester_inactive else "ACTIVE_SPACE_MEMBER"
+    )
+    source_deleted = any(
+        e["action"] == "DELETE_SOURCE_RECORD" and e["recordId"] == request["recordId"]
+        for e in case["events"]
+    )
+    assert be["queryHttpStatus"] == (404 if source_deleted else 200)
+    assert be.get("queryErrorCode") == ("RESOURCE_NOT_FOUND" if source_deleted else None)
     if be.get("state") in {"FAILED", "DISCARDED"}:
         assert be["storedProposalCount"] == 0
     for event in case["events"]:
@@ -315,16 +337,103 @@ def test_backend_scenario_consistency(case):
         assert event["action"] in {
             "DELETE_SOURCE_RECORD",
             "DETACH_BASIS",
+            "INVALIDATE_DIRECT_DOCUMENT",
             "CHANGE_CANDIDATE_VERSION",
             "END_REQUESTER_MEMBERSHIP",
             "FAIL_PROPOSAL_INSERT",
             "CHANGE_ACTIVE_CONTRACT",
             "SEED_FAILED_RUN",
         }
-    if be.get("state") == "COMPLETED":
+        if event["action"] in {"DETACH_BASIS", "INVALIDATE_DIRECT_DOCUMENT"}:
+            assert_basis_invalidation(case, request, event)
+        if event["action"] == "DELETE_SOURCE_RECORD":
+            assert event["recordId"] == request["recordId"]
+            if event["phase"] == "BEFORE_COMPLETION":
+                assert be["state"] == "DISCARDED" and be["storedProposalCount"] == 0
+            else:
+                assert event["phase"] == "AFTER_COMPLETION"
+                assert be["completionState"] == "COMPLETED"
+                assert "state" not in be  # No newly prescribed post-deletion state.
+                assert be["deletedSourceTextVisible"] is False
+                assert be["deletedSourceTextStoredInDerivedCopies"] is False
+    if case["aiResponse"]["httpStatus"] == 200 and be.get("failureCode") != "AI_INVALID_RESPONSE":
         response = payload(case["aiResponse"]["bodyFile"])
-        assert len(response["suggestions"]) == be["storedProposalCount"]
-        assert_positive_examples(payload(case["request"]["bodyFile"]), response)
+        assert_positive_examples(request, response)
+        if be.get("state") == "COMPLETED":
+            assert len(response["suggestions"]) == be["storedProposalCount"]
+        if be.get("completionState") == "COMPLETED":
+            assert len(response["suggestions"]) == be["storedAtCompletion"]
+
+
+def assert_basis_invalidation(case, request, event):
+    """Validate scenario setup/expectations, without claiming to execute BE mutations."""
+    candidate = next(c for c in request["candidates"] if c["itemId"] == event["itemId"])
+    basis = next(b for b in candidate["basis"] if b["basisId"] == event["basisId"])
+    assert basis["kind"] == event["basisKind"]
+    assert "keepBasisRow" not in event and "keepDocument" not in event
+    detach = event["action"] == "DETACH_BASIS"
+    if detach:
+        assert event["removeCareItemBasisRow"] is True
+        assert event["preserveBasisContent"] is True
+    else:
+        assert basis["kind"] == "DIRECT_INPUT"
+        assert event["redactBody"] is True
+        assert event["retainCareItemBasisRow"] is True
+
+    be = case["expected"]["be"]
+    if event["phase"] == "BEFORE_COMPLETION":
+        assert be["state"] == "DISCARDED" and be["storedProposalCount"] == 0
+    else:
+        assert event["phase"] == "AFTER_COMPLETION"
+        assert be["completionState"] == "COMPLETED" and be["storedAtCompletion"] > 0
+        assert be["visibleValidProposalCount"] == be["visibleValidBasisCount"] == 0
+    assert be["queryHttpStatus"] == 200
+
+    if basis["kind"] == "DIRECT_INPUT":
+        seed = next(
+            s for s in case["setup"]["directInputDocuments"] if s["basisId"] == basis["basisId"]
+        )
+        assert seed["itemId"] == candidate["itemId"]
+        # Separate current and original documents so invalidating the original cannot
+        # accidentally pass by checking only current_document_id or the item version.
+        ids = [seed[k] for k in ("itemId", "basisId", "currentDocumentId", "basisDocumentId")]
+        assert len({UUID(value) for value in ids}) == len(ids)
+        if not detach:
+            assert event["documentId"] == seed["basisDocumentId"]
+        assert be["currentDocumentUnchanged"] is True
+        assert be["candidateVersionUnchanged"] is True
+        assert be["basisAfterEvent"] == {
+            "careItemBasisRowExists": not detach,
+            "documentExists": True,
+            "documentValid": detach,
+        }
+
+
+def test_direct_input_invalidation_coverage_includes_unreferenced_inputs():
+    covered = set()
+    for case in CASES["BACKEND"]:
+        for event in case["events"]:
+            if event.get("basisKind") != "DIRECT_INPUT":
+                continue
+            response = payload(case["aiResponse"]["bodyFile"])
+            references = {
+                (ref["itemId"], basis_id)
+                for suggestion in response["suggestions"]
+                for ref in suggestion["basisReferences"]
+                for basis_id in ref["basisIds"]
+            }
+            referenced = (event["itemId"], event["basisId"]) in references
+            if not referenced:
+                # The unreferenced dependency belongs to another input candidate.
+                assert event["itemId"] not in {s["targetItemId"] for s in response["suggestions"]}
+                assert event["itemId"] not in {item_id for item_id, _ in references}
+            covered.add((event["phase"], event["action"], referenced))
+    assert covered == {
+        (phase, action, referenced)
+        for phase in ("BEFORE_COMPLETION", "AFTER_COMPLETION")
+        for action in ("DETACH_BASIS", "INVALIDATE_DIRECT_DOCUMENT")
+        for referenced in (True, False)
+    }
 
 
 def test_backend_goldens_retain_all_operations_and_retry_identity():

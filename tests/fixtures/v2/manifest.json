@@ -1,7 +1,7 @@
 {
   "formatVersion": 1,
   "contractVersion": "v2",
-  "revision": "v2-20261016.1",
+  "revision": "v2-20261016.2",
   "sourceRepository": "Team-Hanmaum/hanmaum-ai",
   "suites": {
     "STATIC": "cases/static.json",
@@ -190,6 +190,10 @@
     "C-candidate-version",
     "C-completed",
     "C-delete-derived-copies",
+    "C-direct-basis-detached",
+    "C-direct-basis-detached-query",
+    "C-direct-document-invalidated",
+    "C-direct-document-invalidated-query",
     "C-empty",
     "C-explicit-retry",
     "C-fixed-run-version",
@@ -200,6 +204,10 @@
     "C-storage-rollback",
     "C-unknown-code",
     "C-unreferenced-basis",
+    "C-unreferenced-direct-basis",
+    "C-unreferenced-direct-basis-query",
+    "C-unreferenced-direct-document",
+    "C-unreferenced-direct-document-query",
     "C-version-changed-query",
     "C-wrong-pair"
   ],
@@ -210,7 +218,7 @@
     },
     {
       "path": "cases/backend.json",
-      "sha256": "98b471726ebbdeb5a92ef37e22add3829cbc9cdb9bfe93bd95b29e2f7fae093c"
+      "sha256": "84ea887f6c1c468442b2a92471d7c7043281287d2690d26790dd600034bec875"
     },
     {
       "path": "cases/receipts.json",
@@ -865,6 +873,10 @@
       "sha256": "64af72049eddbf31afb4ab323def6b5561a9c2b141c07587adf9fa046db5c2dc"
     },
     {
+      "path": "payloads/responses/update-direct-input.json",
+      "sha256": "e7a14585d825060865f88fbfa68fc4524fea08593aee292531bc61a4d41e6311"
+    },
+    {
       "path": "payloads/responses/update-guidance.json",
       "sha256": "63aa25cbd8c063b39c87f84ec1401689d1ce734eb3aa7abebd2ef7a09f789baa"
     },
@@ -894,7 +906,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "46baf708e660753fe0f44eff7620099daf96f247f9ecdcdeac0b629c1b43b5e0"
+      "sha256": "57710fbc411a57fa81b4c550da2a339363e8c525c770b917afae9027603b955f"
     }
   ]
 }
