@@ -190,6 +190,9 @@ app/
   config.py       환경 변수
   api.py          상태 확인·분석 API
   schemas.py      요청·응답 계약
+  v2/
+    schemas.py    v2 전용 요청·응답 모델과 필드·제안 조합 검증
+    validation.py 원문 JSON 파싱과 요청·결과 사이의 계약 검증
   security.py     내부 키 인증
   services.py     타임아웃·분석 결과 검증
   providers.py    분석 제공자 인터페이스·stub
@@ -205,10 +208,10 @@ AI는 Spring이 보낸 원문과 후보를 바탕으로 제안만 반환합니�
 이 레포는 DB를 직접 읽거나 수정하지 않습니다.
 분석 계약과 제약은 [API 계약 문서](docs/ai-contract.md)를 참고합니다.
 
-v2는 [확정 계약](docs/ai-contract-v2.md)과 [공통 fixture](tests/fixtures/v2/README.md)를
-먼저 준비한 단계입니다. 현재 실행 API와 기존 v1 fixture는 유지하며, v2 API·수신 기록 저장소와
-BE 저장·조회 구현은 후속 작업입니다. 공통 fixture 검사는 실제 모델 품질이나 양쪽 연동 완료를
-의미하지 않습니다.
+v2는 [확정 계약](docs/ai-contract-v2.md)과 [공통 fixture](tests/fixtures/v2/README.md)의
+`v2-20261016.2`를 기준으로 요청·응답 모델과 계약 검증을 구현했습니다.
+현재 실행 API는 v1이며, v2 API·수신 기록 저장소·실제 모델 연결과 BE 저장·조회 구현은 후속 작업입니다.
+기존 v1 모델·제한·API와 공유 fixture 원문·기대값은 유지합니다.
 
 공통 데이터의 파일 목록·SHA-256·revision 및 사례 일관성을 확인합니다.
 
@@ -216,6 +219,32 @@ BE 저장·조회 구현은 후속 작업입니다. 공통 fixture 검사는 실
 uv run --locked python scripts/fixture_manifest.py
 uv run --locked pytest tests/test_v2_fixture_bundle.py
 ```
+
+실제 v2 계약 코드의 판정은 별도 테스트로 확인합니다.
+
+```bash
+uv run --locked pytest tests/test_v2_contract.py
+```
+
+`app.v2.validation.parse_request(raw)`는 UTF-8 원문 JSON에서 중복 키와 시간 정밀도를
+검사하고 v2 요청 모델을 반환합니다. 요청 본문을 미리 JSON 객체로 바꾸면 중복 키를 잃으므로
+이 진입점에 원문 바이트를 전달합니다.
+반환된 요청은 후보·현재 값·근거까지 읽기 전용이며 후보·근거 배열은 내부적으로 tuple로 보존합니다.
+JSON 직렬화에서는 기존 배열 형식이 유지됩니다. 제공자가 입력을 가공해야 하면
+`request.model_dump(mode="json")`으로 별도 사본을 전달하고, 응답 검증에는 최초 요청을 유지합니다.
+`validate_response(request, payload)`는 제공자 결과의 원문 JSON 또는 객체를 받아
+필드·작업 조합과 대상·버전·근거 참조를 검증하고, 하나라도 위반하면 전체 응답을 거부합니다.
+요청 위반은 `AnalysisFailure(422, INVALID_REQUEST)`, 결과 위반은
+`AnalysisFailure(502, INVALID_AI_RESPONSE)`로 구분하며 원문을 오류 메시지나 로그에 넣지 않습니다.
+
+정적 146개 사례 중 계약 검증 139개를 실제 코드에 연결했습니다. 인증·헤더·제공자 처리 7개와
+수신 기록 30개·BE 통합 25개는 후속 구현의 실행 검증 대상입니다.
+정확한 caseId 구분과 책임은 [v2 계약의 구현 범위](docs/ai-contract-v2.md#현재-ai-구현과-테스트-범위)에 정리했습니다.
+fixture 검사나 모델 검증 통과는 실제 HTTP·호출 횟수·DB 통합·모델 품질 검증 완료를 의미하지 않습니다.
+현재 파서는 전체 본문을 전달받는 계약 검증 함수이며 자원 사용량을 제한하는 수신 계층이 아닙니다.
+v2 HTTP·제공자 연결 전에 본문·응답 크기와 컬렉션·문자열 제한, 초과 오류 처리를 합의하고,
+본문을 전부 버퍼링하거나 JSON으로 디코딩하기 전의 읽기 단계부터 보호해야 합니다.
+크기 제한은 계약 15절의 미정 사항이므로 이번 모델에 임의의 숫자나 v1 제한을 추가하지 않습니다.
 
 BE에는 동일 revision의 `tests/fixtures/v2/` 전체를 전달합니다. 사례 형식, 원문 JSON 전송,
 동시성·저장·조회 시나리오의 실행 책임과 동기화 방법은 fixture README에 정리되어 있습니다.
