@@ -10,6 +10,7 @@ from uuid import UUID
 
 from app.errors import AnalysisFailure
 from app.v2.comparison import Fingerprint, RequestDigester
+from app.v2.diagnostics import FailureEvent, record_failure
 from app.v2.schemas import AnalysisRequest
 
 SCHEMA_VERSION = 1
@@ -67,6 +68,7 @@ class SQLiteReceiptStore:
         try:
             connection.execute("PRAGMA synchronous = FULL")
             if connection.execute("PRAGMA journal_mode").fetchone()[0] in {"off", "memory"}:
+                record_failure(FailureEvent.RECEIPT_DURABILITY)
                 raise store_unavailable()
             if not create:
                 self._check_schema(connection)
@@ -78,6 +80,16 @@ class SQLiteReceiptStore:
     @staticmethod
     def _check_schema(connection: sqlite3.Connection) -> None:
         if connection.execute("PRAGMA user_version").fetchone()[0] != SCHEMA_VERSION:
+            record_failure(FailureEvent.RECEIPT_SCHEMA)
+            raise store_unavailable()
+        # Accept only the DDL owned by this schema version, including CHECK, NOT NULL,
+        # the composite primary key and WITHOUT ROWID. Substring checks can be fooled
+        # by comments or weakened expressions. Equivalent hand-written DDL is unsupported.
+        definition = connection.execute(
+            "SELECT sql FROM sqlite_schema WHERE type = 'table' AND name = 'receipts'"
+        ).fetchone()
+        if definition is None or definition[0].strip() != SCHEMA.strip():
+            record_failure(FailureEvent.RECEIPT_SCHEMA)
             raise store_unavailable()
         columns = connection.execute("PRAGMA table_info(receipts)").fetchall()
         if [(col[1], col[2], col[3], col[5]) for col in columns] != [
@@ -87,6 +99,7 @@ class SQLiteReceiptStore:
             ("hmac_key_version", "TEXT", 1, 0),
             ("digest", "BLOB", 1, 0),
         ]:
+            record_failure(FailureEvent.RECEIPT_SCHEMA)
             raise store_unavailable()
 
     def initialize(self) -> None:
@@ -100,9 +113,11 @@ class SQLiteReceiptStore:
                 ).fetchall()
                 if version == 0 and not tables:
                     connection.execute(SCHEMA)
-                    connection.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
+                    # PRAGMA does not accept bound values; this literal matches SCHEMA_VERSION.
+                    connection.execute("PRAGMA user_version = 1")
                 self._check_schema(connection)
-        except (sqlite3.Error, OSError):
+        except (sqlite3.Error, OSError) as error:
+            record_failure(FailureEvent.RECEIPT_INITIALIZE, error)
             raise store_unavailable() from None
 
     @staticmethod
@@ -120,10 +135,21 @@ class SQLiteReceiptStore:
         try:
             with closing(self._connect()) as connection:
                 return self._read(connection, contract_version, request_id)
-        except (sqlite3.Error, OSError):
+        except (sqlite3.Error, OSError) as error:
+            record_failure(FailureEvent.RECEIPT_READ, error)
             raise store_unavailable() from None
 
     def register(self, receipt: Receipt) -> Receipt | None:
+        if (
+            not isinstance(receipt, Receipt)
+            or not isinstance(receipt.contract_version, str)
+            or not receipt.contract_version
+            or not isinstance(receipt.request_id, UUID)
+            or not isinstance(receipt.fingerprint, Fingerprint)
+            or not receipt.fingerprint.is_valid()
+        ):
+            record_failure(FailureEvent.RECEIPT_INPUT)
+            raise store_unavailable()
         try:
             with closing(self._connect()) as connection, connection:
                 connection.execute("BEGIN IMMEDIATE")
@@ -142,7 +168,8 @@ class SQLiteReceiptStore:
                 )
                 # The context commits before returning; commit failure cannot authorize a call.
             return None
-        except (sqlite3.Error, OSError):
+        except (sqlite3.Error, OSError) as error:
+            record_failure(FailureEvent.RECEIPT_REGISTER, error)
             raise store_unavailable() from None
 
 

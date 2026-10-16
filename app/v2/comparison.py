@@ -5,12 +5,13 @@ import hmac
 import json
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
-from datetime import UTC, datetime
+from datetime import date, datetime, timedelta
 from types import MappingProxyType
 from uuid import UUID
 
 from pydantic import SecretBytes
 
+from app.v2.diagnostics import FailureEvent, record_failure
 from app.v2.schemas import AnalysisRequest
 
 CANONICALIZATION_VERSION = "v2-json-1"
@@ -21,6 +22,28 @@ class ComparisonUnavailable(Exception):
 
     def __init__(self):
         super().__init__("수신 기록을 안전하게 비교할 수 없습니다.")
+
+
+def _canonical_timestamp(value: str) -> str:
+    timestamp = datetime.fromisoformat(value)
+    # Integer arithmetic preserves microseconds without constructing a UTC datetime
+    # outside years 1..9999. A valid offset can cross at most one boundary day.
+    offset = timestamp.utcoffset() // timedelta(microseconds=1)
+    day_us = 86_400_000_000
+    local_us = (
+        (timestamp.hour * 60 + timestamp.minute) * 60 + timestamp.second
+    ) * 1_000_000 + timestamp.microsecond
+    ordinal, time_us = divmod(timestamp.toordinal() * day_us + local_us - offset, day_us)
+    if ordinal == 0:
+        day = "0000-12-31"
+    elif ordinal == date.max.toordinal() + 1:
+        day = "10000-01-01"
+    else:
+        day = date.fromordinal(ordinal).isoformat()
+    seconds, microseconds = divmod(time_us, 1_000_000)
+    hour, seconds = divmod(seconds, 3600)
+    minute, second = divmod(seconds, 60)
+    return f"{day}T{hour:02}:{minute:02}:{second:02}.{microseconds:06}Z"
 
 
 def canonicalize_v2(request: AnalysisRequest) -> bytes:
@@ -34,8 +57,7 @@ def canonicalize_v2(request: AnalysisRequest) -> bytes:
         return value
 
     body = request.model_dump(mode="python", by_alias=True)
-    timestamp = datetime.fromisoformat(request.recorded_at).astimezone(UTC)
-    body["recordedAt"] = timestamp.isoformat(timespec="microseconds").replace("+00:00", "Z")
+    body["recordedAt"] = _canonical_timestamp(request.recorded_at)
     # ASCII escaping preserves decoded strings (including lone JSON surrogates).
     # Only typed UUID objects and recordedAt are normalized, never text contents.
     return json.dumps(
@@ -48,6 +70,16 @@ class Fingerprint:
     canonicalization_version: str
     hmac_key_version: str
     digest: bytes = field(repr=False)
+
+    def is_valid(self) -> bool:
+        return (
+            isinstance(self.canonicalization_version, str)
+            and bool(self.canonicalization_version)
+            and isinstance(self.hmac_key_version, str)
+            and bool(self.hmac_key_version)
+            and isinstance(self.digest, bytes)
+            and len(self.digest) == hashlib.sha256().digest_size
+        )
 
 
 class RequestDigester:
@@ -69,6 +101,7 @@ class RequestDigester:
                 for key in keys.values()
             )
         ):
+            record_failure(FailureEvent.COMPARISON_CONFIGURATION)
             raise ValueError(
                 "Active comparison rule and dedicated HMAC keys of at least 32 bytes required"
             )
@@ -87,6 +120,12 @@ class RequestDigester:
     ) -> Fingerprint:
         rule_version = self._active_rule_version if rule_version is None else rule_version
         key_version = self._active_key_version if key_version is None else key_version
+        if rule_version not in self._rules:
+            record_failure(FailureEvent.COMPARISON_RULE_MISSING)
+            raise ComparisonUnavailable()
+        if key_version not in self._keys:
+            record_failure(FailureEvent.COMPARISON_KEY_MISSING)
+            raise ComparisonUnavailable()
         try:
             rule, key = self._rules[rule_version], self._keys[key_version]
             context = json.dumps(
@@ -96,19 +135,14 @@ class RequestDigester:
             digest.update(context + b"\0")
             digest.update(rule(request))
             return Fingerprint(rule_version, key_version, digest.digest())
-        except Exception:
+        except Exception as error:
             # Neither a missing historic rule/key nor a failing rule permits a new call.
+            record_failure(FailureEvent.COMPARISON_FAILED, error)
             raise ComparisonUnavailable() from None
 
     def matches(self, request: AnalysisRequest, stored: Fingerprint) -> bool:
-        if (
-            not isinstance(stored.canonicalization_version, str)
-            or not stored.canonicalization_version
-            or not isinstance(stored.hmac_key_version, str)
-            or not stored.hmac_key_version
-            or not isinstance(stored.digest, bytes)
-            or len(stored.digest) != hashlib.sha256().digest_size
-        ):
+        if not isinstance(stored, Fingerprint) or not stored.is_valid():
+            record_failure(FailureEvent.COMPARISON_METADATA)
             raise ComparisonUnavailable()
         candidate = self.fingerprint(
             request,
