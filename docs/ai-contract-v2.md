@@ -2,9 +2,39 @@
 
 2026-10-16 사용자 확정 계약. 아래 조항은 합의된 최종본을 보존하며 새 정책을 추가하지 않는다.
 
-현재 구현은 v1이다. 이 문서와 공통 fixture는 v2 구현 기준이며 API·수신 기록·BE 저장 구현 및 양쪽 연동 검증 완료를 의미하지 않는다.
+현재 실행 API는 v1이다. AI의 v2 요청·응답 모델과 계약 검증은 별도 모듈로 구현했으며, v2 API·수신 기록·BE 저장 구현 및 양쪽 연동 검증 완료를 의미하지 않는다.
 
 공통 사례와 사용 방법: [v2 fixture](../tests/fixtures/v2/README.md). 기존 계약: [v1](ai-contract.md).
+
+## 현재 AI 구현과 테스트 범위
+
+기준 fixture: `v2-20261016.2`, 기준 커밋 `af3abb3310f2f86c55fdf182f687da7491ef5fec`.
+공유 JSON·기대값·manifest는 구현에 맞춰 변경하지 않는다.
+
+- `app/v2/schemas.py`: 유형별 완전한 currentValues, 두 종류 근거, v2 제안 필드와 작업·관계·대상·변경분 조합 검증.
+- `app/v2/validation.py`: 원문 JSON의 중복 키·UTF-8·엄격한 타입·시간 정밀도 검증과 요청·결과 간 ID·유형·버전·원문 evidence·근거 소속·최소 참조 검증.
+- `parse_request(raw)`는 원문 bytes 또는 str을 받고 검증된 AnalysisRequest를 반환한다. `model_validate_json`이나 선행 JSON 디코딩으로 이 진입점을 대체하면 중복 키를 잃을 수 있다.
+- `validate_response(request, payload)`는 원문 JSON 또는 제공자가 반환한 객체를 받고 전체 검증 후 AnalysisResponse를 반환한다. 이미 디코딩된 객체의 중복 키는 복구할 수 없으므로 제공자 어댑터도 원문 디코딩 시 이를 거부해야 한다.
+- 호출부는 두 진입점에서 반환한 모델을 사용한다. 원문·제공자 오류 상세를 포함할 수 있는 Pydantic 오류를 그대로 외부로 전달하지 않는다. 계약 위반은 안전한 AnalysisFailure로 변환한다.
+- 날짜·시각은 형식을 검증한 문자열로 보존한다. recordedAt의 오프셋·소수초 원문, 문자열 공백·유니코드 표현·배열 순서·DIRECT_INPUT.text를 변경하지 않는다. UUID로 선언한 필드만 UUID 값으로 취급한다.
+- v1의 크기·개수·문자열 길이 제한을 v2에 일괄 적용하지 않는다. HMAC 정규화·수신 기록·상태 전이·업무 DB 유효성 검증은 이 모듈의 구현 범위가 아니다.
+
+실제 코드 테스트: `uv run --locked pytest tests/test_v2_contract.py`.
+fixture 자체의 무결성·시나리오 형식 검사는 기존 `tests/test_v2_fixture_bundle.py`에서 별도로 유지한다.
+
+| caseId 범위 | 이번 검증 | 후속 실행 검증 |
+| --- | --- | --- |
+| 아래 7개를 제외한 `cases/static.json`의 모든 A-* 139개 | 정상 40개, 무효 요청 30개, 무효 결과 69개를 실제 파서·모델·요청 상대 검증에 연결 | HTTP 응답·제공자 호출 횟수 |
+| `A-auth-missing`, `A-auth-invalid` | 제외 | 내부 HTTP 인증 |
+| `A-header-mismatch`, `A-header-uuid-case` | 제외 | HTTP 헤더와 본문 UUID 비교 |
+| `A-unavailable`, `A-disabled`, `A-timeout` | 제외 | 제공자 호출·설정·예외·타임아웃 처리 |
+| `cases/receipts.json`의 모든 B-* 30개 | 기존 fixture 일관성 검사만 유지 | 실제 수신 기록·동시성·재시작·키 교체 |
+| `cases/backend.json`의 모든 C-* 25개 | 기존 fixture 일관성 검사 및 직접 입력 근거 응답의 계약 검증 | BE DB·상태 변경·저장·권한·조회 통합 |
+
+139개 적용 caseId는 `tests/test_v2_contract.py`의 CONTRACT_CASES, 7개 제외 caseId·사유는 DEFERRED_STATIC에 명시한다. 신규 사례가 분류 없이 빠지지 않도록 revision·목록·기대 오류 범위를 검사한다.
+별도 경계 테스트에서 시간 정밀도·유효하지 않은 날짜와 오프셋, JSON 오류·응답 중복 키, 원문 보존, UUID 대소문자 중복, nullable 키 누락, v1 제한의 비전파와 안전한 오류를 확인한다.
+
+이 단계에서는 `/v2/analyses`를 등록하거나 제공자를 호출하지 않는다. 422·502는 검증 예외의 상태·코드이며 실제 HTTP 응답 완료 주장이 아니다. 기존 v1 라우트·서비스·테스트는 유지한다.
 
 ## 1. 계약 버전과 책임
 
