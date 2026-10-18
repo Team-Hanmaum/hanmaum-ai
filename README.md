@@ -138,6 +138,38 @@ uv run --locked pytest
 `.githooks/pre-commit`은 Python·의존성 관련 변경을 커밋할 때 린트와 형식을 검사합니다.
 테스트는 위 명령으로 실행합니다. 테스트에는 실제 LLM 호출과 API 키가 필요하지 않습니다.
 
+### GitHub Actions CI
+
+[AI CI](.github/workflows/ci.yml)는 모든 대상 브랜치의 PR 생성·코드 갱신·재오픈과
+`dev`·`main` push에서 `Lint and test` job을 실행합니다. 같은 PR 또는 ref의 이전 실행은
+취소하며, job 제한 시간은 10분입니다.
+
+Ubuntu 24.04에서 `.python-version`의 Python과 uv 0.12.19를 사용합니다.
+의존성은 `uv.lock`으로 고정하고, uv 캐시는 PR에서 복원하며 `dev`·`main` push에서 저장합니다.
+Action은 전체 커밋 SHA로 고정하며 저장소 내용 읽기 권한만 사용합니다.
+
+검사 순서와 로컬 재현 명령:
+
+```bash
+uv python install
+uv sync --locked --dev
+uv run --locked ruff check .
+uv run --locked ruff format --check .
+uv run --locked python scripts/fixture_manifest.py
+uv run --locked pytest --junitxml=test-results/pytest.xml
+```
+
+- fixture 검사는 manifest와 실제 파일 목록·해시·사례 메타데이터를 비교합니다.
+  `--write`로 기준을 자동 갱신하지 않습니다. 전체 pytest에도 관련 검사가 포함되지만
+  fixture 문제를 먼저 구분할 수 있도록 별도 step을 유지합니다.
+- pytest는 기존 v1, v2 계약, 공통 fixture, 수신 기록·리뷰 회귀를 모두 실행합니다.
+  가짜 제공자와 임시 SQLite를 사용하며 실제 LLM 키·GPU·BE DB·별도 DB 서비스가 필요하지 않습니다.
+- pytest가 생성한 `test-results/pytest.xml`은 테스트 실패 시에도 실행이 취소되지 않았다면
+  `ai-test-results` artifact로 업로드하여 7일간 보관합니다. 테스트 실행 전 실패로 파일이
+  생성되지 않았다면 업로드를 생략합니다. 로컬 결과 디렉터리는 Git에서 제외합니다.
+- CI는 AI 저장소 내부의 검증입니다. BE 복사본 동기화·BE 통합·실제 모델 품질·배포 검증과
+  구분합니다. 머지 차단에 사용할 필수 검사 지정은 GitHub 브랜치 보호·ruleset의 별도 설정입니다.
+
 ## Docker로 실행하기
 
 Docker Desktop을 실행한 상태에서 아래 명령을 사용합니다.
