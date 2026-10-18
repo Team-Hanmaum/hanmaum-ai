@@ -3,11 +3,19 @@
 import hashlib
 from copy import deepcopy
 from datetime import date, datetime, time
+from pathlib import PurePosixPath, PureWindowsPath
 from uuid import UUID
 
 import pytest
 
-from scripts.fixture_manifest import DEFAULT_ROOT, SUITES, build_manifest, bundle_path, read_json
+from scripts.fixture_manifest import (
+    DEFAULT_ROOT,
+    SUITES,
+    build_manifest,
+    bundle_path,
+    inventory_sort_key,
+    read_json,
+)
 
 ROOT = DEFAULT_ROOT
 CASES = {name: read_json(ROOT / path) for name, path in SUITES.items()}
@@ -57,6 +65,23 @@ def walk(value):
     elif isinstance(value, list):
         for child in value:
             yield from walk(child)
+
+
+@pytest.mark.parametrize("path_type", [PurePosixPath, PureWindowsPath])
+def test_manifest_inventory_order_is_portable(path_type):
+    # Fixed published order, including a directory/file-prefix boundary and case ties.
+    expected = [
+        ".gitattributes",
+        "cases/A.json",
+        "cases/a.json",
+        "cases/backend.json",
+        "cases.json",
+        "payloads/requests/base.json",
+        "README.md",
+    ]
+    for names in (expected, list(reversed(expected))):
+        ordered = sorted(map(path_type, names), key=inventory_sort_key)
+        assert [path.as_posix() for path in ordered] == expected
 
 
 def test_manifest_exact_inventory_and_hashes():

@@ -160,6 +160,7 @@ uv run --locked pytest --junitxml=test-results/pytest.xml
 ```
 
 - fixture 검사는 manifest와 실제 파일 목록·해시·사례 메타데이터를 비교합니다.
+  파일 목록은 운영체제와 무관한 정렬로 비교하여 Windows·Linux의 경로 정렬 차이를 제거합니다.
   `--write`로 기준을 자동 갱신하지 않습니다. 전체 pytest에도 관련 검사가 포함되지만
   fixture 문제를 먼저 구분할 수 있도록 별도 step을 유지합니다.
 - pytest는 기존 v1, v2 계약, 공통 fixture, 수신 기록·리뷰 회귀를 모두 실행합니다.
