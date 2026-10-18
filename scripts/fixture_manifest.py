@@ -45,9 +45,18 @@ def bundle_path(root, relative):
     return path
 
 
+def inventory_sort_key(relative_path):
+    # Preserve the published Windows-generated inventory on every OS. Native Path
+    # ordering differs on Linux (notably README.md versus lowercase directories).
+    parts = relative_path.parts
+    return tuple(part.casefold() for part in parts), parts
+
+
 def build_manifest(root, revision):
     files = []
-    for path in sorted(root.rglob("*")):
+    for path in sorted(
+        root.rglob("*"), key=lambda path: inventory_sort_key(path.relative_to(root))
+    ):
         if path.is_symlink():
             raise ValueError(f"Symlinks are not portable fixtures: {path}")
         if not path.is_file() or path == root / "manifest.json":
