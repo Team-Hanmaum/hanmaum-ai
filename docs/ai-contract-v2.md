@@ -567,13 +567,15 @@ v2 지원이 완료된 것으로 가정하지 말고, v2 저장 구현에서 해
 
 ## 13. AI 오류와 BE 실패 코드
 
-아래는 v2 구현 시 맞출 매핑이다.
+아래는 v2-20261021.1의 전체 HTTP/code 허용 목록이며 16.3절의 추가 합의를 포함한다.
+기계 판독 기준은 공통 fixture의 error-mapping.json이며, 발생 조건·우선순위는 16절을 따른다.
 현재 BE에 모든 실패 코드가 이미 추가됐다는 뜻은 아니다.
 
-| AI HTTP | AI code | BE 분석 실패 코드 |
+| AI HTTP | AI code | BE 통신 어댑터 실패 코드 |
 | --- | --- | --- |
 | 400 | REQUEST_ID_MISMATCH | AI_INTEGRATION_ERROR |
 | 401 | UNAUTHORIZED | AI_INTEGRATION_ERROR |
+| 413 | REQUEST_TOO_LARGE | AI_INTEGRATION_ERROR |
 | 422 | INVALID_REQUEST | AI_INTEGRATION_ERROR |
 | 409 | REQUEST_ALREADY_RECEIVED | AI_DUPLICATE_REQUEST |
 | 409 | REQUEST_ID_REUSED | AI_REQUEST_ID_REUSED |
@@ -581,13 +583,15 @@ v2 지원이 완료된 것으로 가정하지 말고, v2 저장 구현에서 해
 | 502 | AI_UNAVAILABLE | AI_SERVICE_UNAVAILABLE |
 | 503 | AI_NOT_CONFIGURED | AI_INTEGRATION_ERROR |
 | 503 | RECEIPT_STORE_UNAVAILABLE | AI_RECEIPT_STORE_UNAVAILABLE |
+| 503 | REQUEST_COMPARISON_UNAVAILABLE | AI_RECEIPT_STORE_UNAVAILABLE |
+| 503 | AI_OVERLOADED | AI_SERVICE_UNAVAILABLE |
 | 504 | AI_TIMEOUT | AI_TIMEOUT |
 
 - BE는 허용한 HTTP 상태·오류 코드 조합만 매핑한다.
 - 알 수 없는 응답·잘못된 오류 본문은 안전한 일반 실패로 처리한다.
 - 제공자의 원본 message를 저장하거나 공개 응답에 그대로 전달하지 않는다.
 - 정상 요청에 대한 제공자 결과가 계약 위반이면 AI는 502 INVALID_AI_RESPONSE를 반환한다.
-- 요청 본문 자체가 계약 위반이면 422 INVALID_REQUEST다.
+- 요청 본문의 필드·개수·문자열 합계 위반은 422 INVALID_REQUEST이며, 전송 바이트 초과는 413 REQUEST_TOO_LARGE다.
 - 정상적인 모호함·대상 없음은 200의 검토 제안이다.
 - BE의 비동기 상태 조회는 활성 원본에 접근 권한이 있는 구성원의 정상 조회 시 200이다. 원본 삭제 시 분석 상세 조회는 404 RESOURCE_NOT_FOUND이며 내부 AI HTTP 상태와 구분한다.
 - 내부 AI 오류가 이미 완료된 분석 접수 HTTP 응답을 바꾸지는 않는다.
@@ -780,7 +784,8 @@ BE는 후보·근거를 구성하는 단계부터 개수·길이·누적 크기�
 
 ### 16.3 오류 매핑
 
-13절의 기존 허용 목록에 다음 세 조합을 추가한다. HTTP와 code를 쌍으로 확인한다.
+이번 revision에서 추가한 세 조합은 다음과 같으며 13절의 전체 허용 목록에도 반영했다.
+HTTP와 code를 쌍으로 확인한다.
 
 | AI HTTP / code | BE 통신 어댑터 실패 코드 |
 | --- | --- |

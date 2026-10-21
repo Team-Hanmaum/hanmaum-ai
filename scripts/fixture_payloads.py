@@ -3,8 +3,11 @@
 import argparse
 import hashlib
 import json
+import os
+from contextlib import contextmanager
 from copy import deepcopy
 from pathlib import Path
+from tempfile import NamedTemporaryFile, TemporaryDirectory
 
 from scripts.fixture_manifest import DEFAULT_ROOT, bundle_path, read_json
 
@@ -94,6 +97,8 @@ def maximum(values):
 
 
 def measurements(raw, side):
+    if side not in ("request", "response"):
+        raise ValueError(f"Unsupported payload side: {side!r}")
     data = json.loads(raw)
     result = {f"{side}.bytes": len(raw), f"{side}.stringUnits": string_units(data)}
     if side == "request":
@@ -141,6 +146,44 @@ def measurements(raw, side):
     }
 
 
+def write_metadata(path, generated):
+    """Replace one complete metadata file; failures leave the original readable."""
+    raw = (json.dumps(generated, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+    temporary = None
+    try:
+        with NamedTemporaryFile(
+            mode="wb", dir=path.parent, prefix=f".{path.name}.", suffix=".tmp", delete=False
+        ) as stream:
+            temporary = Path(stream.name)
+            stream.write(raw)
+            stream.flush()
+            os.fsync(stream.fileno())
+        # Close before replacing for Windows; the sibling file stays on the same filesystem.
+        os.replace(temporary, path)
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
+
+
+@contextmanager
+def staged_export(destination):
+    """Publish a complete export directory only after the caller finishes successfully."""
+    if destination is None:
+        yield None
+        return
+    if destination.exists() or destination.is_symlink():
+        raise FileExistsError(f"Export destination already exists: {destination}")
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    with TemporaryDirectory(prefix=f".{destination.name}.", dir=destination.parent) as directory:
+        staging = Path(directory) / "payloads"
+        staging.mkdir()
+        yield staging
+        # Do not replace a destination created while generation was in progress.
+        if destination.exists() or destination.is_symlink():
+            raise FileExistsError(f"Export destination already exists: {destination}")
+        staging.rename(destination)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=DEFAULT_ROOT)
@@ -156,24 +199,20 @@ def main():
     if args.export:
         if args.export.resolve().is_relative_to(args.root.resolve()):
             parser.error("Export outside the shared bundle")
-        args.export.mkdir(parents=True, exist_ok=False)
-    for name, entry in generated["payloads"].items():
-        if not name.replace("-", "").isalnum():
-            raise ValueError("Unsafe generated payload name")
-        raw = materialize(args.root, generated["recipes"], name)
-        observed = measurements(raw, entry["side"])
+    with staged_export(args.export) as staging:
+        for name, entry in generated["payloads"].items():
+            if not name.replace("-", "").isalnum():
+                raise ValueError("Unsafe generated payload name")
+            raw = materialize(args.root, generated["recipes"], name)
+            observed = measurements(raw, entry["side"])
+            if args.write_metadata:
+                entry["expected"] = observed
+            elif entry["expected"] != observed:
+                raise SystemExit(f"Generated payload mismatch: {name}")
+            if staging:
+                (staging / f"{name}.json").write_bytes(raw)
         if args.write_metadata:
-            entry["expected"] = observed
-        elif entry["expected"] != observed:
-            raise SystemExit(f"Generated payload mismatch: {name}")
-        if args.export:
-            (args.export / f"{name}.json").write_bytes(raw)
-    if args.write_metadata:
-        path.write_text(
-            json.dumps(generated, ensure_ascii=False, indent=2) + "\n",
-            encoding="utf-8",
-            newline="\n",
-        )
+            write_metadata(path, generated)
     print(f"{generated['revision']}: {len(generated['payloads'])} generated payloads verified")
 
 
