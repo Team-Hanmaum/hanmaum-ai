@@ -1,4 +1,4 @@
-"""Exercise real v2 contract code using the unchanged shared fixture revision."""
+"""Exercise preserved A-* cases; revision .1 limit/HTTP implementation is deferred."""
 
 import json
 import operator
@@ -97,7 +97,7 @@ def normalize_uuids(value, key=None):
 
 def test_fixture_coverage_is_explicit():
     manifest = json.loads(raw("manifest.json"))
-    assert manifest["revision"] == "v2-20261016.2"
+    assert manifest["revision"] == "v2-20261021.1"
     all_ids = {case["caseId"] for case in STATIC_CASES}
     assert DEFERRED_STATIC.keys() <= all_ids
     assert len(CONTRACT_CASES) == 139
@@ -235,7 +235,9 @@ def test_every_current_value_key_is_required_even_when_nullable(candidate_index)
         assert_failure(caught.value, 422, "INVALID_REQUEST")
 
 
-def test_v2_does_not_inherit_v1_length_or_count_limits():
+def test_pre_http_models_retain_previous_unbounded_behavior_until_limit_implementation():
+    # Legacy implementation regression only. New revision expectations live in L-*;
+    # replace this test when implementing those limits, never weaken their goldens.
     data = request_data()
     data["content"] += " 내용" * 4000
     data["candidates"][0]["basis"][0]["text"] = "근거" * 2001

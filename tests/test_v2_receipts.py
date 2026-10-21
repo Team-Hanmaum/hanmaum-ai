@@ -1,4 +1,4 @@
-"""Run all shared receipt scenarios against SQLite and the internal v2 service.
+"""Run preserved receipt scenarios against SQLite and the internal v2 service.
 
 HTTP headers/status transport and expected.be remain the next integration layers.
 """
@@ -31,6 +31,8 @@ from app.v2.validation import parse_request
 
 ROOT = Path(__file__).parent / "fixtures/v2"
 CASES = json.loads((ROOT / "cases/receipts.json").read_bytes())
+DEFERRED_HTTP = {"B-uncomparable-record": "503 mapping awaits HTTP integration"}
+INTERNAL_CASES = [case for case in CASES if case["caseId"] not in DEFERRED_HTTP]
 KEY = b"synthetic-receipt-test-key-only-001"
 RULE = "fixture-rule-1"
 KEY_VERSION = "fixture-key-1"
@@ -116,7 +118,7 @@ class RacingStore(SQLiteReceiptStore):
 
 
 @pytest.mark.anyio
-@pytest.mark.parametrize("case", CASES, ids=lambda c: c["caseId"])
+@pytest.mark.parametrize("case", INTERNAL_CASES, ids=lambda c: c["caseId"])
 async def test_shared_receipt_scenario(case, tmp_path, monkeypatch):
     path = tmp_path / "receipts.sqlite3"
     store = store_at(path, initialize=True)
@@ -211,9 +213,31 @@ async def test_shared_receipt_scenario(case, tmp_path, monkeypatch):
 
 def test_receipt_fixture_coverage():
     manifest = json.loads(raw("manifest.json"))
-    assert manifest["revision"] == "v2-20261016.2"
+    assert manifest["revision"] == "v2-20261021.1"
     assert len(CASES) == len({c["caseId"] for c in CASES}) == 30
     assert {c["contractVersion"] for c in CASES} == {"v2"}
+    assert {case["caseId"] for case in INTERNAL_CASES} | DEFERRED_HTTP.keys() == {
+        case["caseId"] for case in CASES
+    }
+    assert len(INTERNAL_CASES) == 29
+
+
+@pytest.mark.anyio
+async def test_uncomparable_internal_block_preserved_http_mapping_still_deferred(tmp_path):
+    store = store_at(tmp_path / "receipts.sqlite3", initialize=True)
+    comparison = digester()
+    request = parse_request(raw())
+    store.register(Receipt("v2", request.request_id, comparison.fingerprint(request)))
+    before = rows(store.path)
+    changed = digester(keys={"new-key": SecretBytes(b"new-" + KEY)}, active_key_version="new-key")
+    provider = FakeProvider()
+    with pytest.raises(ComparisonUnavailable):
+        await service(store, provider, changed).analyze(raw())
+    assert provider.calls == 0
+    assert rows(store.path) == before
+    # The new 503 fixture is deliberately not emulated here by translating exceptions.
+    case = next(c for c in CASES if c["caseId"] == "B-uncomparable-record")
+    assert case["steps"][-1]["expected"]["ai"]["code"] == "REQUEST_COMPARISON_UNAVAILABLE"
 
 
 def test_canonical_format_and_original_snapshot():

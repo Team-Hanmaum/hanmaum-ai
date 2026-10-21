@@ -1,0 +1,57 @@
+{
+  "caseId": "B-uncomparable-record",
+  "category": "RECEIPT",
+  "purpose": "기존 기록을 안전하게 비교할 수 없으면 호출 차단",
+  "contractVersion": "v2",
+  "contractSections": [
+    10,
+    11,
+    13,
+    14
+  ],
+  "steps": [
+    {
+      "action": "ROTATE_COMPARISON_METADATA",
+      "field": "hmacKeyVersion",
+      "newVersion": "fixture-version-2",
+      "oldComparisonAvailable": false
+    },
+    {
+      "action": "SUBMIT",
+      "request": {
+        "method": "POST",
+        "path": "/v2/analyses",
+        "headers": {
+          "Content-Type": "application/json",
+          "X-Internal-Api-Key": "fixture-only-not-a-secret",
+          "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+        },
+        "bodyFile": "payloads/requests/base.json"
+      },
+      "provider": {
+        "mode": "RETURN",
+        "bodyFile": "payloads/responses/update.json"
+      },
+      "expected": {
+        "ai": {
+          "outcome": "BLOCKED",
+          "providerCalls": 0
+        },
+        "be": {
+          "assertion": "NO_NEW_PROPOSALS",
+          "storedProposalCount": 0
+        }
+      }
+    }
+  ],
+  "expected": {
+    "totalProviderCalls": 0
+  },
+  "seedReceipt": {
+    "contractVersion": "v2",
+    "requestBodyFile": "payloads/requests/base.json",
+    "executionState": "SUCCEEDED",
+    "canonicalizationVersion": "fixture-rule-1",
+    "hmacKeyVersion": "fixture-key-1"
+  }
+}

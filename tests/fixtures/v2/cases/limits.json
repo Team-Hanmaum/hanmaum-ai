@@ -1,0 +1,4806 @@
+[
+  {
+    "caseId": "L-request-bytes-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.bytes below: 1048575",
+    "boundary": {
+      "metric": "request.bytes",
+      "limit": 1048576,
+      "value": 1048575,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-bytes-below"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-bytes-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.bytes at: 1048576",
+    "boundary": {
+      "metric": "request.bytes",
+      "limit": 1048576,
+      "value": 1048576,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-bytes-at"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-bytes-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.bytes above: 1048577",
+    "boundary": {
+      "metric": "request.bytes",
+      "limit": 1048576,
+      "value": 1048577,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-bytes-above"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [
+      "request.bytes"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 413,
+        "providerCalls": 0,
+        "code": "REQUEST_TOO_LARGE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-bytes-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.bytes below: 524287",
+    "boundary": {
+      "metric": "response.bytes",
+      "limit": 524288,
+      "value": 524287,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-bytes-below"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-bytes-below"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-bytes-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.bytes at: 524288",
+    "boundary": {
+      "metric": "response.bytes",
+      "limit": 524288,
+      "value": 524288,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-bytes-at"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-bytes-at"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-bytes-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.bytes above: 524289",
+    "boundary": {
+      "metric": "response.bytes",
+      "limit": 524288,
+      "value": 524289,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-bytes-above"
+    },
+    "expectedLimitViolations": [
+      "response.bytes"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-content-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.content below: 9999",
+    "boundary": {
+      "metric": "request.content",
+      "limit": 10000,
+      "value": 9999,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-content-below"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-content-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.content at: 10000",
+    "boundary": {
+      "metric": "request.content",
+      "limit": 10000,
+      "value": 10000,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-content-at"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-content-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.content above: 10001",
+    "boundary": {
+      "metric": "request.content",
+      "limit": 10000,
+      "value": 10001,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-content-above"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [
+      "request.content"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-candidates-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.candidates below: 99",
+    "boundary": {
+      "metric": "request.candidates",
+      "limit": 100,
+      "value": 99,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-candidates-below"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-candidates-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.candidates at: 100",
+    "boundary": {
+      "metric": "request.candidates",
+      "limit": 100,
+      "value": 100,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-candidates-at"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-candidates-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.candidates above: 101",
+    "boundary": {
+      "metric": "request.candidates",
+      "limit": 100,
+      "value": 101,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-candidates-above"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [
+      "request.candidates"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-basisPerCandidate-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.basisPerCandidate below: 19",
+    "boundary": {
+      "metric": "request.basisPerCandidate",
+      "limit": 20,
+      "value": 19,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-basisPerCandidate-below"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-basisPerCandidate-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.basisPerCandidate at: 20",
+    "boundary": {
+      "metric": "request.basisPerCandidate",
+      "limit": 20,
+      "value": 20,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-basisPerCandidate-at"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-basisPerCandidate-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.basisPerCandidate above: 21",
+    "boundary": {
+      "metric": "request.basisPerCandidate",
+      "limit": 20,
+      "value": 21,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-basisPerCandidate-above"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [
+      "request.basisPerCandidate"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-basisTotal-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.basisTotal below: 499",
+    "boundary": {
+      "metric": "request.basisTotal",
+      "limit": 500,
+      "value": 499,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-basisTotal-below"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-basisTotal-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.basisTotal at: 500",
+    "boundary": {
+      "metric": "request.basisTotal",
+      "limit": 500,
+      "value": 500,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-basisTotal-at"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-basisTotal-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.basisTotal above: 501",
+    "boundary": {
+      "metric": "request.basisTotal",
+      "limit": 500,
+      "value": 501,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-basisTotal-above"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [
+      "request.basisTotal"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-basisText-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.basisText below: 19999",
+    "boundary": {
+      "metric": "request.basisText",
+      "limit": 20000,
+      "value": 19999,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-basisText-below"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-basisText-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.basisText at: 20000",
+    "boundary": {
+      "metric": "request.basisText",
+      "limit": 20000,
+      "value": 20000,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-basisText-at"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-basisText-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.basisText above: 20001",
+    "boundary": {
+      "metric": "request.basisText",
+      "limit": 20000,
+      "value": 20001,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-basisText-above"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [
+      "request.basisText"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-currentText-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.currentText below: 9999",
+    "boundary": {
+      "metric": "request.currentText",
+      "limit": 10000,
+      "value": 9999,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-currentText-below"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-currentText-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.currentText at: 10000",
+    "boundary": {
+      "metric": "request.currentText",
+      "limit": 10000,
+      "value": 10000,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-currentText-at"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-currentText-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.currentText above: 10001",
+    "boundary": {
+      "metric": "request.currentText",
+      "limit": 10000,
+      "value": 10001,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-currentText-above"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [
+      "request.currentText"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-stringUnits-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.stringUnits below: 99999",
+    "boundary": {
+      "metric": "request.stringUnits",
+      "limit": 100000,
+      "value": 99999,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-stringUnits-below"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-stringUnits-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.stringUnits at: 100000",
+    "boundary": {
+      "metric": "request.stringUnits",
+      "limit": 100000,
+      "value": 100000,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-stringUnits-at"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-stringUnits-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request.stringUnits above: 100001",
+    "boundary": {
+      "metric": "request.stringUnits",
+      "limit": 100000,
+      "value": 100001,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-stringUnits-above"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [
+      "request.stringUnits"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-suggestions-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.suggestions below: 29",
+    "boundary": {
+      "metric": "response.suggestions",
+      "limit": 30,
+      "value": 29,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-suggestions-below"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-suggestions-below"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 29,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-suggestions-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.suggestions at: 30",
+    "boundary": {
+      "metric": "response.suggestions",
+      "limit": 30,
+      "value": 30,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-suggestions-at"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-suggestions-at"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 30,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-suggestions-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.suggestions above: 31",
+    "boundary": {
+      "metric": "response.suggestions",
+      "limit": 30,
+      "value": 31,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-suggestions-above"
+    },
+    "expectedLimitViolations": [
+      "response.suggestions"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-title-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.title below: 499",
+    "boundary": {
+      "metric": "response.title",
+      "limit": 500,
+      "value": 499,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-title-below"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-title-below"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-title-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.title at: 500",
+    "boundary": {
+      "metric": "response.title",
+      "limit": 500,
+      "value": 500,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-title-at"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-title-at"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-title-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.title above: 501",
+    "boundary": {
+      "metric": "response.title",
+      "limit": 500,
+      "value": 501,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-title-above"
+    },
+    "expectedLimitViolations": [
+      "response.title"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-evidence-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.evidence below: 9999",
+    "boundary": {
+      "metric": "response.evidence",
+      "limit": 10000,
+      "value": 9999,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-evidence"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-evidence-below"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-evidence-below"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-evidence-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.evidence at: 10000",
+    "boundary": {
+      "metric": "response.evidence",
+      "limit": 10000,
+      "value": 10000,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-evidence"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-evidence-at"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-evidence-at"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-evidence-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.evidence above: 10001",
+    "boundary": {
+      "metric": "response.evidence",
+      "limit": 10000,
+      "value": 10001,
+      "delta": 1,
+      "coupledViolations": [
+        "EVIDENCE_NOT_IN_CONTENT"
+      ]
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-evidence"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-evidence-above"
+    },
+    "expectedLimitViolations": [
+      "response.evidence"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-changeText-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.changeText below: 9999",
+    "boundary": {
+      "metric": "response.changeText",
+      "limit": 10000,
+      "value": 9999,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-changeText-below"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-changeText-below"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-changeText-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.changeText at: 10000",
+    "boundary": {
+      "metric": "response.changeText",
+      "limit": 10000,
+      "value": 10000,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-changeText-at"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-changeText-at"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-changeText-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.changeText above: 10001",
+    "boundary": {
+      "metric": "response.changeText",
+      "limit": 10000,
+      "value": 10001,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-changeText-above"
+    },
+    "expectedLimitViolations": [
+      "response.changeText"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-stringUnits-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.stringUnits below: 49999",
+    "boundary": {
+      "metric": "response.stringUnits",
+      "limit": 50000,
+      "value": 49999,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-stringUnits-below"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-stringUnits-below"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 6,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-stringUnits-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.stringUnits at: 50000",
+    "boundary": {
+      "metric": "response.stringUnits",
+      "limit": 50000,
+      "value": 50000,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-stringUnits-at"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-stringUnits-at"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 6,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-stringUnits-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.stringUnits above: 50001",
+    "boundary": {
+      "metric": "response.stringUnits",
+      "limit": 50000,
+      "value": 50001,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-stringUnits-above"
+    },
+    "expectedLimitViolations": [
+      "response.stringUnits"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-candidateItemIds-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.candidateItemIds below: 99",
+    "boundary": {
+      "metric": "response.candidateItemIds",
+      "limit": 100,
+      "value": 99,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-refs100"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-candidateItemIds-below"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-candidateItemIds-below"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-candidateItemIds-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.candidateItemIds at: 100",
+    "boundary": {
+      "metric": "response.candidateItemIds",
+      "limit": 100,
+      "value": 100,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-refs100"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-candidateItemIds-at"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-candidateItemIds-at"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-candidateItemIds-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.candidateItemIds above: 101",
+    "boundary": {
+      "metric": "response.candidateItemIds",
+      "limit": 100,
+      "value": 101,
+      "delta": 1,
+      "coupledViolations": [
+        "DUPLICATE_CANDIDATE_ID"
+      ]
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-refs100"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-candidateItemIds-above"
+    },
+    "expectedLimitViolations": [
+      "response.candidateItemIds"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-basisReferences-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.basisReferences below: 99",
+    "boundary": {
+      "metric": "response.basisReferences",
+      "limit": 100,
+      "value": 99,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-refs100"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-basisReferences-below"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-basisReferences-below"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-basisReferences-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.basisReferences at: 100",
+    "boundary": {
+      "metric": "response.basisReferences",
+      "limit": 100,
+      "value": 100,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-refs100"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-basisReferences-at"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-basisReferences-at"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-basisReferences-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.basisReferences above: 101",
+    "boundary": {
+      "metric": "response.basisReferences",
+      "limit": 100,
+      "value": 101,
+      "delta": 1,
+      "coupledViolations": [
+        "DUPLICATE_REFERENCE_ITEM"
+      ]
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-refs100"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-basisReferences-above"
+    },
+    "expectedLimitViolations": [
+      "response.basisReferences"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-basisIdsPerItem-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.basisIdsPerItem below: 19",
+    "boundary": {
+      "metric": "response.basisIdsPerItem",
+      "limit": 20,
+      "value": 19,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-refs20"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-basisIdsPerItem-below"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-basisIdsPerItem-below"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-basisIdsPerItem-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.basisIdsPerItem at: 20",
+    "boundary": {
+      "metric": "response.basisIdsPerItem",
+      "limit": 20,
+      "value": 20,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-refs20"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-basisIdsPerItem-at"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-basisIdsPerItem-at"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-basisIdsPerItem-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.basisIdsPerItem above: 21",
+    "boundary": {
+      "metric": "response.basisIdsPerItem",
+      "limit": 20,
+      "value": 21,
+      "delta": 1,
+      "coupledViolations": [
+        "DUPLICATE_BASIS_ID"
+      ]
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-refs20"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-basisIdsPerItem-above"
+    },
+    "expectedLimitViolations": [
+      "response.basisIdsPerItem"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-basisIdsPerSuggestion-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.basisIdsPerSuggestion below: 499",
+    "boundary": {
+      "metric": "response.basisIdsPerSuggestion",
+      "limit": 500,
+      "value": 499,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-refs500"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-basisIdsPerSuggestion-below"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-basisIdsPerSuggestion-below"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-basisIdsPerSuggestion-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.basisIdsPerSuggestion at: 500",
+    "boundary": {
+      "metric": "response.basisIdsPerSuggestion",
+      "limit": 500,
+      "value": 500,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-refs500"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-basisIdsPerSuggestion-at"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-basisIdsPerSuggestion-at"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-basisIdsPerSuggestion-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response.basisIdsPerSuggestion above: 501",
+    "boundary": {
+      "metric": "response.basisIdsPerSuggestion",
+      "limit": 500,
+      "value": 501,
+      "delta": 1,
+      "coupledViolations": [
+        "DUPLICATE_BASIS_ID"
+      ]
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-refs500"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-basisIdsPerSuggestion-above"
+    },
+    "expectedLimitViolations": [
+      "response.basisIdsPerSuggestion"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-free-title-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request OBSERVATION title UTF-16 9999",
+    "boundary": {
+      "metric": "request.currentText",
+      "limit": 10000,
+      "value": 9999,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-free-title-below"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-free-title-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request OBSERVATION title UTF-16 10000",
+    "boundary": {
+      "metric": "request.currentText",
+      "limit": 10000,
+      "value": 10000,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-free-title-at"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-free-title-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request OBSERVATION title UTF-16 10001",
+    "boundary": {
+      "metric": "request.currentText",
+      "limit": 10000,
+      "value": 10001,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-free-title-above"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [
+      "request.currentText"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-free-title-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response OBSERVATION title UTF-16 9999",
+    "boundary": {
+      "metric": "response.changeText",
+      "limit": 10000,
+      "value": 9999,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-free-title-below"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-free-title-below"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-free-title-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response OBSERVATION title UTF-16 10000",
+    "boundary": {
+      "metric": "response.changeText",
+      "limit": 10000,
+      "value": 10000,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-free-title-at"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-free-title-at"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-free-title-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response OBSERVATION title UTF-16 10001",
+    "boundary": {
+      "metric": "response.changeText",
+      "limit": 10000,
+      "value": 10001,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-free-title-above"
+    },
+    "expectedLimitViolations": [
+      "response.changeText"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-free-description-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request OBSERVATION description UTF-16 9999",
+    "boundary": {
+      "metric": "request.currentText",
+      "limit": 10000,
+      "value": 9999,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-free-description-below"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-free-description-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request OBSERVATION description UTF-16 10000",
+    "boundary": {
+      "metric": "request.currentText",
+      "limit": 10000,
+      "value": 10000,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-free-description-at"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-free-description-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request OBSERVATION description UTF-16 10001",
+    "boundary": {
+      "metric": "request.currentText",
+      "limit": 10000,
+      "value": 10001,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-free-description-above"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [
+      "request.currentText"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-free-description-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response OBSERVATION description UTF-16 9999",
+    "boundary": {
+      "metric": "response.changeText",
+      "limit": 10000,
+      "value": 9999,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-free-description-below"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-free-description-below"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-free-description-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response OBSERVATION description UTF-16 10000",
+    "boundary": {
+      "metric": "response.changeText",
+      "limit": 10000,
+      "value": 10000,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-free-description-at"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-free-description-at"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-free-description-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response OBSERVATION description UTF-16 10001",
+    "boundary": {
+      "metric": "response.changeText",
+      "limit": 10000,
+      "value": 10001,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-free-description-above"
+    },
+    "expectedLimitViolations": [
+      "response.changeText"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-free-location-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request SCHEDULE location UTF-16 9999",
+    "boundary": {
+      "metric": "request.currentText",
+      "limit": 10000,
+      "value": 9999,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-free-location-below"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-free-location-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request SCHEDULE location UTF-16 10000",
+    "boundary": {
+      "metric": "request.currentText",
+      "limit": 10000,
+      "value": 10000,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-free-location-at"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-free-location-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request SCHEDULE location UTF-16 10001",
+    "boundary": {
+      "metric": "request.currentText",
+      "limit": 10000,
+      "value": 10001,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-free-location-above"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [
+      "request.currentText"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-free-location-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response SCHEDULE location UTF-16 9999",
+    "boundary": {
+      "metric": "response.changeText",
+      "limit": 10000,
+      "value": 9999,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-free-location-below"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-free-location-below"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-free-location-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response SCHEDULE location UTF-16 10000",
+    "boundary": {
+      "metric": "response.changeText",
+      "limit": 10000,
+      "value": 10000,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-free-location-at"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-free-location-at"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-free-location-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response SCHEDULE location UTF-16 10001",
+    "boundary": {
+      "metric": "response.changeText",
+      "limit": 10000,
+      "value": 10001,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-free-location-above"
+    },
+    "expectedLimitViolations": [
+      "response.changeText"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-free-observedTimeText-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request OBSERVATION observedTimeText UTF-16 9999",
+    "boundary": {
+      "metric": "request.currentText",
+      "limit": 10000,
+      "value": 9999,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-free-observedTimeText-below"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-free-observedTimeText-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request OBSERVATION observedTimeText UTF-16 10000",
+    "boundary": {
+      "metric": "request.currentText",
+      "limit": 10000,
+      "value": 10000,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-free-observedTimeText-at"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-free-observedTimeText-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request OBSERVATION observedTimeText UTF-16 10001",
+    "boundary": {
+      "metric": "request.currentText",
+      "limit": 10000,
+      "value": 10001,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-free-observedTimeText-above"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [
+      "request.currentText"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-free-observedTimeText-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response OBSERVATION observedTimeText UTF-16 9999",
+    "boundary": {
+      "metric": "response.changeText",
+      "limit": 10000,
+      "value": 9999,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-free-observedTimeText-below"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-free-observedTimeText-below"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-free-observedTimeText-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response OBSERVATION observedTimeText UTF-16 10000",
+    "boundary": {
+      "metric": "response.changeText",
+      "limit": 10000,
+      "value": 10000,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-free-observedTimeText-at"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-free-observedTimeText-at"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-free-observedTimeText-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response OBSERVATION observedTimeText UTF-16 10001",
+    "boundary": {
+      "metric": "response.changeText",
+      "limit": 10000,
+      "value": 10001,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-free-observedTimeText-above"
+    },
+    "expectedLimitViolations": [
+      "response.changeText"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-free-sourceName-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request GUIDANCE sourceName UTF-16 9999",
+    "boundary": {
+      "metric": "request.currentText",
+      "limit": 10000,
+      "value": 9999,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-free-sourceName-below"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-free-sourceName-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request GUIDANCE sourceName UTF-16 10000",
+    "boundary": {
+      "metric": "request.currentText",
+      "limit": 10000,
+      "value": 10000,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-free-sourceName-at"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-free-sourceName-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request GUIDANCE sourceName UTF-16 10001",
+    "boundary": {
+      "metric": "request.currentText",
+      "limit": 10000,
+      "value": 10001,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-free-sourceName-above"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [
+      "request.currentText"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-free-sourceName-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response GUIDANCE sourceName UTF-16 9999",
+    "boundary": {
+      "metric": "response.changeText",
+      "limit": 10000,
+      "value": 9999,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-free-sourceName-below"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-free-sourceName-below"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-free-sourceName-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response GUIDANCE sourceName UTF-16 10000",
+    "boundary": {
+      "metric": "response.changeText",
+      "limit": 10000,
+      "value": 10000,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-free-sourceName-at"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-free-sourceName-at"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-free-sourceName-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response GUIDANCE sourceName UTF-16 10001",
+    "boundary": {
+      "metric": "response.changeText",
+      "limit": 10000,
+      "value": 10001,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-minimal"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-free-sourceName-above"
+    },
+    "expectedLimitViolations": [
+      "response.changeText"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-free-answerText-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request QUESTION answerText UTF-16 9999",
+    "boundary": {
+      "metric": "request.currentText",
+      "limit": 10000,
+      "value": 9999,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-free-answerText-below"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-free-answerText-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request QUESTION answerText UTF-16 10000",
+    "boundary": {
+      "metric": "request.currentText",
+      "limit": 10000,
+      "value": 10000,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-free-answerText-at"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-free-answerText-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "request QUESTION answerText UTF-16 10001",
+    "boundary": {
+      "metric": "request.currentText",
+      "limit": 10000,
+      "value": 10001,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-free-answerText-above"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [
+      "request.currentText"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-free-answerText-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response QUESTION answerText UTF-16 9999",
+    "boundary": {
+      "metric": "response.changeText",
+      "limit": 10000,
+      "value": 9999,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-question-below"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-free-answerText-below"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-free-answerText-below"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-free-answerText-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response QUESTION answerText UTF-16 10000",
+    "boundary": {
+      "metric": "response.changeText",
+      "limit": 10000,
+      "value": 10000,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-question-at"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-free-answerText-at"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-free-answerText-at"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-response-free-answerText-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "response QUESTION answerText UTF-16 10001",
+    "boundary": {
+      "metric": "response.changeText",
+      "limit": 10000,
+      "value": 10001,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-question-above"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-free-answerText-above"
+    },
+    "expectedLimitViolations": [
+      "response.changeText"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 502,
+        "providerCalls": 1,
+        "code": "INVALID_AI_RESPONSE",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-count-unicode-literal",
+    "category": "LIMITS",
+    "purpose": "Decoded-string counting: unicode-literal",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "measurementOnly": true,
+    "payloadRecipe": "unicode-literal",
+    "expected": {
+      "calculation": "EXACT_GENERATED_METRICS"
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-count-unicode-escaped",
+    "category": "LIMITS",
+    "purpose": "Decoded-string counting: unicode-escaped",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "measurementOnly": true,
+    "payloadRecipe": "unicode-escaped",
+    "expected": {
+      "calculation": "EXACT_GENERATED_METRICS"
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-count-uuid-compact",
+    "category": "LIMITS",
+    "purpose": "Decoded-string counting: uuid-compact",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "measurementOnly": true,
+    "payloadRecipe": "uuid-compact",
+    "expected": {
+      "calculation": "EXACT_GENERATED_METRICS"
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-count-unicode-not-normalized",
+    "category": "LIMITS",
+    "purpose": "Decoded-string counting: unicode-not-normalized",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "measurementOnly": true,
+    "payloadRecipe": "unicode-not-normalized",
+    "expected": {
+      "calculation": "EXACT_GENERATED_METRICS"
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-count-opaque-direct-input",
+    "category": "LIMITS",
+    "purpose": "Decoded-string counting: opaque-direct-input",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "measurementOnly": true,
+    "payloadRecipe": "opaque-direct-input",
+    "expected": {
+      "calculation": "EXACT_GENERATED_METRICS"
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-count-repeated-values",
+    "category": "LIMITS",
+    "purpose": "Decoded-string counting: repeated-values",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "measurementOnly": true,
+    "payloadRecipe": "repeated-values",
+    "expected": {
+      "calculation": "EXACT_GENERATED_METRICS"
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-emoji-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "UTF-16 supplementary boundary",
+    "boundary": {
+      "metric": "request.content",
+      "limit": 10000,
+      "value": 9999,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-emoji-below"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-pre-normalization-below",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "Count compact UUID before normalization at total boundary",
+    "boundary": {
+      "metric": "request.stringUnits",
+      "limit": 100000,
+      "value": 99999,
+      "delta": -1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-pre-normalization-below"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-emoji-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "UTF-16 supplementary boundary",
+    "boundary": {
+      "metric": "request.content",
+      "limit": 10000,
+      "value": 10000,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-emoji-at"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-pre-normalization-at",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "Count compact UUID before normalization at total boundary",
+    "boundary": {
+      "metric": "request.stringUnits",
+      "limit": 100000,
+      "value": 100000,
+      "delta": 0,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-pre-normalization-at"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [],
+    "expected": {
+      "ai": {
+        "httpStatus": 200,
+        "providerCalls": 1,
+        "bodyRecipe": "response-minimal"
+      },
+      "be": {
+        "state": "COMPLETED",
+        "failureCode": null,
+        "storedProposalCount": 1,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-emoji-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "UTF-16 supplementary boundary",
+    "boundary": {
+      "metric": "request.content",
+      "limit": 10000,
+      "value": 10001,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-emoji-above"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [
+      "request.content"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "L-request-pre-normalization-above",
+    "category": "LIMITS",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "Count compact UUID before normalization at total boundary",
+    "boundary": {
+      "metric": "request.stringUnits",
+      "limit": 100000,
+      "value": 100001,
+      "delta": 1,
+      "coupledViolations": []
+    },
+    "request": {
+      "method": "POST",
+      "path": "/v2/analyses",
+      "headers": {
+        "Content-Type": "application/json",
+        "X-Internal-Api-Key": "fixture-only-not-a-secret",
+        "X-Request-Id": "aaaaaaaa-0000-4000-8000-000000000001"
+      },
+      "bodyRecipe": "request-pre-normalization-above"
+    },
+    "provider": {
+      "mode": "RETURN",
+      "bodyRecipe": "response-minimal"
+    },
+    "expectedLimitViolations": [
+      "request.stringUnits"
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 422,
+        "providerCalls": 0,
+        "code": "INVALID_REQUEST",
+        "messagePolicy": "NON_EMPTY_SANITIZED"
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "FIXTURE_CHECKED_RUNTIME_DEFERRED"
+  }
+]

@@ -1,0 +1,903 @@
+[
+  {
+    "caseId": "H-existing-before-overload-same",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "기존 기록 판정이 제공자 슬롯 과부하보다 우선",
+    "setup": {
+      "authenticated": true,
+      "validRequest": true,
+      "providerSlots": 2,
+      "occupiedSlots": 2,
+      "existingReceipt": "same",
+      "requestBodyFile": "payloads/requests/base.json",
+      "storedRequestBodyFile": "payloads/requests/base.json"
+    },
+    "steps": [
+      {
+        "action": "SUBMIT"
+      }
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 409,
+        "code": "REQUEST_ALREADY_RECEIVED",
+        "providerCalls": 0
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_DUPLICATE_REQUEST",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0,
+      "existingReceiptPreserved": true
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-existing-before-overload-different",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "기존 기록 판정이 제공자 슬롯 과부하보다 우선",
+    "setup": {
+      "authenticated": true,
+      "validRequest": true,
+      "providerSlots": 2,
+      "occupiedSlots": 2,
+      "existingReceipt": "different",
+      "requestBodyFile": "payloads/requests/base.json",
+      "storedRequestBodyFile": "payloads/requests/compare-content-space.json"
+    },
+    "steps": [
+      {
+        "action": "SUBMIT"
+      }
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 409,
+        "code": "REQUEST_ID_REUSED",
+        "providerCalls": 0
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_REQUEST_ID_REUSED",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0,
+      "existingReceiptPreserved": true
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-existing-before-overload-uncomparable",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "기존 기록 판정이 제공자 슬롯 과부하보다 우선",
+    "setup": {
+      "authenticated": true,
+      "validRequest": true,
+      "providerSlots": 2,
+      "occupiedSlots": 2,
+      "existingReceipt": "uncomparable",
+      "requestBodyFile": "payloads/requests/base.json",
+      "storedRequestBodyFile": "payloads/requests/base.json"
+    },
+    "steps": [
+      {
+        "action": "SUBMIT"
+      }
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 503,
+        "code": "REQUEST_COMPARISON_UNAVAILABLE",
+        "providerCalls": 0
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_RECEIPT_STORE_UNAVAILABLE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0,
+      "existingReceiptPreserved": true
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-new-overloaded",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "신규 요청 과부하: 해당 요청의 등록과 호출 없음",
+    "setup": {
+      "authenticated": true,
+      "validRequest": true,
+      "providerSlots": 2,
+      "occupiedSlots": 2,
+      "existingReceipt": null,
+      "requestBodyFile": "payloads/requests/base.json"
+    },
+    "steps": [
+      {
+        "action": "SUBMIT"
+      }
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 503,
+        "code": "AI_OVERLOADED",
+        "providerCalls": 0
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_SERVICE_UNAVAILABLE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-registration-race-same",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "슬롯 확보 후 등록 트랜잭션에서 경쟁 승자 기록 재확인",
+    "setup": {
+      "providerSlots": 2,
+      "occupiedSlots": 0,
+      "existingReceipt": null,
+      "requestBodyFile": "payloads/requests/base.json",
+      "competitorBodyFile": "payloads/requests/base.json"
+    },
+    "steps": [
+      {
+        "action": "PAUSE_AFTER_ABSENT_READ"
+      },
+      {
+        "action": "ACQUIRE_SLOT"
+      },
+      {
+        "action": "COMPETITOR_COMMIT_RECEIPT"
+      },
+      {
+        "action": "RESUME_ATOMIC_REGISTRATION"
+      }
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 409,
+        "code": "REQUEST_ALREADY_RECEIVED",
+        "providerCalls": 0
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_DUPLICATE_REQUEST",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0,
+      "slotReleased": true,
+      "competitorReceiptPreserved": true
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-registration-race-different",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "슬롯 확보 후 등록 트랜잭션에서 경쟁 승자 기록 재확인",
+    "setup": {
+      "providerSlots": 2,
+      "occupiedSlots": 0,
+      "existingReceipt": null,
+      "requestBodyFile": "payloads/requests/base.json",
+      "competitorBodyFile": "payloads/requests/compare-content-space.json"
+    },
+    "steps": [
+      {
+        "action": "PAUSE_AFTER_ABSENT_READ"
+      },
+      {
+        "action": "ACQUIRE_SLOT"
+      },
+      {
+        "action": "COMPETITOR_COMMIT_RECEIPT"
+      },
+      {
+        "action": "RESUME_ATOMIC_REGISTRATION"
+      }
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 409,
+        "code": "REQUEST_ID_REUSED",
+        "providerCalls": 0
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_REQUEST_ID_REUSED",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0,
+      "slotReleased": true,
+      "competitorReceiptPreserved": true
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-overload-concurrent-commit",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "과부하 요청의 무등록과 다른 요청의 등록을 구분",
+    "setup": {
+      "providerSlots": 2,
+      "occupiedSlots": 2,
+      "existingReceipt": null,
+      "requestBodyFile": "payloads/requests/base.json",
+      "competitorBodyFile": "payloads/requests/base.json"
+    },
+    "steps": [
+      {
+        "action": "OBSERVE_ABSENT_AND_NO_SLOT"
+      },
+      {
+        "action": "REJECT_THIS_REQUEST"
+      },
+      {
+        "action": "COMPETITOR_COMMIT_RECEIPT"
+      }
+    ],
+    "expected": {
+      "ai": {
+        "httpStatus": 503,
+        "code": "AI_OVERLOADED",
+        "providerCalls": 0
+      },
+      "be": {
+        "state": "FAILED",
+        "failureCode": "AI_SERVICE_UNAVAILABLE",
+        "storedProposalCount": 0,
+        "queryHttpStatus": 200
+      },
+      "receiptCreatedByThisRequest": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0,
+      "competitorReceiptPreserved": true
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-slot-retained-timeout",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "취소를 억제한 제공자가 실제 종료될 때까지 슬롯 유지",
+    "setup": {
+      "providerSlots": 2,
+      "occupiedSlots": 2,
+      "providerBehavior": "SUPPRESS_CANCEL_UNTIL_RELEASE",
+      "requestBodyFile": "payloads/requests/base.json",
+      "targetRequestAlreadyRegistered": true,
+      "otherRequestBodyFile": "payloads/requests/retry.json"
+    },
+    "steps": [
+      {
+        "action": "PROVIDER_TIMEOUT"
+      },
+      {
+        "action": "ASSERT_OCCUPIED_SLOTS",
+        "count": 2
+      },
+      {
+        "action": "SUBMIT_OTHER_NEW_REQUEST",
+        "expectedHttpStatus": 503,
+        "expectedCode": "AI_OVERLOADED"
+      },
+      {
+        "action": "RELEASE_PROVIDER_AND_WAIT_FINISH"
+      },
+      {
+        "action": "ASSERT_OCCUPIED_SLOTS",
+        "count": 1
+      }
+    ],
+    "expected": {
+      "targetCallerHttpStatus": 504,
+      "targetCallerCode": "AI_TIMEOUT",
+      "clientResponseDelivered": true,
+      "targetReceiptPreserved": true,
+      "targetProviderCalls": 1,
+      "otherRequestProviderCalls": 0,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-slot-retained-caller-cancel",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "취소를 억제한 제공자가 실제 종료될 때까지 슬롯 유지",
+    "setup": {
+      "providerSlots": 2,
+      "occupiedSlots": 2,
+      "providerBehavior": "SUPPRESS_CANCEL_UNTIL_RELEASE",
+      "requestBodyFile": "payloads/requests/base.json",
+      "targetRequestAlreadyRegistered": true,
+      "otherRequestBodyFile": "payloads/requests/retry.json"
+    },
+    "steps": [
+      {
+        "action": "CANCEL_CALLER"
+      },
+      {
+        "action": "ASSERT_OCCUPIED_SLOTS",
+        "count": 2
+      },
+      {
+        "action": "SUBMIT_OTHER_NEW_REQUEST",
+        "expectedHttpStatus": 503,
+        "expectedCode": "AI_OVERLOADED"
+      },
+      {
+        "action": "RELEASE_PROVIDER_AND_WAIT_FINISH"
+      },
+      {
+        "action": "ASSERT_OCCUPIED_SLOTS",
+        "count": 1
+      }
+    ],
+    "expected": {
+      "targetCallerHttpStatus": null,
+      "targetCallerCode": null,
+      "clientResponseDelivered": false,
+      "targetReceiptPreserved": true,
+      "targetProviderCalls": 1,
+      "otherRequestProviderCalls": 0,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-chunked-request-at",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "길이 헤더 없는 분할 본문의 실제 바이트 제한",
+    "setup": {
+      "contentLength": null,
+      "chunkBytes": 8192,
+      "bodyRecipe": "request-bytes-at",
+      "boundaryCaseId": "L-request-bytes-at",
+      "receiver": "AI"
+    },
+    "steps": [
+      {
+        "action": "READ_CHUNKS_UNTIL_LIMIT_OR_EOF"
+      }
+    ],
+    "expected": {
+      "accepted": true,
+      "maxBufferedBytes": 1048576,
+      "failureCode": null,
+      "partialResultStored": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-chunked-request-above",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "길이 헤더 없는 분할 본문의 실제 바이트 제한",
+    "setup": {
+      "contentLength": null,
+      "chunkBytes": 8192,
+      "bodyRecipe": "request-bytes-above",
+      "boundaryCaseId": "L-request-bytes-above",
+      "receiver": "AI"
+    },
+    "steps": [
+      {
+        "action": "READ_CHUNKS_UNTIL_LIMIT_OR_EOF"
+      }
+    ],
+    "expected": {
+      "accepted": false,
+      "maxBufferedBytes": 1048576,
+      "failureCode": "REQUEST_TOO_LARGE",
+      "partialResultStored": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-chunked-response-at",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "길이 헤더 없는 분할 본문의 실제 바이트 제한",
+    "setup": {
+      "contentLength": null,
+      "chunkBytes": 8192,
+      "bodyRecipe": "response-bytes-at",
+      "boundaryCaseId": "L-response-bytes-at",
+      "receiver": "BE",
+      "injectedResponseStatus": 200,
+      "requestBodyRecipe": "request-minimal"
+    },
+    "steps": [
+      {
+        "action": "READ_CHUNKS_UNTIL_LIMIT_OR_EOF"
+      }
+    ],
+    "expected": {
+      "accepted": true,
+      "maxBufferedBytes": 524288,
+      "failureCode": null,
+      "partialResultStored": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-chunked-response-above",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "길이 헤더 없는 분할 본문의 실제 바이트 제한",
+    "setup": {
+      "contentLength": null,
+      "chunkBytes": 8192,
+      "bodyRecipe": "response-bytes-above",
+      "boundaryCaseId": "L-response-bytes-above",
+      "receiver": "BE",
+      "injectedResponseStatus": 200,
+      "requestBodyRecipe": "request-minimal"
+    },
+    "steps": [
+      {
+        "action": "READ_CHUNKS_UNTIL_LIMIT_OR_EOF"
+      }
+    ],
+    "expected": {
+      "accepted": false,
+      "maxBufferedBytes": 524288,
+      "failureCode": "AI_INVALID_RESPONSE",
+      "partialResultStored": false,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-receipt-preserved-response-bytes",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "등록 후 과대 제공자 결과를 거부해도 기록 유지",
+    "setup": {
+      "requestBodyRecipe": "request-minimal",
+      "providerBodyRecipe": "response-bytes-above"
+    },
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "expectedHttpStatus": 502,
+        "expectedCode": "INVALID_AI_RESPONSE",
+        "providerCalls": 1
+      },
+      {
+        "action": "REPEAT_SAME_REQUEST",
+        "expectedHttpStatus": 409,
+        "expectedCode": "REQUEST_ALREADY_RECEIVED",
+        "providerCalls": 0
+      }
+    ],
+    "expected": {
+      "receiptPreserved": true,
+      "totalProviderCalls": 1,
+      "storedProposalCount": 0,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-receipt-preserved-response-suggestions",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "등록 후 과대 제공자 결과를 거부해도 기록 유지",
+    "setup": {
+      "requestBodyRecipe": "request-minimal",
+      "providerBodyRecipe": "response-suggestions-above"
+    },
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "expectedHttpStatus": 502,
+        "expectedCode": "INVALID_AI_RESPONSE",
+        "providerCalls": 1
+      },
+      {
+        "action": "REPEAT_SAME_REQUEST",
+        "expectedHttpStatus": 409,
+        "expectedCode": "REQUEST_ALREADY_RECEIVED",
+        "providerCalls": 0
+      }
+    ],
+    "expected": {
+      "receiptPreserved": true,
+      "totalProviderCalls": 1,
+      "storedProposalCount": 0,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-receipt-preserved-response-changeText",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "등록 후 과대 제공자 결과를 거부해도 기록 유지",
+    "setup": {
+      "requestBodyRecipe": "request-minimal",
+      "providerBodyRecipe": "response-changeText-above"
+    },
+    "steps": [
+      {
+        "action": "SUBMIT",
+        "expectedHttpStatus": 502,
+        "expectedCode": "INVALID_AI_RESPONSE",
+        "providerCalls": 1
+      },
+      {
+        "action": "REPEAT_SAME_REQUEST",
+        "expectedHttpStatus": 409,
+        "expectedCode": "REQUEST_ALREADY_RECEIVED",
+        "providerCalls": 0
+      }
+    ],
+    "expected": {
+      "receiptPreserved": true,
+      "totalProviderCalls": 1,
+      "storedProposalCount": 0,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-unknown-error-422-request-too-large",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "BE의 정확한 HTTP/code 허용 목록 검증",
+    "setup": {
+      "injectedResponse": {
+        "httpStatus": 422,
+        "body": {
+          "code": "REQUEST_TOO_LARGE",
+          "message": "synthetic"
+        }
+      }
+    },
+    "steps": [
+      {
+        "action": "BE_MAP_INJECTED_RESPONSE"
+      }
+    ],
+    "expected": {
+      "be": {
+        "failureCode": "AI_SERVICE_UNAVAILABLE",
+        "storedProposalCount": 0
+      },
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-unknown-error-409-request-comparison-unavailable",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "BE의 정확한 HTTP/code 허용 목록 검증",
+    "setup": {
+      "injectedResponse": {
+        "httpStatus": 409,
+        "body": {
+          "code": "REQUEST_COMPARISON_UNAVAILABLE",
+          "message": "synthetic"
+        }
+      }
+    },
+    "steps": [
+      {
+        "action": "BE_MAP_INJECTED_RESPONSE"
+      }
+    ],
+    "expected": {
+      "be": {
+        "failureCode": "AI_SERVICE_UNAVAILABLE",
+        "storedProposalCount": 0
+      },
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-unknown-error-429-ai-overloaded",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "BE의 정확한 HTTP/code 허용 목록 검증",
+    "setup": {
+      "injectedResponse": {
+        "httpStatus": 429,
+        "body": {
+          "code": "AI_OVERLOADED",
+          "message": "synthetic"
+        }
+      }
+    },
+    "steps": [
+      {
+        "action": "BE_MAP_INJECTED_RESPONSE"
+      }
+    ],
+    "expected": {
+      "be": {
+        "failureCode": "AI_SERVICE_UNAVAILABLE",
+        "storedProposalCount": 0
+      },
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-unknown-error-503-unknown-code",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "BE의 정확한 HTTP/code 허용 목록 검증",
+    "setup": {
+      "injectedResponse": {
+        "httpStatus": 503,
+        "body": {
+          "code": "UNKNOWN_CODE",
+          "message": "synthetic"
+        }
+      }
+    },
+    "steps": [
+      {
+        "action": "BE_MAP_INJECTED_RESPONSE"
+      }
+    ],
+    "expected": {
+      "be": {
+        "failureCode": "AI_SERVICE_UNAVAILABLE",
+        "storedProposalCount": 0
+      },
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-be-preflight-limit",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "BE 구성/직렬화 제한 초과 시 원본 보존·HTTP 호출 없음",
+    "setup": {
+      "requestBodyRecipe": "request-bytes-above",
+      "sourceAlreadySaved": true
+    },
+    "steps": [
+      {
+        "action": "BE_ENCODE_BEFORE_SEND"
+      }
+    ],
+    "expected": {
+      "be": {
+        "failureCode": "AI_INTEGRATION_ERROR",
+        "storedProposalCount": 0
+      },
+      "httpCalls": 0,
+      "sourcePreserved": true,
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-be-oversized-error",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "오류 응답도 바이트 초과하면 AI_INVALID_RESPONSE",
+    "setup": {
+      "injectedResponseStatus": 503,
+      "contentLength": null,
+      "bodyRecipe": "error-bytes-above"
+    },
+    "steps": [
+      {
+        "action": "BE_READ_BEFORE_ERROR_DECODE"
+      }
+    ],
+    "expected": {
+      "be": {
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0
+      },
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-be-invalid-200-limit",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "AI가 제한 위반 결과를 200으로 보내도 BE 독립 거부",
+    "setup": {
+      "injectedResponseStatus": 200,
+      "responseBodyRecipe": "response-suggestions-above",
+      "requestBodyRecipe": "request-minimal"
+    },
+    "steps": [
+      {
+        "action": "BE_VALIDATE_RESPONSE"
+      }
+    ],
+    "expected": {
+      "be": {
+        "failureCode": "AI_INVALID_RESPONSE",
+        "storedProposalCount": 0
+      },
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-be-error-bytes-below",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "응답 바이트 상한 이내의 오류 본문은 기존 HTTP/code 매핑 적용",
+    "setup": {
+      "injectedResponseStatus": 503,
+      "contentLength": null,
+      "bodyRecipe": "error-bytes-below"
+    },
+    "steps": [
+      {
+        "action": "BE_READ_BEFORE_ERROR_DECODE"
+      }
+    ],
+    "expected": {
+      "be": {
+        "failureCode": "AI_SERVICE_UNAVAILABLE",
+        "storedProposalCount": 0
+      },
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  },
+  {
+    "caseId": "H-be-error-bytes-at",
+    "category": "HTTP",
+    "contractVersion": "v2",
+    "contractSections": [
+      16
+    ],
+    "purpose": "응답 바이트 상한 이내의 오류 본문은 기존 HTTP/code 매핑 적용",
+    "setup": {
+      "injectedResponseStatus": 503,
+      "contentLength": null,
+      "bodyRecipe": "error-bytes-at"
+    },
+    "steps": [
+      {
+        "action": "BE_READ_BEFORE_ERROR_DECODE"
+      }
+    ],
+    "expected": {
+      "be": {
+        "failureCode": "AI_SERVICE_UNAVAILABLE",
+        "storedProposalCount": 0
+      },
+      "automaticRetries": 0,
+      "v1FallbackCalls": 0
+    },
+    "executionCoverage": "SCENARIO_ONLY_RUNTIME_DEFERRED"
+  }
+]

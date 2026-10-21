@@ -1,12 +1,14 @@
 {
   "formatVersion": 1,
   "contractVersion": "v2",
-  "revision": "v2-20261016.2",
+  "revision": "v2-20261021.1",
   "sourceRepository": "Team-Hanmaum/hanmaum-ai",
   "suites": {
     "STATIC": "cases/static.json",
     "RECEIPT": "cases/receipts.json",
-    "BACKEND": "cases/backend.json"
+    "BACKEND": "cases/backend.json",
+    "LIMITS": "cases/limits.json",
+    "HTTP": "cases/http.json"
   },
   "caseIds": [
     "A-all-current-values",
@@ -209,7 +211,134 @@
     "C-unreferenced-direct-document",
     "C-unreferenced-direct-document-query",
     "C-version-changed-query",
-    "C-wrong-pair"
+    "C-wrong-pair",
+    "H-be-error-bytes-at",
+    "H-be-error-bytes-below",
+    "H-be-invalid-200-limit",
+    "H-be-oversized-error",
+    "H-be-preflight-limit",
+    "H-chunked-request-above",
+    "H-chunked-request-at",
+    "H-chunked-response-above",
+    "H-chunked-response-at",
+    "H-existing-before-overload-different",
+    "H-existing-before-overload-same",
+    "H-existing-before-overload-uncomparable",
+    "H-new-overloaded",
+    "H-overload-concurrent-commit",
+    "H-receipt-preserved-response-bytes",
+    "H-receipt-preserved-response-changeText",
+    "H-receipt-preserved-response-suggestions",
+    "H-registration-race-different",
+    "H-registration-race-same",
+    "H-slot-retained-caller-cancel",
+    "H-slot-retained-timeout",
+    "H-unknown-error-409-request-comparison-unavailable",
+    "H-unknown-error-422-request-too-large",
+    "H-unknown-error-429-ai-overloaded",
+    "H-unknown-error-503-unknown-code",
+    "L-count-opaque-direct-input",
+    "L-count-repeated-values",
+    "L-count-unicode-escaped",
+    "L-count-unicode-literal",
+    "L-count-unicode-not-normalized",
+    "L-count-uuid-compact",
+    "L-request-basisPerCandidate-above",
+    "L-request-basisPerCandidate-at",
+    "L-request-basisPerCandidate-below",
+    "L-request-basisText-above",
+    "L-request-basisText-at",
+    "L-request-basisText-below",
+    "L-request-basisTotal-above",
+    "L-request-basisTotal-at",
+    "L-request-basisTotal-below",
+    "L-request-bytes-above",
+    "L-request-bytes-at",
+    "L-request-bytes-below",
+    "L-request-candidates-above",
+    "L-request-candidates-at",
+    "L-request-candidates-below",
+    "L-request-content-above",
+    "L-request-content-at",
+    "L-request-content-below",
+    "L-request-currentText-above",
+    "L-request-currentText-at",
+    "L-request-currentText-below",
+    "L-request-emoji-above",
+    "L-request-emoji-at",
+    "L-request-emoji-below",
+    "L-request-free-answerText-above",
+    "L-request-free-answerText-at",
+    "L-request-free-answerText-below",
+    "L-request-free-description-above",
+    "L-request-free-description-at",
+    "L-request-free-description-below",
+    "L-request-free-location-above",
+    "L-request-free-location-at",
+    "L-request-free-location-below",
+    "L-request-free-observedTimeText-above",
+    "L-request-free-observedTimeText-at",
+    "L-request-free-observedTimeText-below",
+    "L-request-free-sourceName-above",
+    "L-request-free-sourceName-at",
+    "L-request-free-sourceName-below",
+    "L-request-free-title-above",
+    "L-request-free-title-at",
+    "L-request-free-title-below",
+    "L-request-pre-normalization-above",
+    "L-request-pre-normalization-at",
+    "L-request-pre-normalization-below",
+    "L-request-stringUnits-above",
+    "L-request-stringUnits-at",
+    "L-request-stringUnits-below",
+    "L-response-basisIdsPerItem-above",
+    "L-response-basisIdsPerItem-at",
+    "L-response-basisIdsPerItem-below",
+    "L-response-basisIdsPerSuggestion-above",
+    "L-response-basisIdsPerSuggestion-at",
+    "L-response-basisIdsPerSuggestion-below",
+    "L-response-basisReferences-above",
+    "L-response-basisReferences-at",
+    "L-response-basisReferences-below",
+    "L-response-bytes-above",
+    "L-response-bytes-at",
+    "L-response-bytes-below",
+    "L-response-candidateItemIds-above",
+    "L-response-candidateItemIds-at",
+    "L-response-candidateItemIds-below",
+    "L-response-changeText-above",
+    "L-response-changeText-at",
+    "L-response-changeText-below",
+    "L-response-evidence-above",
+    "L-response-evidence-at",
+    "L-response-evidence-below",
+    "L-response-free-answerText-above",
+    "L-response-free-answerText-at",
+    "L-response-free-answerText-below",
+    "L-response-free-description-above",
+    "L-response-free-description-at",
+    "L-response-free-description-below",
+    "L-response-free-location-above",
+    "L-response-free-location-at",
+    "L-response-free-location-below",
+    "L-response-free-observedTimeText-above",
+    "L-response-free-observedTimeText-at",
+    "L-response-free-observedTimeText-below",
+    "L-response-free-sourceName-above",
+    "L-response-free-sourceName-at",
+    "L-response-free-sourceName-below",
+    "L-response-free-title-above",
+    "L-response-free-title-at",
+    "L-response-free-title-below",
+    "L-response-stringUnits-above",
+    "L-response-stringUnits-at",
+    "L-response-stringUnits-below",
+    "L-response-suggestions-above",
+    "L-response-suggestions-at",
+    "L-response-suggestions-below",
+    "L-response-title-above",
+    "L-response-title-at",
+    "L-response-title-below"
   ],
   "files": [
     {
@@ -221,8 +350,16 @@
       "sha256": "84ea887f6c1c468442b2a92471d7c7043281287d2690d26790dd600034bec875"
     },
     {
+      "path": "cases/http.json",
+      "sha256": "0cd42d3669387aad9ac8fd3f176bf1ddb0ccc6a2f3a862f9fcd16429ba93593d"
+    },
+    {
+      "path": "cases/limits.json",
+      "sha256": "bef73521502feddd6bfc7b00c78bb817632c559447f2c558e2c13d5135018200"
+    },
+    {
       "path": "cases/receipts.json",
-      "sha256": "8c054ac51a45b400e490627750f68c0fd3ccda16b097c82ebb9b8b8db9b82f84"
+      "sha256": "83b61e1ff114c4cb590690e40a3e629e47781744eb22711753a9cdac1ae01b61"
     },
     {
       "path": "cases/static.json",
@@ -230,7 +367,27 @@
     },
     {
       "path": "error-mapping.json",
-      "sha256": "80c98a7f09d154c8940cabf6817caee5808026ded2770f1f18847736e3c5e599"
+      "sha256": "3d4db04817d86425bb4b71b657f6e42d2414acf77bd39f512833015037c231e5"
+    },
+    {
+      "path": "generated.json",
+      "sha256": "7f8007d72522cb21ceca14332ce5d241b471f3081773724f7e57878c6c6261fe"
+    },
+    {
+      "path": "GENERATION.md",
+      "sha256": "5e50d1371ecd251b29cd51122280020923dab822b8bb45590087a288d00019eb"
+    },
+    {
+      "path": "history/B-uncomparable-record.v2-20261016.2.json",
+      "sha256": "894941261cb838e7820246dba37a603de3180d37166202bf79b706bf6b0aa300"
+    },
+    {
+      "path": "history/v2-20261016.2-manifest.json",
+      "sha256": "a65c27c8a8c323f3bdfb6fec0bddefe8cf251870f940e2410a2043b0dab83ff9"
+    },
+    {
+      "path": "limits.json",
+      "sha256": "4df891cf15325f94c073696d01bf298bcd7ff7138fa885a552d5b9b66a41e44c"
     },
     {
       "path": "payloads/requests/base.json",
@@ -543,6 +700,10 @@
     {
       "path": "payloads/responses/empty.json",
       "sha256": "63064a2f928b47f8c38a4325a0819d6ea9aa81e98dd8fbfb16d5320d1633126f"
+    },
+    {
+      "path": "payloads/responses/error-overloaded.json",
+      "sha256": "68af5a3c17bf2f4b8bc3f588fe3dd33e483f9ea292087dd5258fc7a543dcef6b"
     },
     {
       "path": "payloads/responses/existing-answer.json",
@@ -906,7 +1067,11 @@
     },
     {
       "path": "README.md",
-      "sha256": "57710fbc411a57fa81b4c550da2a339363e8c525c770b917afae9027603b955f"
+      "sha256": "b4044bdf5857f482efabd7fe4bfe02c890885f6989168eeb1c6bdca979679877"
+    },
+    {
+      "path": "revision-history.json",
+      "sha256": "6206000156938c6bc2d0d25bcb062abd84af75f81740dd16b421fdd09e86aa66"
     }
   ]
 }
