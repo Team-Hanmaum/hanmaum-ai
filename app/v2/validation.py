@@ -3,6 +3,15 @@
 import json
 
 from app.errors import AnalysisFailure
+from app.v2.limits import (
+    REQUEST_BYTES,
+    RESPONSE_BYTES,
+    RequestTooLarge,
+    check_raw_size,
+    check_request,
+    check_response,
+    encode_json,
+)
 from app.v2.schemas import AnalysisRequest, AnalysisResponse
 
 
@@ -19,13 +28,9 @@ def reject_constant(value: str) -> None:
     raise ValueError("Non-JSON number")
 
 
-def load_json(raw: bytes | str) -> object:
-    """Decode a buffered contract payload, not a resource-limiting ingestion boundary.
-
-    Before HTTP/provider integration, agree v2 limits and enforce them while reading
-    the payload, before buffering or decoding it. Contract section 15 leaves those
-    values unresolved; this module must not invent wire-level size/count limits.
-    """
+def load_json(raw: bytes | str, maximum: int = REQUEST_BYTES) -> object:
+    """Bound buffered input before decoding; HTTP also bounds the stream while reading."""
+    check_raw_size(raw, maximum)
     # Decode explicitly: json.loads(bytes) also accepts UTF-16/32, unlike this wire contract.
     if isinstance(raw, bytes):
         raw = raw.decode("utf-8")
@@ -37,8 +42,14 @@ def load_json(raw: bytes | str) -> object:
 def parse_request(raw: bytes | str) -> AnalysisRequest:
     """Parse original JSON into a deeply immutable response-validation snapshot."""
     try:
-        return AnalysisRequest.model_validate(load_json(raw))
-    except (ValueError, RecursionError):
+        value = load_json(raw)
+        check_request(value)
+        return AnalysisRequest.model_validate(value)
+    except RequestTooLarge:
+        raise AnalysisFailure(
+            413, "REQUEST_TOO_LARGE", "요청 본문 크기가 제한을 초과했습니다."
+        ) from None
+    except (ValueError, TypeError, RecursionError):
         raise AnalysisFailure(
             422, "INVALID_REQUEST", "요청 형식과 필수 항목을 확인해주세요."
         ) from None
@@ -55,11 +66,26 @@ def validate_response(request: AnalysisRequest, payload: object) -> AnalysisResp
     """
     try:
         if isinstance(payload, (bytes, str)):
-            payload = load_json(payload)
+            payload = load_json(payload, RESPONSE_BYTES)
+        else:
+            # Decoded adapters must bound their own reads; also bound the object at this boundary.
+            encode_json(payload)
+        check_response(payload)
         response = AnalysisResponse.model_validate(payload)
         validate_references(request, response)
         return response
-    except (ValueError, RecursionError):
+    except (ValueError, TypeError, RecursionError, OverflowError):
+        raise AnalysisFailure(
+            502, "INVALID_AI_RESPONSE", "분석 결과를 검증하지 못했습니다."
+        ) from None
+
+
+def serialize_response(response: AnalysisResponse) -> bytes:
+    try:
+        value = response.model_dump(mode="json", by_alias=True)
+        check_response(value)
+        return encode_json(value)
+    except (ValueError, TypeError, RecursionError, OverflowError):
         raise AnalysisFailure(
             502, "INVALID_AI_RESPONSE", "분석 결과를 검증하지 못했습니다."
         ) from None

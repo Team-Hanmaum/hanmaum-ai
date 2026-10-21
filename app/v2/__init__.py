@@ -1,1 +1,1 @@
-"""Version 2 contract validation; HTTP and receipt handling are separate work."""
+"""Version 2 HTTP, contract validation and receipt-based provider admission."""

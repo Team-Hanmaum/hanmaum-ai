@@ -1,6 +1,6 @@
 """Run preserved receipt scenarios against SQLite and the internal v2 service.
 
-HTTP headers/status transport and expected.be remain the next integration layers.
+HTTP transport is tested separately in test_v2_http.py; expected.be belongs to BE tests.
 """
 
 import asyncio
@@ -31,7 +31,7 @@ from app.v2.validation import parse_request
 
 ROOT = Path(__file__).parent / "fixtures/v2"
 CASES = json.loads((ROOT / "cases/receipts.json").read_bytes())
-DEFERRED_HTTP = {"B-uncomparable-record": "503 mapping awaits HTTP integration"}
+DEFERRED_HTTP = {"B-uncomparable-record": "503 mapping covered in test_v2_http.py"}
 INTERNAL_CASES = [case for case in CASES if case["caseId"] not in DEFERRED_HTTP]
 KEY = b"synthetic-receipt-test-key-only-001"
 RULE = "fixture-rule-1"

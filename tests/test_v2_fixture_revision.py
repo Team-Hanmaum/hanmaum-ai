@@ -7,8 +7,8 @@ from uuid import UUID
 
 import pytest
 
-from app.errors import AnalysisFailure
-from app.v2.validation import parse_request, validate_response
+from app.v2.schemas import AnalysisRequest, AnalysisResponse
+from app.v2.validation import validate_references
 from scripts.fixture_manifest import DEFAULT_ROOT, read_json
 from scripts.fixture_payloads import materialize, measurements, string_units
 
@@ -72,16 +72,17 @@ def test_boundary_goldens_isolate_limits_and_disclose_coupled_contract_violation
     assert case["expected"]["ai"].get("code") == code
     assert case["expected"]["ai"]["providerCalls"] == (0 if status in {413, 422} else 1)
     assert case["expected"]["receiptCreatedByThisRequest"] == (status not in {413, 422})
-    # Existing validators prove OTHER structural/semantic rules. They do not yet enforce
-    # these new limits; the expected HTTP outcomes stay explicit fixture data.
-    request = parse_request(request_raw)
+    # Inspect OTHER rules independently of resource limits. HTTP boundary outcomes
+    # are executed against the unchanged goldens in test_v2_http.py.
+    request = AnalysisRequest.model_validate(json.loads(request_raw))
     if boundary["coupledViolations"]:
-        with pytest.raises(AnalysisFailure) as caught:
-            validate_response(request, response_raw)
-        assert caught.value.code == "INVALID_AI_RESPONSE"
+        with pytest.raises(ValueError):
+            response = AnalysisResponse.model_validate(json.loads(response_raw))
+            validate_references(request, response)
         assert boundary["delta"] == 1
     else:
-        response = validate_response(request, response_raw)
+        response = AnalysisResponse.model_validate(json.loads(response_raw))
+        validate_references(request, response)
         if case["expected"]["ai"]["httpStatus"] == 200:
             assert len(response.suggestions) == case["expected"]["be"]["storedProposalCount"]
 
