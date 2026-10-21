@@ -73,6 +73,11 @@ async def test_openapi_describes_v2_without_changing_v1_and_all_references_resol
     ready = schema["paths"]["/health/ready/v2"]["get"]
     assert ready["security"] == operation["security"]
     assert set(ready["responses"]) == {"200", "401", "503"}
+    assert set(ready["responses"]["503"]["content"]["application/json"]["examples"]) == {
+        "AI_NOT_CONFIGURED",
+        "RECEIPT_STORE_UNAVAILABLE",
+        "AI_OVERLOADED",
+    }
 
 
 @pytest.mark.anyio

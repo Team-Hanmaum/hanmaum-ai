@@ -190,7 +190,7 @@ READINESS_RESPONSES = {
             401: ERRORS[401],
             503: {
                 code: ERRORS[503][code]
-                for code in ("AI_NOT_CONFIGURED", "RECEIPT_STORE_UNAVAILABLE")
+                for code in ("AI_NOT_CONFIGURED", "RECEIPT_STORE_UNAVAILABLE", "AI_OVERLOADED")
             },
         }
     ),

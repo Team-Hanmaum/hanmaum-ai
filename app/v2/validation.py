@@ -56,7 +56,7 @@ def parse_request(raw: bytes | str) -> AnalysisRequest:
 
 
 def validate_response(request: AnalysisRequest, payload: object) -> AnalysisResponse:
-    """Validate a provider JSON object or original JSON, then all request-relative rules.
+    """Validate provider JSON or an AnalysisResponse, then all request-relative rules.
 
     Raw bytes/text retain duplicate keys for rejection. An already decoded provider object
     cannot recover duplicates; its adapter must reject duplicates when decoding raw output.
@@ -65,6 +65,9 @@ def validate_response(request: AnalysisRequest, payload: object) -> AnalysisResp
     No partial list is returned if any suggestion fails.
     """
     try:
+        if isinstance(payload, AnalysisResponse):
+            # Revalidate nested fields as well: model instances may have been mutated.
+            payload = payload.model_dump(mode="json", by_alias=True, warnings="error")
         if isinstance(payload, (bytes, str)):
             payload = load_json(payload, RESPONSE_BYTES)
         else:

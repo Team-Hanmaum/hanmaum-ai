@@ -7,6 +7,10 @@ from starlette.requests import ClientDisconnect
 from app.v2.diagnostics import FailureEvent, record_failure
 
 
+class _SendDeadlineExceeded(Exception):
+    """Only the transport-owned send budget expired."""
+
+
 class V2Transport:
     def __init__(self, app, send_budget=0.5):
         self.app = app
@@ -21,15 +25,20 @@ class V2Transport:
         async def bounded_send(message):
             nonlocal remaining
             started = loop.time()
+            deadline = asyncio.timeout(remaining)
             try:
-                async with asyncio.timeout(remaining):
+                async with deadline:
                     await send(message)
+            except TimeoutError:
+                if not deadline.expired():
+                    raise
+                raise _SendDeadlineExceeded() from None
             finally:
                 remaining -= loop.time() - started
 
         try:
             await self.app(scope, receive, bounded_send)
-        except TimeoutError:
+        except _SendDeadlineExceeded:
             # Headers may already have been sent. Never append a second JSON response.
             record_failure(FailureEvent.HTTP_SEND_TIMEOUT)
         except ClientDisconnect:

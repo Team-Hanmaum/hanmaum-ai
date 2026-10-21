@@ -54,6 +54,7 @@ async def _wait_disconnect(request):
 
 
 async def until_disconnect(request, operation):
+    """Start monitoring only after read_body has consumed the final body event."""
     work = asyncio.create_task(operation)
     disconnect = asyncio.create_task(_wait_disconnect(request))
     try:

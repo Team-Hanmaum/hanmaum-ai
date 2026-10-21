@@ -53,10 +53,8 @@ class Workers:
     async def run(self, function: Callable, *args, budget: float = 1, leases=(), failure=None):
         if budget <= 0:
             raise failure or timed_out()
-        try:
-            lease = self.capacity.acquire()
-        except AnalysisFailure:
-            raise failure or overloaded() from None
+        # Admission saturation is distinct from a submitted storage operation timing out.
+        lease = self.capacity.acquire()
         task = asyncio.create_task(asyncio.to_thread(function, *args))
         self.tasks.add(task)
         for owner in leases:

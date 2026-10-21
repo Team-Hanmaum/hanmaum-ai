@@ -356,7 +356,7 @@ async def test_v2_readiness_requires_explicit_store_initialization_and_leaves_v1
 ):
     path = tmp_path / "new.sqlite3"
     app = create_app(
-        Settings(_env_file=None, ai_provider="stub", ai_internal_api_key=AUTH),
+        Settings(_env_file=None, app_env="test", ai_provider="stub", ai_internal_api_key=AUTH),
         v2_settings=enabled_settings(path),
     )
     async with client(app) as http:
@@ -375,7 +375,7 @@ async def test_v2_readiness_requires_explicit_store_initialization_and_leaves_v1
 def test_internal_auth_and_receipt_hmac_keys_cannot_be_reused(tmp_path):
     with pytest.raises(ValueError, match="separate"):
         create_app(
-            Settings(_env_file=None, ai_internal_api_key=KEY.decode()),
+            Settings(_env_file=None, app_env="test", ai_internal_api_key=KEY.decode()),
             v2_settings=enabled_settings(tmp_path / "unused.sqlite3"),
         )
 
@@ -399,7 +399,7 @@ def test_real_http_server_with_stub_and_persisted_receipt(tmp_path):
     path = tmp_path / "wire.sqlite3"
     SQLiteReceiptStore(path, lock_timeout_seconds=0.05).initialize()
     app = create_app(
-        Settings(_env_file=None, ai_provider="stub", ai_internal_api_key=AUTH),
+        Settings(_env_file=None, app_env="test", ai_provider="stub", ai_internal_api_key=AUTH),
         v2_settings=enabled_settings(path),
     )
     with socket.socket() as listener:

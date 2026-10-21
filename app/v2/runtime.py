@@ -1,4 +1,4 @@
-"""One v2 runtime per app/process. No implicit receipt initialization or LLM calls."""
+"""App-local runtime; supported servers run one ASGI app per worker process."""
 
 import asyncio
 
