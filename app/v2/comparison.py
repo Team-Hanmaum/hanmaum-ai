@@ -18,7 +18,7 @@ CANONICALIZATION_VERSION = "v2-json-1"
 
 
 class ComparisonUnavailable(Exception):
-    """Fail closed internally. The external status/code still requires BE agreement."""
+    """Fail closed internally; v2 HTTP maps this to 503 REQUEST_COMPARISON_UNAVAILABLE."""
 
     def __init__(self):
         super().__init__("수신 기록을 안전하게 비교할 수 없습니다.")

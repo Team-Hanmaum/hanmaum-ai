@@ -8,6 +8,8 @@ from threading import Lock
 
 
 class FailureEvent(StrEnum):
+    HTTP_SEND_TIMEOUT = "http.send_timeout"
+    HTTP_DISCONNECT = "http.disconnect"
     COMPARISON_CONFIGURATION = "comparison.configuration"
     COMPARISON_RULE_MISSING = "comparison.rule_missing"
     COMPARISON_KEY_MISSING = "comparison.key_missing"

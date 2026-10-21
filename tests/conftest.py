@@ -1,4 +1,5 @@
 import json
+import os
 from pathlib import Path
 
 import pytest
@@ -13,6 +14,12 @@ def anyio_backend():
 def isolated_settings(monkeypatch):
     for name in ("APP_ENV", "AI_PROVIDER", "AI_INTERNAL_API_KEY", "ANALYSIS_TIMEOUT_SECONDS"):
         monkeypatch.delenv(name, raising=False)
+    for name in tuple(os.environ):
+        if name.startswith("AI_V2_"):
+            monkeypatch.delenv(name, raising=False)
+    # v1 tests must remain independent of a developer's optional local v2 configuration.
+    monkeypatch.setenv("AI_V2_PROVIDER", "disabled")
+    monkeypatch.setenv("AI_V2_HMAC_KEYS", "{}")
 
 
 @pytest.fixture

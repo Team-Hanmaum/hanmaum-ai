@@ -1,4 +1,4 @@
-"""Exercise preserved A-* cases; revision .1 limit/HTTP implementation is deferred."""
+"""Internal structural contract tests; all A-* also run through test_v2_http.py."""
 
 import json
 import operator
@@ -15,7 +15,7 @@ from app.v2.validation import parse_request, validate_response
 ROOT = Path(__file__).parent / "fixtures/v2"
 STATIC_CASES = json.loads((ROOT / "cases/static.json").read_bytes())
 
-# Exact IDs keep new cases from being silently excluded by status-code filters.
+# Covered by test_v2_http.py; exact IDs keep new cases from silently escaping either layer.
 DEFERRED_STATIC = {
     "A-auth-missing": "HTTP authentication",
     "A-auth-invalid": "HTTP authentication",
@@ -235,13 +235,12 @@ def test_every_current_value_key_is_required_even_when_nullable(candidate_index)
         assert_failure(caught.value, 422, "INVALID_REQUEST")
 
 
-def test_pre_http_models_retain_previous_unbounded_behavior_until_limit_implementation():
-    # Legacy implementation regression only. New revision expectations live in L-*;
-    # replace this test when implementing those limits, never weaken their goldens.
+def test_v2_allows_larger_than_v1_inputs_within_the_agreed_v2_limits():
     data = request_data()
-    data["content"] += " 내용" * 4000
+    data["content"] += " 내용" * 1000
     data["candidates"][0]["basis"][0]["text"] = "근거" * 2001
     original = deepcopy(data["candidates"][0])
+    original["basis"][0]["text"] = "근거"
     for index in range(51):
         candidate = deepcopy(original)
         candidate["itemId"] = str(UUID(int=index + 1))
@@ -253,10 +252,13 @@ def test_pre_http_models_retain_previous_unbounded_behavior_until_limit_implemen
     provider = response_data()
     provider["suggestions"][0]["title"] = "설명" * 201
     provider["suggestions"][0]["changes"]["description"] = "제안" * 2001
-    provider["suggestions"] *= 31
     result = validate_response(parsed, provider)
-    assert len(result.suggestions) == 31
+    assert len(result.suggestions) == 1
     assert result.suggestions[0].title == provider["suggestions"][0]["title"]
+    provider["suggestions"] *= 31
+    with pytest.raises(AnalysisFailure) as caught:
+        validate_response(parsed, provider)
+    assert_failure(caught.value, 502, "INVALID_AI_RESPONSE")
 
 
 def test_safe_errors_do_not_expose_input_or_provider_text(caplog):

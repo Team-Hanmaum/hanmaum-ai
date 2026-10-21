@@ -125,6 +125,87 @@ stub 응답:
 응답 헤더의 `X-AI-Provider: stub`으로 시험용 응답임을 확인할 수 있습니다.
 비어 있는 결과가 실제 분석 완료를 뜻하지는 않습니다.
 
+## v2 HTTP 실행
+
+`POST /v2/analyses`는 `v2-20261021.1` 계약을 구현합니다. v1 설정은 그대로 유지하고
+v2를 별도로 활성화합니다. 기본 `AI_V2_PROVIDER=disabled`에서는 503 AI_NOT_CONFIGURED이며,
+`stub`은 로컬·테스트 전용으로 빈 제안을 반환합니다. 실제 LLM 연결과 분석 품질 평가는 후속입니다.
+v2 stub 활성화에는 `APP_ENV=local` 또는 `APP_ENV=test`의 명시적 설정이 필요합니다.
+APP_ENV 생략에 따른 기본 local 값으로는 v2 stub을 시작하지 않습니다. v1 기본값은 유지합니다.
+로컬 예시 인증키는 `127.0.0.1`에 한정한 개발 확인용입니다. Docker 포트를 로컬에 공개할 때도
+`-p 127.0.0.1:8000:8000`으로 제한합니다. 공유 환경은 별도 무작위 내부 키와 접근 제한이 필요하며,
+명시적 APP_ENV 설정만으로 외부 노출을 안전하게 만들지는 않습니다.
+
+1. AI 전용 영속 디렉터리를 준비하고 **최초 한 번만** 저장소를 초기화합니다.
+   `uv run --locked python -m app.v2.initialize_receipts C:/dev/Hanmaum/ai-data/receipts.sqlite3`
+   상위 디렉터리는 먼저 생성해야 합니다. 기존 정상 DB에 실행하면 기록을 유지하지만,
+   파일 유실을 복구하려고 빈 DB를 초기화하면 이전 요청의 중복 차단 근거를 잃습니다.
+2. 인증키와 별개로 무작위 HMAC 키를 생성하여 비밀 설정에 보관합니다. 키는 최소 32바이트이며,
+   `.env`의 `AI_V2_HMAC_KEYS`에 `{"local-1":"별도로 생성한 키"}` 형식으로 설정합니다.
+   같은 버전 이름의 키 값을 바꾸거나 기존 기록에 필요한 이전 키를 제거하지 않습니다.
+3. `AI_V2_ACTIVE_HMAC_KEY_VERSION=local-1`, 절대 경로인 `AI_V2_RECEIPT_DB_PATH`,
+   `AI_V2_PROVIDER=stub`을 설정하고 서버를 재시작합니다. DB·키를 서버가 자동 생성하지 않습니다.
+4. 기존 `/health/ready`는 v1 상태이며, v2는 내부 키를 포함해 `GET /health/ready/v2`로 확인합니다.
+   이 확인은 저장소 접근·스키마만 검사하고 기록을 생성하거나 제공자를 호출하지 않습니다.
+
+```bash
+curl -i http://localhost:8000/v2/analyses \
+  -H 'Content-Type: application/json' \
+  -H 'X-Internal-Api-Key: local-development-only' \
+  -H 'X-Request-Id: aaaaaaaa-0000-4000-8000-000000000001' \
+  --data-binary @tests/fixtures/v2/payloads/requests/base.json
+```
+
+동일 요청을 다시 보내면 409 REQUEST_ALREADY_RECEIVED입니다. 명시적인 새 실행은 새 requestId를
+헤더와 본문에 함께 사용하고 원본 recordedAt은 유지합니다. 자동 재시도·v1 fallback은 없습니다.
+
+Swagger에서는 [로컬 API 문서](http://localhost:8000/docs)를 열고 다음 순서로 확인합니다.
+
+1. **Authorize**에 `.env`의 `AI_INTERNAL_API_KEY`를 입력합니다. LLM API 키가 아닙니다.
+2. `GET /health/ready/v2` → **Try it out → Execute**로 준비 상태를 확인합니다.
+   기본 비활성화 상태는 503 AI_NOT_CONFIGURED, 저장소까지 준비된 stub은 200입니다.
+3. `POST /v2/analyses` → **Try it out**에서 `X-Request-Id`를 입력하고 요청 예시를 선택합니다.
+   `minimal`은 후보 없는 요청, `question`은 질문 후보와 근거가 있는 요청입니다.
+   본문의 `requestId`와 헤더는 같은 UUID여야 합니다. 예시 ID를 이미 사용했다면 두 값을
+   함께 새 UUID로 변경해야 새 실행이 됩니다. `recordedAt`은 원본 시점을 유지합니다.
+4. stub 활성화 시 첫 요청의 200·빈 제안, 동일 요청의 409, 같은 ID에 다른 유효 본문의
+   409 REQUEST_ID_REUSED, 헤더 ID 불일치의 400, 필수 content 누락의 422를 확인합니다.
+   인증 해제 후에는 401입니다. 기본 비활성화 상태에서도 인증·요청 검증은 적용됩니다.
+
+Swagger의 **Schema**는 v2 중첩 후보·근거·응답 필드를 설명하고 **Responses**는 상태별 오류
+코드와 `code`·`message` 예시를 제공합니다. 200의 질문 답변 예시는 계약 형식 설명이며 현재
+stub이 생성하는 결과는 아닙니다. 정확한 크기 경계·동시성·취소는 자동 HTTP 테스트로 확인합니다.
+Swagger 명세는 스트림 수신과 별도로 구성하여 본문 선행 버퍼링이나 검증 순서를 바꾸지 않습니다.
+
+| AI 전용 설정 | 기본값 / 상한 | 적용 |
+| --- | --- | --- |
+| `AI_V2_PROVIDER_TIMEOUT_SECONDS` | 20초 / 25초 | 제공자 대기; 남은 전체 예산으로 추가 제한 |
+| `AI_V2_TOTAL_TIMEOUT_SECONDS` | 26초 / 26초 | 본문 수신·파싱·저장소·제공자·검증·직렬화의 전체 처리 기한 |
+| `AI_V2_BODY_TIMEOUT_SECONDS` | 2초 / 2초 | 본문 수신 |
+| `AI_V2_WORKER_TIMEOUT_SECONDS` | 1초 / 1초 | 파싱·저장소·검증·직렬화 각 워커 대기 |
+| `AI_V2_STORE_LOCK_TIMEOUT_SECONDS` | 0.25초 / 0.5초 | SQLite 잠금 대기; 워커 기한보다 작아야 함 |
+
+지원 실행 구성은 worker 프로세스 하나에 ASGI 앱 하나입니다. 이 구성에서 제공자 슬롯은
+프로세스당 2개, 수신부터 응답 전송까지의 진입 슬롯은 4개이며 대기열이 없습니다.
+CPU 작업과 저장소 작업도 각각 4개까지만 제출합니다. 응답 전송 대기는 합계 0.5초로 제한합니다.
+용량 객체는 앱·서비스 인스턴스별로 생성하며 프로세스 전역으로 공유하지 않습니다.
+한 프로세스에 여러 앱을 마운트하는 구성은 이 프로세스당 한도 보장 범위에 포함하지 않습니다.
+전체 처리 26초 + 전송 0.5초 + BE 연결 3초를 BE 전체 HTTP 기한 30초 안에 배치했습니다.
+제공자 대기는 검증·직렬화 예산을 남기며, 타임아웃이 나도 실제 작업 종료까지 슬롯을 유지합니다.
+기존 기록은 제공자 슬롯 부족보다 먼저 판정하고, 신규 요청은 슬롯 확보 후 원자적으로 재확인·등록합니다.
+진입 슬롯이 모두 사용 중이면 본문을 읽기 전에 503 AI_OVERLOADED로 거부합니다.
+저장소 워커가 가득 차 작업을 제출하지 못한 경우도 503 AI_OVERLOADED입니다. 제출 후 저장소
+대기 기한 초과·조회·등록 실패는 503 RECEIPT_STORE_UNAVAILABLE이며 준비 상태 API에도 적용됩니다.
+응답 전송이 막히거나 연결이 끊어지면 두 번째 오류 본문을 붙이지 않고 전송을 중단합니다.
+
+이는 초기 로컬·통합 실행 설정입니다. 프로세스·인스턴스 수에 따라 총 동시 실행 수가 늘어납니다.
+스레드의 강제 종료나 프로세스 전체 메모리 상한을 보장하지 않으며, 실제 제공자 어댑터의
+스트림 읽기·토큰·출력 한도, 서버/프록시 연결 제한과 운영 자원 예산은 실제 모델 연결·배포에서 검증합니다.
+컨테이너 사용 시 DB를 영속 볼륨에 두고 같은 호스트의 모든 프로세스가 같은 파일을 사용해야 합니다.
+BE 업무 DB에 연결하지 않으며, 저장소 보관·정리 정책 확정 전 자동 삭제는 없습니다.
+요청 크기·동시성 제한은 수신 기록의 누적 디스크 용량 상한이 아닙니다. 외부·운영 공개 전에는
+접근 제한과 저장 볼륨 용량·사용량 감시·신규 접수 차단 기준을 별도로 검증해야 합니다.
+
 ## 검사와 테스트
 
 ```bash
@@ -229,6 +310,12 @@ app/
     comparison.py 동일 본문 정규화·버전별 HMAC 비교
     receipts.py   SQLite 수신 기록·원자적 등록·중복 차단
     services.py   내부 v2 호출 제어·타임아웃·원본 기준 응답 검증
+    api.py        v2 분석·준비 상태 HTTP 진입점
+    limits.py     바이트·UTF-16·컬렉션 공통 상한
+    resources.py  대기열 없는 진입·작업 슬롯과 워커 수명 관리
+    transport.py  응답 전송 시간 제한과 연결 종료 정리
+    config.py     v2 전용 설정
+    runtime.py    수신 저장소·가짜 제공자 조립
   security.py     내부 키 인증
   services.py     타임아웃·분석 결과 검증
   providers.py    분석 제공자 인터페이스·stub
@@ -244,13 +331,11 @@ AI는 Spring이 보낸 원문과 후보를 바탕으로 제안만 반환합니�
 AI는 BE 업무 DB를 직접 읽거나 수정하지 않습니다. v2 수신 기록은 AI 전용 SQLite 파일에 관리합니다.
 분석 계약과 제약은 [API 계약 문서](docs/ai-contract.md)를 참고합니다.
 
-v2는 [확정 계약](docs/ai-contract-v2.md)과 [공통 fixture](tests/fixtures/v2/README.md)의
-기존 `v2-20261016.2`를 기준으로 요청·응답 모델과 계약 검증을 구현했습니다.
-새 계약·fixture revision은 **v2-20261021.1**입니다. 초기 크기 제한·오류·중복/과부하 우선순위를
-확정했으며 이번 변경은 문서·fixture·검증 도구입니다. 새 런타임 제한과 HTTP 구현은 후속입니다.
-현재 실행 API는 v1입니다. v2 내부 수신 기록·HMAC·중복 호출 차단은 구현했으며,
-v2 API·실제 모델 연결과 BE 저장·조회 연동은 후속 작업입니다.
-기존 v1 모델·제한·API와 기존 fixture payload 원문은 유지합니다. 기대값 변경은 revision 이력에 명시합니다.
+v2는 [확정 계약](docs/ai-contract-v2.md)의 **v2-20261021.1**을 기준으로 HTTP API,
+크기 제한·오류·수신 기록·HMAC·중복/과부하 우선순위·동시성 제어를 구현했습니다.
+기존 v1과 [공통 fixture](tests/fixtures/v2/README.md)의 모든 원문·revision·manifest는 유지합니다.
+fixture 내부의 실행 범위 표기는 발행 당시 상태이며, 현재 구현 범위는 아래와 계약 문서에서 관리합니다.
+실제 모델 연결 및 BE 실행·저장·조회 통합은 후속 작업입니다.
 
 공통 데이터의 파일 목록·SHA-256·revision 및 사례 일관성을 확인합니다.
 
@@ -280,25 +365,30 @@ uv run --locked pytest tests/test_v2_contract.py
 반환된 요청은 후보·현재 값·근거까지 읽기 전용이며 후보·근거 배열은 내부적으로 tuple로 보존합니다.
 JSON 직렬화에서는 기존 배열 형식이 유지됩니다. 제공자가 입력을 가공해야 하면
 `request.model_dump(mode="json")`으로 별도 사본을 전달하고, 응답 검증에는 최초 요청을 유지합니다.
-`validate_response(request, payload)`는 제공자 결과의 원문 JSON 또는 객체를 받아
+`validate_response(request, payload)`는 제공자 결과의 원문 JSON·객체·AnalysisResponse를 받아
 필드·작업 조합과 대상·버전·근거 참조를 검증하고, 하나라도 위반하면 전체 응답을 거부합니다.
-요청 위반은 `AnalysisFailure(422, INVALID_REQUEST)`, 결과 위반은
+AnalysisResponse 인스턴스도 JSON 호환 표현으로 변환한 뒤 크기·중첩 필드·요청 참조를 다시
+검증합니다. 이미 정규화된 객체가 원문 길이 검사를 대신하지 않으므로 제공자 어댑터의 읽기·원문 검증도 필요합니다.
+요청 바이트 초과는 `AnalysisFailure(413, REQUEST_TOO_LARGE)`, 그 외 요청 위반은
+`AnalysisFailure(422, INVALID_REQUEST)`, 결과 위반은
 `AnalysisFailure(502, INVALID_AI_RESPONSE)`로 구분하며 원문을 오류 메시지나 로그에 넣지 않습니다.
 
-정적 146개 사례 중 계약 검증 139개를 실제 코드에 연결했습니다. 인증·헤더·제공자 처리 7개의
-HTTP 검증과 BE 통합 25개는 후속 실행 검증 대상입니다. 수신 기록 기존 29개는 실제 SQLite와
-내부 서비스·가짜 제공자로 검증합니다. 비교 불가의 내부 차단은 별도 회귀로 유지하며 새 503 매핑은
-후속입니다. 새 LIMITS/HTTP 사례는 생성 바이트·측정값·시나리오를 검증하며 실행 검증과 구분합니다.
+`tests/test_v2_http.py`는 A-* 146개와 L-* 경계값 96개를 실제 FastAPI HTTP 경로에 연결해
+상태·코드·응답·제공자 호출 수·수신 기록을 확인합니다. L-* 측정 전용 6개는 별도 생성 검증입니다.
+B-* 기존 29개는 SQLite·내부 서비스로, B-uncomparable-record는 503 HTTP 응답으로 검증합니다.
+H-* 25개 중 AI 담당 14개는 HTTP·경쟁·취소·슬롯 유지·청크 수신 테스트이며,
+BE 담당 11개와 C-* 25개의 실행·저장·조회 통합은 BE 검증 범위입니다.
+`tests/test_v2_http_resources.py`는 느린 수신·전송·워커, 전체 기한, 연결 종료, 설정을 보완 검증합니다.
 정확한 caseId 구분과 책임은 [v2 계약의 구현 범위](docs/ai-contract-v2.md#현재-ai-구현과-테스트-범위)에 정리했습니다.
 fixture 검사나 모델 검증 통과는 실제 HTTP·호출 횟수·DB 통합·모델 품질 검증 완료를 의미하지 않습니다.
-현재 파서는 전체 본문을 전달받는 계약 검증 함수이며 자원 사용량을 제한하는 수신 계층이 아닙니다.
-초기 제한과 오류는 계약 16절에서 확정했습니다. v2 HTTP·제공자 연결 시 전체 버퍼링·JSON 디코딩
-전의 읽기 단계부터 적용해야 합니다. 현재 모델이 새 제한을 적용한다고 해석하지 않습니다.
+HTTP는 Content-Length 유무와 무관하게 실제 읽은 요청 바이트를 제한합니다. 문자열은
+JSON 디코딩 후 타입 변환 전에 UTF-16 단위로 검사하고, 제공자 원문·최종 직렬화 응답 모두 검증합니다.
+스키마 클래스의 직접 생성은 수신 제한의 대체 경로가 아닙니다. 외부 요청은 HTTP 진입점을 사용합니다.
 
 수신 기록 구현은 같은 호스트의 여러 프로세스가 하나의 로컬 SQLite 파일을 공유하는 범위입니다.
-DB·HMAC 키는 v2 내부 서비스에 명시적으로 주입하며 기존 v1 실행에는 필요하지 않습니다.
+DB·HMAC 키는 v2 활성화 시에만 설정하며 기존 v1 실행에는 필요하지 않습니다.
 기록 유실 시 자동으로 빈 DB를 만들지 않고, 자동 만료·삭제도 아직 도입하지 않았습니다.
-비교 불가 오류의 외부 매핑은 합의됐으며 구현이 후속입니다. 보관·정리 정책은 미정입니다.
+비교 불가는 503 REQUEST_COMPARISON_UNAVAILABLE로 반환합니다. 보관·정리 정책은 미정입니다.
 설계·초기화·키 관리·테스트 경계는 [v2 수신 기록 문서](docs/v2-receipts.md)를 참고합니다.
 
 ```bash

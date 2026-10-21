@@ -178,12 +178,20 @@ class ReceiptGate:
         self.store = store
         self.digester = digester
 
+    def check_existing(self, request: AnalysisRequest) -> None:
+        existing = self.store.get("v2", request.request_id)
+        if existing is not None:
+            self._reject_existing(request, existing)
+
+    def _reject_existing(self, request: AnalysisRequest, existing: Receipt) -> None:
+        if self.digester.matches(request, existing.fingerprint):
+            raise AnalysisFailure(409, "REQUEST_ALREADY_RECEIVED", "이미 접수한 요청입니다.")
+        raise AnalysisFailure(409, "REQUEST_ID_REUSED", "다른 본문에 사용된 요청 ID입니다.")
+
     def claim(self, request: AnalysisRequest) -> None:
         existing = self.store.get("v2", request.request_id)
         if existing is None:
             receipt = Receipt("v2", request.request_id, self.digester.fingerprint(request))
             existing = self.store.register(receipt)
         if existing is not None:
-            if self.digester.matches(request, existing.fingerprint):
-                raise AnalysisFailure(409, "REQUEST_ALREADY_RECEIVED", "이미 접수한 요청입니다.")
-            raise AnalysisFailure(409, "REQUEST_ID_REUSED", "다른 본문에 사용된 요청 ID입니다.")
+            self._reject_existing(request, existing)
