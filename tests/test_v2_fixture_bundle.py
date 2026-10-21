@@ -1,4 +1,4 @@
-"""Check the shared examples themselves, not the unimplemented v2 endpoint/store."""
+"""Check fixture integrity; new HTTP/limit expectations are not runtime verification."""
 
 import hashlib
 from copy import deepcopy
@@ -101,7 +101,7 @@ def test_manifest_exact_inventory_and_hashes():
 def test_case_metadata_and_references(case):
     assert case["contractVersion"] == "v2"
     assert case["purpose"].strip()
-    assert case["contractSections"] and set(case["contractSections"]) <= set(range(1, 16))
+    assert case["contractSections"] and set(case["contractSections"]) <= set(range(1, 17))
     assert case["expected"]
     for obj in walk(case):
         for key, value in obj.items():
@@ -115,7 +115,7 @@ def test_case_metadata_and_references(case):
                 assert obj["method"] == "POST"
                 assert obj["path"] == "/v2/analyses"
                 assert obj["headers"]["Content-Type"] == "application/json"
-                assert "bodyFile" in obj
+                assert ("bodyFile" in obj) != ("bodyRecipe" in obj)
         if "ai" in obj and "be" in obj and "code" in obj["ai"]:
             ai, be = obj["ai"], obj["be"]
             assert MAPPING[(ai["httpStatus"], ai["code"])] == be["failureCode"]
@@ -281,6 +281,7 @@ def test_required_categories_and_error_mapping_coverage():
     assert set(MAPPING) == {
         (400, "REQUEST_ID_MISMATCH"),
         (401, "UNAUTHORIZED"),
+        (413, "REQUEST_TOO_LARGE"),
         (422, "INVALID_REQUEST"),
         (409, "REQUEST_ALREADY_RECEIVED"),
         (409, "REQUEST_ID_REUSED"),
@@ -288,6 +289,8 @@ def test_required_categories_and_error_mapping_coverage():
         (502, "AI_UNAVAILABLE"),
         (503, "AI_NOT_CONFIGURED"),
         (503, "RECEIPT_STORE_UNAVAILABLE"),
+        (503, "REQUEST_COMPARISON_UNAVAILABLE"),
+        (503, "AI_OVERLOADED"),
         (504, "AI_TIMEOUT"),
     }
     outcomes = {
@@ -477,8 +480,8 @@ def test_backend_goldens_retain_all_operations_and_retry_identity():
 def test_no_unreferenced_payloads():
     referenced = {
         value
-        for case in ALL_CASES
-        for obj in walk(case)
+        for source in (ALL_CASES, read_json(ROOT / "generated.json"))
+        for obj in walk(source)
         for key, value in obj.items()
         if key.endswith("File")
     }

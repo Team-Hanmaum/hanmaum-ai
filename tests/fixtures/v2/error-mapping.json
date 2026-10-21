@@ -50,6 +50,21 @@
       "httpStatus": 504,
       "aiCode": "AI_TIMEOUT",
       "beFailureCode": "AI_TIMEOUT"
+    },
+    {
+      "httpStatus": 413,
+      "aiCode": "REQUEST_TOO_LARGE",
+      "beFailureCode": "AI_INTEGRATION_ERROR"
+    },
+    {
+      "httpStatus": 503,
+      "aiCode": "REQUEST_COMPARISON_UNAVAILABLE",
+      "beFailureCode": "AI_RECEIPT_STORE_UNAVAILABLE"
+    },
+    {
+      "httpStatus": 503,
+      "aiCode": "AI_OVERLOADED",
+      "beFailureCode": "AI_SERVICE_UNAVAILABLE"
     }
   ]
 }

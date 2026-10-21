@@ -2059,12 +2059,16 @@
         },
         "expected": {
           "ai": {
-            "outcome": "BLOCKED",
-            "providerCalls": 0
+            "httpStatus": 503,
+            "code": "REQUEST_COMPARISON_UNAVAILABLE",
+            "providerCalls": 0,
+            "messagePolicy": "NON_EMPTY_SANITIZED"
           },
           "be": {
-            "assertion": "NO_NEW_PROPOSALS",
-            "storedProposalCount": 0
+            "state": "FAILED",
+            "failureCode": "AI_RECEIPT_STORE_UNAVAILABLE",
+            "storedProposalCount": 0,
+            "queryHttpStatus": 200
           }
         }
       }

@@ -1,0 +1,50 @@
+{
+  "contractVersion": "v2",
+  "revision": "v2-20261021.1",
+  "inclusive": true,
+  "profile": "INITIAL_LOCAL_INTEGRATION",
+  "limits": {
+    "request.bytes": 1048576,
+    "response.bytes": 524288,
+    "request.content": 10000,
+    "request.candidates": 100,
+    "request.basisPerCandidate": 20,
+    "request.basisTotal": 500,
+    "request.basisText": 20000,
+    "request.currentText": 10000,
+    "request.stringUnits": 100000,
+    "response.suggestions": 30,
+    "response.title": 500,
+    "response.evidence": 10000,
+    "response.changeText": 10000,
+    "response.stringUnits": 50000,
+    "response.candidateItemIds": 100,
+    "response.basisReferences": 100,
+    "response.basisIdsPerItem": 20,
+    "response.basisIdsPerSuggestion": 500
+  },
+  "freeTextFields": [
+    "title",
+    "description",
+    "location",
+    "observedTimeText",
+    "sourceName",
+    "answerText"
+  ],
+  "stringUnit": "UTF16_CODE_UNITS_AFTER_JSON_DECODE_BEFORE_TYPE_CONVERSION",
+  "stringTotal": {
+    "include": [
+      "ALL_STRING_VALUES",
+      "ARRAY_STRING_ELEMENTS",
+      "REPEATED_OCCURRENCES"
+    ],
+    "exclude": [
+      "OBJECT_KEYS",
+      "NULL",
+      "NUMBER",
+      "BOOLEAN"
+    ]
+  },
+  "wireEncoding": "UNCOMPRESSED_UTF8_JSON",
+  "runtimeImplementation": "DEFERRED"
+}

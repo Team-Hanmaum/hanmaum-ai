@@ -1,10 +1,12 @@
 # BE↔AI v2 공통 fixture
 
-계약 기준: 2026-10-16 확정본. 전체 계약은 AI 저장소의 `docs/ai-contract-v2.md`.
+계약 기준: 2026-10-16 기본 계약 + 2026-10-21 초기 연동 합의, **v2-20261021.1**.
+전체 계약은 AI 저장소의 `docs/ai-contract-v2.md` 16절까지이며 HTTP 런타임 구현은 후속이다.
 현재 공유 revision은 `manifest.json`의 `revision`이다. AI가 원본을 관리하며 BE 복사·실행 검증 결과는 별도 확인한다.
 
 이 디렉터리 전체를 BE의 `src/test/resources/ai-contract/v2/`에 복사한다.
-`cases/`, `payloads/`, `error-mapping.json`, `manifest.json`, 이 문서와 `.gitattributes`까지 동일하게 관리한다.
+`cases/`, `payloads/`, `history/`, `generated.json`, `limits.json`, `revision-history.json`,
+`error-mapping.json`, `manifest.json`, 문서와 `.gitattributes`까지 manifest에 있는 전체 파일을 동일하게 관리한다.
 Python 테스트와 manifest 도구는 AI 저장소에만 두며 BE는 같은 사례를 Java 테스트에서 읽는다.
 
 ## 무엇이 검증되는가
@@ -14,8 +16,13 @@ Python 테스트와 manifest 도구는 AI 저장소에만 두며 BE는 같은 �
 | `cases/static.json` | v2 HTTP 요청·제공자 결과 검증, BE 오류 매핑 | 파일 무결성·참조·기대값 일관성 |
 | `cases/receipts.json` | 실제 수신 기록 어댑터의 순차·동시·재시작·키 교체 검증 | 시나리오 형식·호출 수·비교 사례 일관성 |
 | `cases/backend.json` | BE의 DB 트랜잭션·권한·입력 의존성·조회 통합 테스트 | 상태 변경 시나리오와 데이터 참조 일관성 |
+| `cases/limits.json` | 문자열·개수·누적·바이트 제한 및 계산 경계 | 생성 원문 길이·SHA-256·기대값 및 기존 조건 검증 |
+| `cases/http.json` | 수신·슬롯·과부하·오류·취소·BE 독립 검증 | 시나리오 형식·참조·우선순위 기대값 검증 |
 
-현재 v2 endpoint, 실제 모델, 수신 기록 저장소는 구현하지 않았다. Python의 fixture 검사 통과는 위 기능이나 BE 통합 테스트 통과를 뜻하지 않는다. 기존 v1 테스트는 그대로 별도 실행한다. 실제 의미 정확도와 모델 품질도 별도 평가한다.
+현재 v2 모델·기존 내부 수신 기록/SQLite는 구현했으며 v2 endpoint와 새 제한·슬롯·외부 오류는
+후속이다. 기존 STATIC 139개와 RECEIPT 29개는 내부 코드로도 검증한다. B-uncomparable-record는
+기존 내부 차단 회귀와 새 HTTP 기대값을 구분한다. 새 LIMITS/HTTP 검사는 명세의 일관성 검사이며
+실제 HTTP·자원 보호·BE 통합 완료가 아니다. 기존 v1 회귀와 실제 모델 품질도 구분한다.
 
 ## 공통 데이터 형식
 
@@ -52,7 +59,9 @@ manifest의 SHA-256은 **파일 원문 바이트의 동기화 검사**다. 런�
 - `FAIL_RECEIPT_STORE`는 READ 또는 REGISTER 단계 실패를 주입한다. `RESTART_AI_PRESERVE_RECEIPTS`는 앱 인스턴스를 새로 만들되 저장소를 유지한다.
 - `SUBMIT_CONCURRENT`는 같은 저장소를 공유하는 서로 다른 두 AI 인스턴스에 동시에 제출한다. 결과 순서는 무관하며 `aiResults`의 다중집합과 전체 호출 수 1을 확인한다. 순차 호출로 대체하지 않는다.
 - `ROTATE_COMPARISON_METADATA`의 버전 문자열은 합성 표식이다. 실제 키·보관 기간·회전 정책을 정의하지 않는다. 이전 기록을 비교 가능한 경우 동일 요청은 차단한다.
-- 안전하게 비교할 수 없는 기록의 `outcome: BLOCKED`는 호출 0회·결과 저장 없음만 고정한다. 최종 계약에 구체 오류 매핑이 명시되지 않은 이 조건에 임의 HTTP·코드를 추가하지 않았다.
+- B-uncomparable-record는 이번 합의로 503 REQUEST_COMPARISON_UNAVAILABLE 및
+  BE AI_RECEIPT_STORE_UNAVAILABLE를 고정했다. 이전 BLOCKED 원문은 history/에 보존한다.
+  현재 내부 예외를 테스트에서 HTTP로 임의 변환해 구현 완료로 표시하지 않는다.
 - `bodyEquality`는 정규화 후 동일 본문 판정의 기대값이다. SHA-256의 파일 동일성과 혼동하지 않는다.
 - 개별 SUBMIT의 BE 기대값은 그 응답을 BE에 독립 주입했을 때의 매핑이다. 연속 단계가 같은 BE 실행의 상태를 덮어쓴다는 뜻이 아니다. 동시 수신 사례도 실제 실행 완료 결과를 중복 오류로 덮어쓰지 않는다.
 
@@ -114,7 +123,9 @@ AI 저장소 루트에서:
 
 ```bash
 uv run --locked python scripts/fixture_manifest.py
+uv run --locked python -m scripts.fixture_payloads
 uv run --locked pytest tests/test_v2_fixture_bundle.py
+uv run --locked pytest tests/test_v2_fixture_revision.py
 uv run --locked pytest
 ```
 
@@ -130,3 +141,24 @@ uv run --locked python scripts/fixture_manifest.py
 BE 전달에는 AI 커밋 SHA·fixture revision·추가/변경 caseId·검증 결과·아직 구현하지 않은 동작을 포함한다. BE 담당자가 전체 폴더를 복사하고 manifest의 파일 목록 및 각 SHA-256, caseId 목록을 비교한 뒤 Java 소비 테스트를 연결한다. 검토 중 차이는 원본 AI fixture에 함께 반영하고 새 revision으로 양쪽을 갱신한다. 한쪽만 기대값을 수정하지 않는다.
 
 현재 데이터 준비·v1 회귀 검사와 후속 v2 구현 테스트·BE 테스트 결과를 별도로 보고한다. 양쪽 검토·실행 검증 전에 신규 분석을 v2로 전환하지 않는다.
+
+## v2-20261021.1 변경·동기화 기준
+
+- 추가/변경/삭제 caseId의 정확한 목록은 revision-history.json에 있다. 기존 A-* 146개·C-* 25개와
+  payload 원문은 그대로이며 B-* 중 B-uncomparable-record의 외부 오류 기대값만 확정했다.
+- 새 L-* 102개는 상한 18종의 -1/상한/+1, 자유 서술 필드별 경계, UTF-16·UTF-8·이스케이프·
+  반복 값·정규화 전 집계를 포함한다. 새 H-* 25개는 실행 구현을 위한 수신·슬롯·경쟁·오류 시나리오다.
+- `generated.json`의 payloads에는 116개 생성 바이트의 길이·SHA-256·UTF-16 측정값이 고정되어 있다.
+  큰 본문을 여러 JSON 파일로 중복 저장하지 않는다. 생성 규칙과 Java 소비 방법은 [GENERATION.md](GENERATION.md).
+- 독립 구성이 불가능한 초과 참조/evidence 사례는 coupledViolations를 읽는다. 다른 제한 초과를
+  숨기거나 기대 오류를 구현에 맞춰 바꾸지 않는다. 이전 무제한 허용 런타임 테스트의 전환은 후속이다.
+- 예전 전체 번들은 커밋 `760426fd6acc0cb0c0c3a81601e98696d80b5dde`의 이 경로에서 복원한다.
+  원래 기준 출처 커밋은 `af3abb3310f2f86c55fdf182f687da7491ef5fec`이다.
+  history/v2-20261016.2-manifest.json의 SHA-256은
+  `a65c27c8a8c323f3bdfb6fec0bddefe8cf251870f940e2410a2043b0dab83ff9`로 고정한다.
+  과거 manifest의 상대 경로는 **그 과거 커밋의 번들 루트** 기준이다. 현재 번들을 검증할 때는
+  루트 manifest.json을 사용하며 history manifest를 현재 파일 목록으로 사용하지 않는다.
+- BE 전달 기준 커밋은 이 변경을 실제 커밋·푸시한 뒤 전달한다. 미커밋 상태에서 기준 커밋을
+  만들어 적지 않는다. 새 manifest의 SHA-256은 `sha256sum` 또는 PowerShell Get-FileHash로 계산한다.
+- BE는 루트 manifest와 revision-history를 비교하고 파일 원문을 동기화한 뒤 생성 바이트 해시를
+  검증한다. 이후 HTTP 오류 허용 목록·제한·통신 테스트를 연결하며 실행/저장 연결은 별도 진행한다.

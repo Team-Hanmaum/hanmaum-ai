@@ -10,6 +10,8 @@ SUITES = {
     "STATIC": "cases/static.json",
     "RECEIPT": "cases/receipts.json",
     "BACKEND": "cases/backend.json",
+    "LIMITS": "cases/limits.json",
+    "HTTP": "cases/http.json",
 }
 
 
@@ -53,6 +55,11 @@ def inventory_sort_key(relative_path):
 
 
 def build_manifest(root, revision):
+    suites = {
+        k: v
+        for k, v in SUITES.items()
+        if revision != "v2-20261016.2" or k in {"STATIC", "RECEIPT", "BACKEND"}
+    }
     files = []
     for path in sorted(
         root.rglob("*"), key=lambda path: inventory_sort_key(path.relative_to(root))
@@ -68,7 +75,7 @@ def build_manifest(root, revision):
             }
         )
     case_ids = []
-    for category, relative in SUITES.items():
+    for category, relative in suites.items():
         cases = read_json(bundle_path(root, relative))
         for case in cases:
             if case["category"] != category or case["contractVersion"] != "v2":
@@ -81,7 +88,7 @@ def build_manifest(root, revision):
         "contractVersion": "v2",
         "revision": revision,
         "sourceRepository": "Team-Hanmaum/hanmaum-ai",
-        "suites": SUITES,
+        "suites": suites,
         "caseIds": sorted(case_ids),
         "files": files,
     }
