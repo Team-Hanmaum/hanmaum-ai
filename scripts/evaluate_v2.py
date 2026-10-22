@@ -28,7 +28,7 @@ from app.v2.receipts import ReceiptGate, SQLiteReceiptStore
 from app.v2.services import AnalysisService
 from app.v2.structured_output import output_schema
 from app.v2.validation import parse_request
-from evals.v2_cases import REVISION, cases, grade
+from evals.v2_cases import GRADER_VERSION, REVISION, cases, grade
 
 
 def digest(value):
@@ -104,6 +104,8 @@ def summarize(rows):
         "p95Seconds": latencies[math.ceil(len(latencies) * 0.95) - 1] if latencies else None,
         "inputTokens": sum(u["input_tokens"] or 0 for u in usages),
         "outputTokens": sum(u["output_tokens"] or 0 for u in usages),
+        "cachedInputTokens": sum(u["cached_tokens"] or 0 for u in usages),
+        "zeroCachedInputCalls": sum(u["cached_tokens"] == 0 for u in usages),
         "usageMissingCalls": sum(
             row["providerCalls"]
             if row["provider"] is None
@@ -143,15 +145,42 @@ def publish_report(path, report):
             staged.unlink(missing_ok=True)
 
 
+def dataset(suite):
+    if suite == "change-intent":
+        from evals.v2_change_intent import REVISION as change_revision
+        from evals.v2_change_intent import cases as change_cases
+
+        return change_revision, change_cases()
+    if suite == "change-holdout":
+        from evals.v2_change_holdout import REVISION as change_holdout_revision
+        from evals.v2_change_holdout import cases as change_holdout_cases
+
+        return change_holdout_revision, change_holdout_cases()
+    if suite == "holdout":
+        from evals.v2_holdout import REVISION as holdout_revision
+        from evals.v2_holdout import cases as holdout_cases
+
+        return holdout_revision, holdout_cases()
+    return REVISION, cases()
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--live", action="store_true", help="explicitly allow paid synthetic calls")
     parser.add_argument("--max-calls", type=int, default=20)
     parser.add_argument("--repeat", type=int, default=1)
-    parser.add_argument("--case", action="append", choices=[c["caseId"] for c in cases()])
+    parser.add_argument(
+        "--suite",
+        choices=["regression", "holdout", "change-intent", "change-holdout"],
+        default="regression",
+    )
+    parser.add_argument("--case", action="append")
     parser.add_argument("--output", type=Path, default=Path("test-results/v2-live.json"))
     args = parser.parse_args()
-    selected = [c for c in cases() if not args.case or c["caseId"] in args.case]
+    revision, all_cases = dataset(args.suite)
+    if args.case and not set(args.case) <= {c["caseId"] for c in all_cases}:
+        parser.error("Case ID is not in the selected suite")
+    selected = [c for c in all_cases if not args.case or c["caseId"] in args.case]
     if not args.live or not 1 <= args.max_calls <= 60 or not 1 <= args.repeat <= 3:
         parser.error("Use --live, --max-calls 1..60 and --repeat 1..3")
     if len(selected) * args.repeat > args.max_calls:
@@ -172,8 +201,17 @@ def main():
         rows, calls_count = asyncio.run(evaluate(selected, config, database, args.repeat))
     report = {
         "createdAt": datetime.now(UTC).isoformat(),
-        "datasetRevision": REVISION,
-        "datasetSha256": digest(cases()),
+        "suite": args.suite,
+        "evaluationRole": {
+            "regression": "regression",
+            "holdout": "regression-after-feedback",
+            "change-intent": "focused-regression",
+            "change-holdout": "independent-holdout",
+        }[args.suite],
+        "datasetRevision": revision,
+        "datasetSha256": digest(all_cases),
+        "selectedCaseIds": [case["caseId"] for case in selected],
+        "graderVersion": GRADER_VERSION,
         "promptVersion": PROMPT_VERSION,
         "promptSha256": digest(SYSTEM_PROMPT),
         "schemaSha256": digest(output_schema()),

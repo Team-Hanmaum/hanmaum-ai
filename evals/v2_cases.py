@@ -7,6 +7,7 @@ from copy import deepcopy
 from uuid import UUID
 
 REVISION = "synthetic-v2-20261023.1"
+GRADER_VERSION = "facts-v2-20261023.1"
 
 
 def uid(number):
@@ -362,30 +363,58 @@ def cases():
     ]
 
 
-def grade(case, response):
-    """Finite fact checks, not an LLM judge or a claim of complete semantic correctness."""
+def _check_suggestion(suggestion, expected_item):
     failures = []
+    for key in ("operation", "type", "targetItemId"):
+        if suggestion[key] != expected_item[key]:
+            failures.append(key)
+    relations = expected_item.get("relationKinds", [expected_item["relationKind"]])
+    if suggestion["relationKind"] not in relations:
+        failures.append("relationKind")
+    for key in ("candidateItemIds", "clearFields"):
+        if set(suggestion[key]) != set(expected_item[key]):
+            failures.append(key)
+    if not set(expected_item["reviewReasons"]) <= set(suggestion["reviewReasons"]):
+        failures.append("reviewReasons")
+    for field, value in expected_item["changes"].items():
+        if suggestion["changes"].get(field) != value:
+            failures.append("changes." + field)
+    for field, terms in expected_item["contains"].items():
+        if any(term not in suggestion["changes"].get(field, "") for term in terms):
+            failures.append("meaning." + field)
+    for field in expected_item["absentChanges"]:
+        if field in suggestion["changes"]:
+            failures.append("absent." + field)
+    return failures
+
+
+def grade(case, response):
+    """Finite facts with one-to-one, order-independent matching; not a full prose judge."""
     actual = response.model_dump(mode="json")["suggestions"]
     expected_list = case["expected"]
     if len(actual) != len(expected_list):
         return ["suggestion_count"]
-    # Each current case expects zero or one suggestion; order is not a scoring assumption.
-    for suggestion, expected_item in zip(actual, expected_list, strict=True):
-        for key in ("operation", "type", "targetItemId", "relationKind"):
-            if suggestion[key] != expected_item[key]:
-                failures.append(key)
-        for key in ("candidateItemIds", "clearFields"):
-            if set(suggestion[key]) != set(expected_item[key]):
-                failures.append(key)
-        if not set(expected_item["reviewReasons"]) <= set(suggestion["reviewReasons"]):
-            failures.append("reviewReasons")
-        for field, value in expected_item["changes"].items():
-            if suggestion["changes"].get(field) != value:
-                failures.append("changes." + field)
-        for field, terms in expected_item["contains"].items():
-            if any(term not in suggestion["changes"].get(field, "") for term in terms):
-                failures.append("meaning." + field)
-        for field in expected_item["absentChanges"]:
-            if field in suggestion["changes"]:
-                failures.append("absent." + field)
-    return failures
+    if len(actual) == 1:
+        return _check_suggestion(actual[0], expected_list[0])
+    edges = [
+        [
+            index
+            for index, suggestion in enumerate(actual)
+            if not _check_suggestion(suggestion, item)
+        ]
+        for item in expected_list
+    ]
+    matched = {}
+
+    def assign(expected_index, visited):
+        for actual_index in edges[expected_index]:
+            if actual_index in visited:
+                continue
+            visited.add(actual_index)
+            if actual_index not in matched or assign(matched[actual_index], visited):
+                matched[actual_index] = expected_index
+                return True
+        return False
+
+    # Augmenting paths avoid greedy matches consuming a later, more specific expectation.
+    return [f"unmatched_expected.{i}" for i in range(len(expected_list)) if not assign(i, set())]
