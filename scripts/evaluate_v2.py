@@ -22,7 +22,7 @@ from pydantic import SecretBytes
 from app.errors import AnalysisFailure
 from app.v2.comparison import RequestDigester
 from app.v2.config import V2Settings
-from app.v2.openai_provider import OpenAIProvider
+from app.v2.openai_provider import OpenAIProvider, token_count
 from app.v2.prompt import PROMPT_VERSION, SYSTEM_PROMPT
 from app.v2.receipts import ReceiptGate, SQLiteReceiptStore
 from app.v2.services import AnalysisService
@@ -94,7 +94,16 @@ async def evaluate(selected, config, database, repeats=1):
 
 def summarize(rows):
     latencies = sorted(row["elapsedSeconds"] for row in rows)
-    usages = [row["provider"] for row in rows if row["provider"]]
+    usages = [row["provider"] for row in rows if row["providerCalls"] and row["provider"]]
+    fields = ("input_tokens", "output_tokens", "cached_tokens")
+    missing = {
+        field: sum(
+            row["providerCalls"]
+            for row in rows
+            if row["provider"] is None or token_count(row["provider"].get(field)) is None
+        )
+        for field in fields
+    }
     return {
         "completedCases": len(rows),
         "contractPassed": sum(r["contractPassed"] for r in rows),
@@ -104,13 +113,16 @@ def summarize(rows):
         "p95Seconds": latencies[math.ceil(len(latencies) * 0.95) - 1] if latencies else None,
         "inputTokens": sum(u["input_tokens"] or 0 for u in usages),
         "outputTokens": sum(u["output_tokens"] or 0 for u in usages),
-        "cachedInputTokens": sum(u["cached_tokens"] or 0 for u in usages),
-        "zeroCachedInputCalls": sum(u["cached_tokens"] == 0 for u in usages),
+        "cachedInputTokens": (
+            None if missing["cached_tokens"] else sum(u["cached_tokens"] for u in usages)
+        ),
+        "zeroCachedInputCalls": sum(token_count(u.get("cached_tokens")) == 0 for u in usages),
+        "cacheUsageMissingCalls": missing["cached_tokens"],
         "usageMissingCalls": sum(
             row["providerCalls"]
-            if row["provider"] is None
-            else int(row["provider"]["input_tokens"] is None)
             for row in rows
+            if row["provider"] is None
+            or any(token_count(row["provider"].get(field)) is None for field in fields)
         ),
     }
 

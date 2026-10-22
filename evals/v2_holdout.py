@@ -10,7 +10,7 @@ Runs after the change-intent prompt revision are regression, not a fresh holdout
 
 from evals.v2_cases import candidate, expected, uid
 
-REVISION = "synthetic-holdout-v2-20261023.1"
+REVISION = "synthetic-holdout-v2-20261023.2"
 
 
 def cases():
@@ -48,6 +48,7 @@ def cases():
                     "location": "별빛공방 3층",
                 },
                 contains={"title": ["도예"]},
+                optional=["description"],
             ),
             expected(
                 "CREATE",
@@ -58,6 +59,7 @@ def cases():
                     "location": "솔잎도서관 1층",
                 },
                 contains={"title": ["독서"]},
+                optional=["description"],
             ),
         ],
     )
@@ -78,6 +80,7 @@ def cases():
                 "OBSERVATION",
                 changes={"observedDate": "2026-11-13", "observedTimeText": "오전"},
                 contains={"description": ["퍼즐", "30분"]},
+                optional=["title"],
             ),
         ],
         [
@@ -283,6 +286,7 @@ def cases():
                 "OBSERVATION",
                 changes={"observedDate": "2026-11-13", "observedTimeText": "오후"},
                 contains={"description": ["색칠", "15분"]},
+                optional=["title"],
             )
         ],
     )
@@ -295,6 +299,7 @@ def cases():
                 "GUIDANCE",
                 changes={"sourceName": "솔바람문화관", "receivedDate": "2026-11-12"},
                 contains={"description": ["개인 컵"]},
+                optional=["title"],
             )
         ],
         recorded_at="2026-11-12T23:40:00Z",  # Seoul is already November 13.
@@ -310,6 +315,7 @@ def cases():
                 changes={"sourceName": "솔바람문화관"},
                 contains={"description": ["개인 컵"]},
                 absent=["receivedDate"],
+                optional=["title"],
             )
         ],
     )
@@ -326,6 +332,7 @@ def cases():
                     "location": "달빛정원 서문",
                 },
                 contains={"title": ["산책"]},
+                optional=["description"],
             )
         ],
         recorded_at="2026-11-12T23:40:00Z",

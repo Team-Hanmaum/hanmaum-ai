@@ -284,7 +284,7 @@ def test_guidance_grader_requires_date_only_with_explicit_received_date(name, ha
 def test_multi_grader_uses_augmenting_paths_for_overlapping_expectations():
     case = next(c for c in cases() if c["caseId"] == "create-guidance")
     case["expected"] = [
-        expected("CREATE", "GUIDANCE"),
+        expected("CREATE", "GUIDANCE", optional=["sourceName"]),
         expected("CREATE", "GUIDANCE", changes={"sourceName": "가상센터"}),
     ]
     suggestions = [

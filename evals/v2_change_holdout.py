@@ -2,7 +2,7 @@
 
 from evals.v2_cases import candidate, expected, uid
 
-REVISION = "synthetic-change-holdout-v2-20261023.1"
+REVISION = "synthetic-change-holdout-v2-20261023.2"
 
 
 def cases():

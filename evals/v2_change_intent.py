@@ -8,7 +8,7 @@ from evals.v2_cases import candidate, expected, uid
 from evals.v2_cases import cases as regression_cases
 from evals.v2_holdout import cases as former_holdout_cases
 
-REVISION = "synthetic-change-intent-v2-20261023.1"
+REVISION = "synthetic-change-intent-v2-20261023.2"
 
 
 def cases():

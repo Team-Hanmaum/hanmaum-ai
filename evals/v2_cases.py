@@ -6,8 +6,8 @@ Expected facts are authored before model execution. Free prose is not exact-matc
 from copy import deepcopy
 from uuid import UUID
 
-REVISION = "synthetic-v2-20261023.1"
-GRADER_VERSION = "facts-v2-20261023.1"
+REVISION = "synthetic-v2-20261023.2"
+GRADER_VERSION = "facts-v2-20261023.2"
 
 
 def uid(number):
@@ -77,6 +77,7 @@ def expected(
     candidates=(),
     clear=(),
     absent=(),
+    optional=(),
 ):
     return {
         "operation": operation,
@@ -89,6 +90,7 @@ def expected(
         "candidateItemIds": [uid(n) for n in candidates],
         "clearFields": list(clear),
         "absentChanges": list(absent),
+        "optionalChanges": list(optional),
     }
 
 
@@ -110,6 +112,7 @@ def cases():
                         "scheduledTime": "15:00",
                         "location": "가상센터 2층",
                     },
+                    optional=["title", "description"],
                 )
             ],
         ),
@@ -117,19 +120,33 @@ def cases():
             "create-task",
             "내일까지 수건을 챙겨주세요.",
             [],
-            [expected("CREATE", "TASK", changes={"dueDate": "2026-10-23"})],
+            [
+                expected(
+                    "CREATE",
+                    "TASK",
+                    changes={"dueDate": "2026-10-23"},
+                    optional=["title", "description"],
+                )
+            ],
         ),
         (
             "create-question",
             "가상센터 방문 때 보호자 동행이 필요한지 확인해주세요.",
             [],
-            [expected("CREATE", "QUESTION")],
+            [expected("CREATE", "QUESTION", optional=["title", "description"])],
         ),
         (
             "create-observation",
             "오늘 오전에는 평소보다 물을 적게 마셨어요.",
             [],
-            [expected("CREATE", "OBSERVATION", changes={"observedDate": "2026-10-22"})],
+            [
+                expected(
+                    "CREATE",
+                    "OBSERVATION",
+                    changes={"observedDate": "2026-10-22"},
+                    optional=["title", "description", "observedTimeText"],
+                )
+            ],
         ),
         (
             "create-guidance",
@@ -141,6 +158,7 @@ def cases():
                     "GUIDANCE",
                     changes={"sourceName": "가상센터"},
                     absent=["receivedDate"],
+                    optional=["title", "description"],
                 )
             ],
         ),
@@ -263,6 +281,7 @@ def cases():
                     changes={"scheduledDate": "2026-10-23"},
                     reasons=["VALUE_UNCLEAR"],
                     absent=["scheduledTime"],
+                    optional=["title", "description", "location"],
                 )
             ],
         ),
@@ -341,6 +360,7 @@ def cases():
                     "CREATE",
                     "GUIDANCE",
                     changes={"sourceName": "가상센터", "receivedDate": "2026-10-22"},
+                    optional=["title", "description"],
                 )
             ],
         ),
@@ -365,6 +385,16 @@ def cases():
 
 def _check_suggestion(suggestion, expected_item):
     failures = []
+    allowed_changes = (
+        set(expected_item["changes"])
+        | set(expected_item["contains"])
+        | set(expected_item["optionalChanges"])
+    )
+    # Keep explicit absence diagnostics; reject every other unlisted field as well.
+    for field in sorted(
+        set(suggestion["changes"]) - allowed_changes - set(expected_item["absentChanges"])
+    ):
+        failures.append("unexpected." + field)
     for key in ("operation", "type", "targetItemId"):
         if suggestion[key] != expected_item[key]:
             failures.append(key)

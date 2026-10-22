@@ -85,7 +85,7 @@ def test_explicit_removal_cannot_be_replaced_with_unknown_review():
     assert "clearFields" in grade(case, result)
 
 
-def test_expectations_frozen_before_prompt_change():
-    assert REVISION == "synthetic-change-intent-v2-20261023.1"
+def test_explicit_field_expectations_are_pinned():
+    assert REVISION == "synthetic-change-intent-v2-20261023.2"
     assert len(cases()) == 6
-    assert digest(cases()) == "4c03f05748d7868c73ce735566a86ec875d752eb921a26362c5614b994069b57"
+    assert digest(cases()) == "5802e3ad08acc083dda1eb5f5b2c13b9574223565876e2dfa34ab69ab887f61c"

@@ -110,13 +110,13 @@ def test_missing_unclear_reason_fails_contract_or_semantic_validation(case):
     assert "reviewReasons" in grade(case, result)
 
 
-def test_independent_change_holdout_is_fixed_before_live_evaluation():
+def test_change_holdout_field_allowlist_revision_is_pinned():
     dataset = cases()
-    assert REVISION == "synthetic-change-holdout-v2-20261023.1"
+    assert REVISION == "synthetic-change-holdout-v2-20261023.2"
     assert len(dataset) == len({case["caseId"] for case in dataset}) == 3
     assert len({case["request"]["requestId"] for case in dataset}) == 3
     assert dataset == cases()
     digest = hashlib.sha256(
         json.dumps(dataset, ensure_ascii=True, sort_keys=True).encode()
     ).hexdigest()
-    assert digest == "2fe921ebff78f163c109327e81644ea8cadef3d3bd694ce0fb3f16368041fea8"
+    assert digest == "4c80fbec2b04139aad4048cedf2c870545144dc4beee073d8d244985a0a433f7"

@@ -232,12 +232,12 @@ def test_contract_permitted_related_relationship_does_not_fail_ambiguous_fact_ch
 
 def test_holdout_revision_is_unique_and_dataset_is_reproducible():
     first = cases()
-    assert REVISION == "synthetic-holdout-v2-20261023.1"
+    assert REVISION == "synthetic-holdout-v2-20261023.2"
     assert len(first) == len({case["caseId"] for case in first}) == 12
     assert len({case["request"]["requestId"] for case in first}) == 12
     assert first == cases()
-    # Pin after independent authoring, before any paid response is observed.
+    # Pin the explicit field allowlist revision; original fact preservation is tested separately.
     digest = hashlib.sha256(
         json.dumps(first, ensure_ascii=True, sort_keys=True).encode()
     ).hexdigest()
-    assert digest == "09ef0ad8e6b5325745248841209cec0a87fa22f3cf64e42f70db37bd09183427"
+    assert digest == "bc1ad13dd473b40c48352d24a9d7b7e1982555053bb677153ba230b2660800d6"
