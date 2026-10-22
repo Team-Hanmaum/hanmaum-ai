@@ -32,6 +32,7 @@ class Observation:
     output_tokens: int | None = None
     cached_tokens: int | None = None
     reasoning_tokens: int | None = None
+    call_number: int | None = None
 
 
 def token_count(value):
@@ -67,6 +68,11 @@ class OpenAIProvider:
             await self._client.aclose()
 
     def request_body(self, request):
+        # Server-only identity is unnecessary for generation; candidate/basis IDs remain
+        # necessary for the unchanged reference contract and server-side validation.
+        model_input = request.model_dump(
+            mode="json", by_alias=True, include={"content", "recorded_at", "timezone", "candidates"}
+        )
         return {
             "model": self.settings.model,
             "reasoning": {"effort": self.settings.reasoning_effort},
@@ -82,7 +88,7 @@ class OpenAIProvider:
                     "role": "user",
                     # Readable Korean avoids making the model interpret six-character escapes.
                     # Escape only lone surrogates; no decoded input value is changed.
-                    "content": json.dumps(request.model_dump(mode="json"), ensure_ascii=False)
+                    "content": json.dumps(model_input, ensure_ascii=False)
                     .encode("utf-8", errors="backslashreplace")
                     .decode("utf-8"),
                 }
@@ -100,11 +106,13 @@ class OpenAIProvider:
     async def analyze(self, request):
         started = perf_counter()
         outcome, status, usage = "unavailable", None, {}
+        call_number = None
         try:
             # ASCII encoding also preserves escaped lone surrogates accepted by the wire contract.
             body = encode_json(self.request_body(request), maximum=4 * 1_048_576)
             key = self.settings.openai_api_key.get_secret_value()
             self.calls += 1
+            call_number = self.calls
             async with self._get_client().stream(
                 "POST",
                 ENDPOINT,
@@ -152,7 +160,16 @@ class OpenAIProvider:
                     raise ValueError("Invalid envelope")
                 usage = envelope.get("usage")
                 usage = usage if isinstance(usage, dict) else {}
-                if envelope.get("status") != "completed" or envelope.get("error") is not None:
+                error = envelope.get("error")
+                if error is not None:
+                    if not isinstance(error, dict) or not all(
+                        isinstance(error.get(field), str) and error[field]
+                        for field in ("code", "message")
+                    ):
+                        raise ValueError("Invalid error envelope")
+                    record_failure(FailureEvent.OPENAI_RESPONSE_ERROR)
+                    raise RuntimeError("OpenAI response failed")
+                if envelope.get("status") != "completed":
                     record_failure(FailureEvent.OPENAI_INCOMPLETE)
                     raise InvalidProviderOutput()
                 output = envelope.get("output")
@@ -218,5 +235,6 @@ class OpenAIProvider:
                 token_count(output_details.get("reasoning_tokens"))
                 if isinstance(output_details, dict)
                 else None,
+                call_number=call_number,
             )
             _logger.info("OpenAI call prompt=%s metrics=%s", PROMPT_VERSION, self.last_observation)

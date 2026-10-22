@@ -10,7 +10,7 @@ import pytest
 from pydantic import ValidationError
 from test_v2_http import AUTH, KEY, ROOT, build, client, headers, raw, row_count
 
-from app.config import Settings
+from app.config import LOCAL_API_KEY, Settings
 from app.main import create_app
 from app.v2.config import V2Settings
 from app.v2.openai_provider import ENVELOPE_BYTES, OpenAIProvider
@@ -126,7 +126,12 @@ async def test_real_adapter_request_and_http_duplicate_preserve_v1(tmp_path, ana
     assert data["store"] is False and data["stream"] is False
     assert data["tools"] == [] and data["truncation"] == "disabled"
     assert data["max_output_tokens"] == 4096
-    assert json.loads(data["input"][0]["content"]) == json.loads(raw())
+    original = json.loads(raw())
+    model_input = json.loads(data["input"][0]["content"])
+    assert model_input == {
+        k: original[k] for k in ("content", "recordedAt", "timezone", "candidates")
+    }
+    assert not {"requestId", "careSpaceId", "recordId"} & model_input.keys()
     assert data["text"]["format"]["strict"] is True
     metrics = asdict(provider.last_observation)
     assert metrics["input_tokens"] == 120 and metrics["reasoning_tokens"] == 20
@@ -171,7 +176,9 @@ def test_input_preserves_korean_whitespace_and_lone_surrogate(tmp_path):
     provider = OpenAIProvider(settings(tmp_path))
     text = provider.request_body(request)["input"][0]["content"]
     assert "한국어" in text
-    assert json.loads(text) == data
+    assert json.loads(text) == {
+        k: data[k] for k in ("content", "recordedAt", "timezone", "candidates")
+    }
     text.encode("utf-8")
 
 
@@ -432,3 +439,53 @@ async def test_runtime_owns_lazy_client_no_readiness_call_and_closes(tmp_path, a
         assert provider.calls == 0
         connection = provider._get_client()
     assert connection.is_closed
+
+
+@pytest.mark.parametrize("environment", [None, "local", "test"])
+def test_openai_rejects_public_internal_key_even_when_environment_is_omitted(tmp_path, environment):
+    options = {"app_env": environment} if environment else {}
+    for override in ({}, {"ai_internal_api_key": LOCAL_API_KEY}):
+        with pytest.raises(ValueError, match="non-public internal API key"):
+            create_app(
+                Settings(_env_file=None, **options, **override), v2_settings=settings(tmp_path)
+            )
+    app = create_app(
+        Settings(_env_file=None, **options, ai_internal_api_key=AUTH),
+        v2_settings=settings(tmp_path),
+    )
+    assert app.state.v2_runtime.owned_provider.calls == 0
+
+
+@pytest.mark.anyio
+@pytest.mark.parametrize(
+    "status, error, expected_code",
+    [
+        ("failed", {"code": "server_error", "message": "sensitive-upstream"}, "AI_UNAVAILABLE"),
+        (
+            "completed",
+            {"code": "rate_limit_exceeded", "message": "sensitive-upstream"},
+            "AI_UNAVAILABLE",
+        ),
+        ("failed", None, "INVALID_AI_RESPONSE"),
+        ("completed", "sensitive-upstream", "INVALID_AI_RESPONSE"),
+        ("completed", {}, "INVALID_AI_RESPONSE"),
+        ("incomplete", None, "INVALID_AI_RESPONSE"),
+    ],
+)
+async def test_error_envelope_distinguishes_provider_failure_from_bad_output(
+    tmp_path, status, error, expected_code, caplog
+):
+    value = envelope() | {"status": status, "error": error}
+    provider = OpenAIProvider(
+        settings(tmp_path), transport=httpx.MockTransport(lambda _: response(value))
+    )
+    app, service = build(tmp_path, provider=provider)
+    async with client(app) as http:
+        result = await http.post("/v2/analyses", content=raw(), headers=headers())
+        assert result.status_code == 502 and result.json()["code"] == expected_code
+        assert (
+            await http.post("/v2/analyses", content=raw(), headers=headers())
+        ).status_code == 409
+    await provider.close()
+    assert provider.calls == row_count(service) == 1
+    assert "sensitive-upstream" not in result.text + caplog.text

@@ -78,10 +78,11 @@ async def until_disconnect(request, operation):
         "v2 기본 설정은 disabled이며 정상 요청에도 503 AI_NOT_CONFIGURED를 반환합니다. "
         "stub/openai 활성화에는 별도 SQLite 수신 저장소와 HMAC 키가 필요하며, "
         "openai는 서버의 OPENAI_API_KEY를 사용해 실제 분석합니다. "
+        "stub은 실제 분석 없이 빈 제안을 반환합니다. "
         "동일 ID·본문 재전송은 409 REQUEST_ALREADY_RECEIVED, "
         "같은 ID·다른 본문은 409 REQUEST_ID_REUSED입니다. "
         "명시적인 새 실행은 헤더·본문의 requestId를 함께 변경하고 recordedAt은 유지합니다. "
-        "실제 LLM은 연결하지 않았으며 자동 재시도·v1 fallback은 없습니다."
+        "자동 재시도·v1 fallback은 없습니다."
     ),
     openapi_extra=ANALYSIS_OPENAPI,
     responses=ANALYSIS_RESPONSES,

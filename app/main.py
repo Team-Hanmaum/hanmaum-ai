@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.api import router
-from app.config import Settings
+from app.config import LOCAL_API_KEY, Settings
 from app.errors import install_error_handlers
 from app.providers import AnalysisProvider, create_provider
 from app.services import AnalysisService
@@ -28,6 +28,8 @@ def create_app(
     if v2_runtime.settings.provider == "stub" and "app_env" not in settings.model_fields_set:
         raise ValueError("v2 stub requires explicit APP_ENV=local or test")
     internal_key = settings.ai_internal_api_key.get_secret_value().encode("utf-8")
+    if v2_runtime.settings.provider == "openai" and internal_key == LOCAL_API_KEY.encode():
+        raise ValueError("OpenAI requires a separate non-public internal API key, even locally")
     if (
         v2_runtime.settings.provider == "openai"
         and v2_runtime.settings.openai_api_key.get_secret_value().encode() == internal_key

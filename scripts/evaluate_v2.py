@@ -9,6 +9,7 @@ import asyncio
 import hashlib
 import json
 import math
+import os
 import tempfile
 from dataclasses import asdict
 from datetime import UTC, datetime
@@ -60,10 +61,16 @@ async def evaluate(selected, config, database, repeats=1):
                     failures = grade(case, result)
                 except AnalysisFailure as error:
                     error_code = error.code
-                # Cancellation may still be draining; let it close before the next explicit case.
+                # Bound cleanup waiting; a still-running call must not inherit older metrics.
                 pending = set(service.tasks)
                 if pending:
                     await asyncio.wait(pending, timeout=1)
+                observation = provider.last_observation
+                matched = (
+                    provider.calls == calls_before + 1
+                    and observation is not None
+                    and observation.call_number == provider.calls
+                )
                 row = {
                     "caseId": case["caseId"],
                     "repeat": repeat + 1,
@@ -72,14 +79,13 @@ async def evaluate(selected, config, database, repeats=1):
                     "failedChecks": failures,
                     "errorCode": error_code,
                     "elapsedSeconds": round(perf_counter() - started, 6),
-                    "provider": asdict(provider.last_observation)
-                    if provider.calls > calls_before and provider.last_observation
-                    else None,
+                    "providerCalls": provider.calls - calls_before,
+                    "provider": asdict(observation) if matched else None,
                 }
                 rows.append(row)
                 print(json.dumps(row, ensure_ascii=True), flush=True)
-                # A configuration/account/API failure is not improved by calling other cases.
-                if error_code == "AI_UNAVAILABLE":
+                # Stop spending after a transport/account failure or timeout; no next case.
+                if error_code in {"AI_UNAVAILABLE", "AI_TIMEOUT"}:
                     return rows, provider.calls
     finally:
         await provider.close()
@@ -98,8 +104,43 @@ def summarize(rows):
         "p95Seconds": latencies[math.ceil(len(latencies) * 0.95) - 1] if latencies else None,
         "inputTokens": sum(u["input_tokens"] or 0 for u in usages),
         "outputTokens": sum(u["output_tokens"] or 0 for u in usages),
-        "usageMissingCalls": sum(u["input_tokens"] is None for u in usages),
+        "usageMissingCalls": sum(
+            row["providerCalls"]
+            if row["provider"] is None
+            else int(row["provider"]["input_tokens"] is None)
+            for row in rows
+        ),
     }
+
+
+def reserve_report(path):
+    """Exclusive creation before any paid call; keep interrupted reservations as evidence."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("x", encoding="utf-8") as stream:
+        json.dump(
+            {"status": "in_progress", "message": "Reserved; evaluation may be interrupted"}, stream
+        )
+        stream.write("\n")
+        stream.flush()
+        os.fsync(stream.fileno())
+
+
+def publish_report(path, report):
+    """Replace our reservation only after a complete report has been written beside it."""
+    staged = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w", encoding="utf-8", dir=path.parent, prefix=f".{path.name}.", delete=False
+        ) as stream:
+            staged = Path(stream.name)
+            json.dump(report, stream, indent=2, ensure_ascii=True)
+            stream.write("\n")
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(staged, path)
+    finally:
+        if staged is not None:
+            staged.unlink(missing_ok=True)
 
 
 def main():
@@ -115,7 +156,9 @@ def main():
         parser.error("Use --live, --max-calls 1..60 and --repeat 1..3")
     if len(selected) * args.repeat > args.max_calls:
         parser.error("Selected cases exceed the explicit call budget")
-    if args.output.exists():
+    try:
+        reserve_report(args.output)
+    except FileExistsError:
         parser.error("Use a new report path; previous evaluation evidence is preserved")
     # Local receipt database is isolated and disposable; it never touches the running server's DB.
     with tempfile.TemporaryDirectory(prefix="hanmaum-synthetic-") as temporary:
@@ -143,8 +186,7 @@ def main():
         "summary": summarize(rows),
         "results": rows,
     }
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(report, indent=2, ensure_ascii=True) + "\n", encoding="utf-8")
+    publish_report(args.output, report)
     print(json.dumps(report["summary"], ensure_ascii=True))
     if len(rows) != report["requestedCases"] or not all(r["semanticPassed"] for r in rows):
         raise SystemExit(1)

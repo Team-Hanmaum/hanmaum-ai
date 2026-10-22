@@ -6,7 +6,7 @@ Expected facts are authored before model execution. Free prose is not exact-matc
 from copy import deepcopy
 from uuid import UUID
 
-REVISION = "synthetic-v2-20261022.1"
+REVISION = "synthetic-v2-20261023.1"
 
 
 def uid(number):
@@ -138,7 +138,8 @@ def cases():
                 expected(
                     "CREATE",
                     "GUIDANCE",
-                    changes={"sourceName": "가상센터", "receivedDate": "2026-10-22"},
+                    changes={"sourceName": "가상센터"},
+                    absent=["receivedDate"],
                 )
             ],
         ),
@@ -326,6 +327,19 @@ def cases():
                     target=199,
                     relation="RELATED",
                     changes={"location": "2층"},
+                )
+            ],
+        ),
+        (
+            "create-guidance-received-date",
+            "오늘 가상센터에서 안내를 받았습니다. "
+            "안내 내용은 방문 시 실내화를 가져오라는 것입니다.",
+            [],
+            [
+                expected(
+                    "CREATE",
+                    "GUIDANCE",
+                    changes={"sourceName": "가상센터", "receivedDate": "2026-10-22"},
                 )
             ],
         ),

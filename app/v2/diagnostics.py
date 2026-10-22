@@ -30,6 +30,7 @@ class FailureEvent(StrEnum):
     OPENAI_NOT_FOUND = "openai.model_or_resource_not_found"
     OPENAI_RATE_LIMIT = "openai.rate_limit_or_quota"
     OPENAI_HTTP = "openai.http_failure"
+    OPENAI_RESPONSE_ERROR = "openai.response_error"
     OPENAI_NETWORK = "openai.network_failure"
     OPENAI_REFUSAL = "openai.refusal"
     OPENAI_INCOMPLETE = "openai.incomplete"

@@ -155,7 +155,7 @@ ANALYSIS_RESPONSES = {
             "X-Request-Id": {"schema": {"type": "string", "format": "uuid"}},
             "X-AI-Provider": {
                 "schema": {"type": "string"},
-                "description": "현재 로컬 제공자는 stub",
+                "description": "응답을 처리한 제공자: stub(시험용) 또는 openai(실제 분석)",
             },
             "Cache-Control": {"schema": {"type": "string", "const": "no-store"}},
         },

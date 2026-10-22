@@ -47,6 +47,10 @@ async def test_openapi_describes_v2_without_changing_v1_and_all_references_resol
 
     walk(schema)
     operation = schema["paths"]["/v2/analyses"]["post"]
+    assert "실제 LLM은 연결하지 않았" not in operation["description"]
+    assert "openai" in operation["description"] and "stub" in operation["description"]
+    provider_description = operation["responses"]["200"]["headers"]["X-AI-Provider"]["description"]
+    assert "openai" in provider_description and "stub" in provider_description
     assert operation["security"] == [{"APIKeyHeader": []}]
     request_id = next(p for p in operation["parameters"] if p["name"] == "X-Request-Id")
     assert request_id["in"] == "header" and request_id["required"] is True
