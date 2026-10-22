@@ -12,8 +12,16 @@ from test_v2_openai import Stream, envelope, response, settings
 
 from app.v2.schemas import AnalysisResponse
 from app.v2.validation import parse_request
-from evals.v2_cases import cases, grade
-from scripts.evaluate_v2 import evaluate, main, publish_report, reserve_report, summarize
+from evals.v2_cases import GRADER_VERSION, cases, expected, grade
+from scripts.evaluate_v2 import (
+    dataset,
+    digest,
+    evaluate,
+    main,
+    publish_report,
+    reserve_report,
+    summarize,
+)
 
 
 @pytest.mark.parametrize("case", cases(), ids=lambda case: case["caseId"])
@@ -271,3 +279,94 @@ def test_guidance_grader_requires_date_only_with_explicit_received_date(name, ha
     assert check() == (["changes.receivedDate"] if has_date else [])
     suggestion["changes"]["receivedDate"] = "2026-10-22"
     assert check() == ([] if has_date else ["absent.receivedDate"])
+
+
+def test_multi_grader_uses_augmenting_paths_for_overlapping_expectations():
+    case = next(c for c in cases() if c["caseId"] == "create-guidance")
+    case["expected"] = [
+        expected("CREATE", "GUIDANCE", optional=["sourceName"]),
+        expected("CREATE", "GUIDANCE", changes={"sourceName": "가상센터"}),
+    ]
+    suggestions = [
+        {
+            "operation": "CREATE",
+            "type": "GUIDANCE",
+            "targetItemId": None,
+            "expectedVersion": None,
+            "candidateItemIds": [],
+            "title": "안내",
+            "evidence": "합성 안내",
+            "changes": {"sourceName": source},
+            "clearFields": [],
+            "relationKind": "NEW",
+            "reviewReasons": [],
+            "basisReferences": [],
+        }
+        for source in ("가상센터", "가상학교")
+    ]
+    result = AnalysisResponse.model_validate(
+        {"requestId": case["request"]["requestId"], "suggestions": suggestions}
+    )
+    # A greedy first match would consume the only response satisfying the second expectation.
+    assert grade(case, result) == []
+    case["expected"][1]["changes"]["sourceName"] = "없는 기관"
+    assert grade(case, result) == ["unmatched_expected.1"]
+
+
+def test_suite_case_mismatch_is_rejected_before_settings(monkeypatch, tmp_path):
+    def forbidden(**_):
+        pytest.fail("Settings must not be read for an unknown case")
+
+    monkeypatch.setattr("scripts.evaluate_v2.V2Settings", forbidden)
+    monkeypatch.setattr(
+        "sys.argv",
+        ["evaluate_v2", "--live", "--suite", "holdout", "--case", "create-guidance"],
+    )
+    with pytest.raises(SystemExit) as error:
+        main()
+    assert error.value.code == 2
+
+
+def test_cli_keeps_suite_and_frozen_dataset_identity_in_report(monkeypatch, tmp_path):
+    revision, all_cases = dataset("holdout")
+    selected_name = all_cases[0]["caseId"]
+    report_path = tmp_path / "holdout.json"
+
+    async def fake_evaluate(selected, config, database, repeats):
+        assert [case["caseId"] for case in selected] == [selected_name]
+        return [
+            {
+                "caseId": selected_name,
+                "contractPassed": True,
+                "semanticPassed": True,
+                "elapsedSeconds": 0.1,
+                "provider": None,
+                "providerCalls": 1,
+            }
+        ], 1
+
+    monkeypatch.setattr("scripts.evaluate_v2.evaluate", fake_evaluate)
+    monkeypatch.setattr("scripts.evaluate_v2.V2Settings", lambda **_: settings(tmp_path))
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            "evaluate_v2",
+            "--live",
+            "--suite",
+            "holdout",
+            "--max-calls",
+            "1",
+            "--case",
+            selected_name,
+            "--output",
+            str(report_path),
+        ],
+    )
+    main()
+    report = json.loads(report_path.read_text())
+    assert report["suite"] == "holdout" and report["datasetRevision"] == revision
+    assert report["evaluationRole"] == "regression-after-feedback"
+    assert report["datasetSha256"] == digest(all_cases)
+    assert report["selectedCaseIds"] == [selected_name]
+    assert report["graderVersion"] == GRADER_VERSION
+    assert report["requestedCases"] == 1
