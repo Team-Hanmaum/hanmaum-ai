@@ -198,6 +198,11 @@ OpenAI·내부 인증·HMAC 키를 분리합니다. openai 사용 시 로컬에�
 `local-development-only`는 시작 시 거부합니다. 별도의 무작위 내부 키를 설정해야 하며,
 BE 연결 시 BE에도 동일한 내부 키를 사용합니다. 설정 변경 후 서버를 재시작합니다.
 
+기존 8000 stub을 유지하면서 실제 모델을 확인하려면, Git에서 제외되는 `.env.openai.local`에
+`AI_V2_PROVIDER=openai`와 별도 무작위 `AI_INTERNAL_API_KEY`만 두고 8001을 실행합니다.
+기존 `.env`·SQLite·HMAC 키를 바꾸지 않습니다. 실행 명령과 Swagger 성공·중복 검사,
+BE 설정·저장·조회 확인 순서는 [v2 연동 안내](docs/v2-integration.md)를 따릅니다.
+
 `app/v2/openai_provider.py`는 HTTPX로 공식 `POST https://api.openai.com/v1/responses`를 호출합니다.
 성공·오류 본문을 SDK가 먼저 메모리에 읽지 않도록 HTTP 스트림을 직접 제한합니다.
 자동 재시도·리디렉션·도구 호출·v1/다른 모델 fallback은 없고, `store=false`, `truncation=disabled`입니다.
@@ -207,6 +212,9 @@ BE 연결 시 BE에도 동일한 내부 키를 사용합니다. 설정 변경 �
 
 AI 전용 프롬프트 버전은 `app/v2/prompt.py`, 구조화된 출력 스키마는
 `app/v2/structured_output.py`에서 관리합니다. 원문·기존 문서·근거는 모두 입력 자료로 취급합니다.
+미정인 변경은 삭제로 해석하지 않습니다. 해당 필드를 `changes`·`clearFields`에서 제외하고
+`VALUE_UNCLEAR`로 검토를 남기며, 원문이 삭제를 명시한 필드만 `clearFields`에 넣습니다.
+확정 변경과 미정 값이 섞인 경우에는 확정된 값만 변경 제안합니다.
 모델 내부 `changes`는 `{field,value}` 배열이며 생략 의미를 유지해 BE의 기존 객체로 변환합니다.
 중복 필드·null·잘못된 대상/버전/근거·원문에 없는 evidence는 실패하며 결과를 부분 채택하지 않습니다.
 `requestId`는 서버가 원래 요청에서 붙입니다. 새 shared fixture revision이나 BE DTO 변경은 없습니다.
@@ -226,8 +234,8 @@ BE 응답의 기존 바이트·UTF-16·개수 제한은 변환 후 다시 적용
 
 ### 합성 데이터 실제 API 평가
 
-공통 fixture는 형식·연동 계약 검증용이고 `evals/v2_cases.py`는 AI 전용 의미 평가용입니다.
-고정된 19개 합성 사례로 5유형·4작업, 상대 날짜, 중복, 충돌, 대상 모호성, 필드 삭제,
+공통 fixture는 형식·연동 계약 검증용이고 `evals/`는 AI 전용 의미 평가용입니다.
+`evals/v2_cases.py`의 고정된 회귀 사례 19개로 5유형·4작업, 상대 날짜, 중복, 충돌, 대상 모호성, 필드 삭제,
 담당자 미확정, 프롬프트 주입, 직접 입력 근거, 후보 100개를 검사합니다.
 정답은 모델 실행 전에 정의하며 모델 결과에 맞춰 바꾸지 않습니다. 자유 문장의 완전한 사실성·안전성을
 자동으로 판정하는 평가는 아니며 소규모 사례 통과가 전체 품질이나 운영 지연을 보장하지 않습니다.
@@ -235,10 +243,35 @@ BE 응답의 기존 바이트·UTF-16·개수 제한은 변환 후 다시 적용
 평가 revision `synthetic-v2-20261023.1`은 기존 `create-guidance`의 방문일을 안내 수신일로
 단정하던 정답을 교정하고, 수신일이 명확한 `create-guidance-received-date`를 추가합니다.
 원문에 근거한 채점 기준 보정이며 모델 출력에 맞춘 점수 조정이 아닙니다. 기존 revision의
-18개 사례·17/18 결과와 보고서는 그대로 보존하며 새 기준의 실제 API 평가는 별도 실행입니다.
+18개 사례·17/18 결과와 보고서는 그대로 보존하며 서로 다른 revision의 점수를 섞지 않습니다.
+
+`evals/v2_holdout.py`의 독립 사례 12개는 `synthetic-holdout-v2-20261023.1`입니다.
+별도 작성자가 프롬프트와 실제 모델 응답을 읽지 않고 계약으로 작성한 기대값을 첫 호출 전에
+고정했습니다. 다중 일정·답변과 관찰의 혼합, 불명확한 변경, 직접 입력 근거, 날짜 경계 등을
+검사합니다. 최초 `hanmaum-v2-20261023.1` 평가 결과는 보존합니다. 이후 미정 변경 오류를
+프롬프트 보완에 사용했으므로 현재는 **회귀 자료**입니다. CLI 이름 `--suite holdout`은
+유지하지만 보고서의 `evaluationRole`은 `regression-after-feedback`으로 구분합니다.
+
+`evals/v2_change_intent.py`는 `synthetic-change-intent-v2-20261023.1`의 집중 회귀 6개입니다.
+기존 실패·명시적 장소 삭제·안내 수신일 사례의 기대값을 그대로 재사용하고 시간·장소의 미정
+변경을 추가했습니다. `evals/v2_change_holdout.py`는 새로운 독립 사례 3개이며 revision은
+`synthetic-change-holdout-v2-20261023.1`입니다. 별도 작성자가 프롬프트와 실제 응답을 읽지
+않고 기한 삭제·시각 미정·확정 시각과 미정 장소의 혼합을 정의해 실행 전에 SHA를 고정했습니다.
+새 독립 사례도 이후 프롬프트 조정에 사용하면 회귀 자료로 전환합니다.
+
+채점 기준 `facts-v2-20261023.1`은 제안 순서와 무관하게 기대값과 실제 제안을 일대일로
+대응시킵니다. 한 제안을 중복으로 정답 처리하지 않으며, 여러 정답 후보가 겹쳐도 가능한 대응을
+탐색합니다. 모호성 사례에서 계약과 의미 모두 허용하는 관계값만 실행 전 고정된 목록으로
+인정합니다. 자유 문장은 일부 핵심어로 검사하므로 문장 전체의 환각·누락·안전성 검토는 별도로
+필요합니다. 이 평가 revision·프롬프트 변경은 BE 공통 계약 `v2-20261021.1`을 변경하지 않습니다.
 
 ```bash
-uv run --locked python -m scripts.evaluate_v2 --live --max-calls 20 --output test-results/v2-live.json
+uv run --locked python -m scripts.evaluate_v2 --live --suite regression --max-calls 19 --output test-results/v2-regression-001.json
+# 최초 독립 평가 이후 보완에 활용한 12개: 현재는 회귀 자료
+uv run --locked python -m scripts.evaluate_v2 --live --suite holdout --max-calls 12 --output test-results/v2-holdout-001.json
+# 변경 의도 집중 회귀와 새 독립 평가
+uv run --locked python -m scripts.evaluate_v2 --live --suite change-intent --max-calls 6 --output test-results/v2-change-regression-001.json
+uv run --locked python -m scripts.evaluate_v2 --live --suite change-holdout --max-calls 3 --output test-results/v2-change-holdout-001.json
 # 명시적 반복 평가: 매 시도 새 requestId, 자동 실패 재시도와는 별개
 uv run --locked python -m scripts.evaluate_v2 --live --repeat 2 --max-calls 38 --output test-results/v2-live-repeat.json
 ```
@@ -248,7 +281,11 @@ uv run --locked python -m scripts.evaluate_v2 --live --repeat 2 --max-calls 38 -
 `.env`의 모델 설정과 키는 사용하지만 `AI_V2_PROVIDER=stub`이어도 평가에서만 openai를 선택합니다.
 API 설정/인증/통신 오류 또는 시간 초과가 발생하면 다음 사례·반복 호출을 중단하고 결과를 보고합니다.
 CI와 pytest는 실제 API를 호출하지 않으며 외부 네트워크·잔액이 필요하지 않습니다.
-보고서에는 데이터셋·프롬프트·스키마 해시, 모델 설정, 계약/의미 검사, 실패 검사명, 지연과 토큰만 기록합니다.
+보고서에는 suite·평가 용도(evaluationRole)·선택한 caseId·데이터셋/채점 기준 버전·데이터셋/프롬프트/스키마 해시,
+모델 설정, 계약/의미 검사, 실패 검사명, 지연과 토큰만 기록합니다.
+`cachedInputTokens`와 `zeroCachedInputCalls`도 구분합니다. 캐시 토큰 0은 관측값이며
+서버의 완전한 cold start를 보장하는 지표는 아닙니다. 캐시가 사용된 순차 결과를 운영 p95로
+단정하지 않습니다. 단계별 출력의 지연은 제공자 대기와 전체 서비스 처리 시간을 각각 기록합니다.
 원문·생성 문장·키는 기록하지 않으며 `test-results/`는 Git에서 제외합니다. 기존 보고서를 덮어쓰지 않습니다.
 유료 호출 전에 출력 경로를 배타적으로 예약하므로 같은 경로의 동시 실행은 호출 전에 거부됩니다.
 완성된 보고서만 원자적으로 교체합니다. 중단·저장 실패 시 예약 파일을 남기며, 진행 중 표시가 있는
@@ -259,7 +296,8 @@ CI와 pytest는 실제 API를 호출하지 않으며 외부 네트워크·잔액
 
 API 기준: [Responses](https://developers.openai.com/api/reference/resources/responses/methods/create),
 [Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs),
-[GPT-6 Luna](https://developers.openai.com/api/docs/models/gpt-6-luna).
+[GPT-6 Luna](https://developers.openai.com/api/docs/models/gpt-6-luna),
+[평가 원칙](https://developers.openai.com/api/docs/guides/evaluation-best-practices).
 
 | AI 전용 설정 | 기본값 / 상한 | 적용 |
 | --- | --- | --- |
