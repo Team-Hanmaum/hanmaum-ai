@@ -26,6 +26,16 @@ class FailureEvent(StrEnum):
     PROVIDER_FAILED = "provider.failed"
     PROVIDER_LATE_FAILURE = "provider.late_failure"
     PROVIDER_INVALID_RESPONSE = "provider.invalid_response"
+    OPENAI_AUTH = "openai.authentication"
+    OPENAI_NOT_FOUND = "openai.model_or_resource_not_found"
+    OPENAI_RATE_LIMIT = "openai.rate_limit_or_quota"
+    OPENAI_HTTP = "openai.http_failure"
+    OPENAI_RESPONSE_ERROR = "openai.response_error"
+    OPENAI_NETWORK = "openai.network_failure"
+    OPENAI_REFUSAL = "openai.refusal"
+    OPENAI_INCOMPLETE = "openai.incomplete"
+    OPENAI_INVALID = "openai.invalid_output"
+    OPENAI_SIZE = "openai.response_size"
 
 
 _logger = logging.getLogger(__name__)

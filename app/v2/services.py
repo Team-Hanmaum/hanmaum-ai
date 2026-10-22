@@ -6,6 +6,7 @@ from typing import Protocol
 
 from app.errors import AnalysisFailure
 from app.v2.diagnostics import FailureEvent, record_failure
+from app.v2.provider_errors import InvalidProviderOutput
 from app.v2.receipts import ReceiptGate, store_unavailable
 from app.v2.resources import Capacity, Workers, timed_out
 from app.v2.schemas import AnalysisRequest, AnalysisResponse
@@ -151,6 +152,11 @@ class AnalysisService:
             record_failure(FailureEvent.PROVIDER_TIMEOUT, error)
             raise AnalysisFailure(
                 504, "AI_TIMEOUT", "분석 응답 대기 시간이 초과되었습니다."
+            ) from None
+        except InvalidProviderOutput:
+            record_failure(FailureEvent.PROVIDER_INVALID_RESPONSE)
+            raise AnalysisFailure(
+                502, "INVALID_AI_RESPONSE", "분석 결과를 검증하지 못했습니다."
             ) from None
         except Exception as error:
             # Do not relay even a provider-supplied AnalysisFailure with arbitrary content.

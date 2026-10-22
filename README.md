@@ -5,9 +5,9 @@ Spring 백엔드의 돌봄 기록 분석 요청을 처리하는 FastAPI 서버�
 Python 3.13.15, FastAPI, Pydantic, uv, Ruff, pytest를 사용합니다. 의존성 버전은
 `uv.lock`으로 공유하고, 프로젝트별 `.venv`에서 실행합니다.
 
-현재는 서버 연동을 확인하는 **stub(시험용 응답)** 단계입니다. 모델 API를 호출하거나 기록을
-분석하지 않으며, 정상 요청에는 `suggestions: []`를 반환합니다. 실제 LLM 제공자·모델·프롬프트는
-후속 작업에서 연결합니다.
+v1은 기존 stub(시험용 응답)·disabled 모드를 유지합니다. v2는 별도로 disabled·stub·openai를
+선택할 수 있습니다. stub은 실제 분석 없이 `suggestions: []`를 반환하며, openai는 실제 모델
+API를 호출합니다. 현재 설정은 `/health/ready/v2`, 성공 응답의 `X-AI-Provider`로 확인합니다.
 
 ## 처음 실행하기
 
@@ -129,7 +129,7 @@ stub 응답:
 
 `POST /v2/analyses`는 `v2-20261021.1` 계약을 구현합니다. v1 설정은 그대로 유지하고
 v2를 별도로 활성화합니다. 기본 `AI_V2_PROVIDER=disabled`에서는 503 AI_NOT_CONFIGURED이며,
-`stub`은 로컬·테스트 전용으로 빈 제안을 반환합니다. 실제 LLM 연결과 분석 품질 평가는 후속입니다.
+`stub`은 로컬·테스트 전용으로 빈 제안을 반환합니다. `openai`는 아래의 실제 모델 설정을 사용합니다.
 v2 stub 활성화에는 `APP_ENV=local` 또는 `APP_ENV=test`의 명시적 설정이 필요합니다.
 APP_ENV 생략에 따른 기본 local 값으로는 v2 stub을 시작하지 않습니다. v1 기본값은 유지합니다.
 로컬 예시 인증키는 `127.0.0.1`에 한정한 개발 확인용입니다. Docker 포트를 로컬에 공개할 때도
@@ -163,7 +163,8 @@ Swagger에서는 [로컬 API 문서](http://localhost:8000/docs)를 열고 다�
 
 1. **Authorize**에 `.env`의 `AI_INTERNAL_API_KEY`를 입력합니다. LLM API 키가 아닙니다.
 2. `GET /health/ready/v2` → **Try it out → Execute**로 준비 상태를 확인합니다.
-   기본 비활성화 상태는 503 AI_NOT_CONFIGURED, 저장소까지 준비된 stub은 200입니다.
+   기본 비활성화 상태는 503 AI_NOT_CONFIGURED, 설정·저장소가 준비된 stub/openai는 200입니다.
+   openai의 200 준비 상태는 키 권한·잔액·모델 접근 가능성이나 실제 응답 성공을 보장하지 않습니다.
 3. `POST /v2/analyses` → **Try it out**에서 `X-Request-Id`를 입력하고 요청 예시를 선택합니다.
    `minimal`은 후보 없는 요청, `question`은 질문 후보와 근거가 있는 요청입니다.
    본문의 `requestId`와 헤더는 같은 UUID여야 합니다. 예시 ID를 이미 사용했다면 두 값을
@@ -176,6 +177,89 @@ Swagger의 **Schema**는 v2 중첩 후보·근거·응답 필드를 설명하고
 코드와 `code`·`message` 예시를 제공합니다. 200의 질문 답변 예시는 계약 형식 설명이며 현재
 stub이 생성하는 결과는 아닙니다. 정확한 크기 경계·동시성·취소는 자동 HTTP 테스트로 확인합니다.
 Swagger 명세는 스트림 수신과 별도로 구성하여 본문 선행 버퍼링이나 검증 순서를 바꾸지 않습니다.
+
+### 실제 OpenAI 분석
+
+v1의 `AI_PROVIDER`는 유지하고 v2 설정만 선택합니다. 기존 SQLite DB와 HMAC 키를 재생성하지 않습니다.
+
+```dotenv
+AI_V2_PROVIDER=openai
+OPENAI_API_KEY=<발급한 별도 서버용 키>
+AI_V2_MODEL=gpt-6-luna
+AI_V2_REASONING_EFFORT=low
+AI_V2_SERVICE_TIER=default
+AI_V2_MAX_OUTPUT_TOKENS=4096
+```
+
+기본 모델은 GPT-6 Luna, 추론 low, 표준 처리(default)입니다. 모델은 환경 변수로 선택하지만
+모델마다 지원하는 설정·정확도·지연이 다르므로 변경 후 같은 합성 평가를 다시 실행합니다.
+키는 `.env`에만 넣으며 Swagger Authorize에는 계속 **AI_INTERNAL_API_KEY**를 사용합니다.
+OpenAI·내부 인증·HMAC 키를 분리합니다. openai 사용 시 로컬에서도 공개 기본 내부 키
+`local-development-only`는 시작 시 거부합니다. 별도의 무작위 내부 키를 설정해야 하며,
+BE 연결 시 BE에도 동일한 내부 키를 사용합니다. 설정 변경 후 서버를 재시작합니다.
+
+`app/v2/openai_provider.py`는 HTTPX로 공식 `POST https://api.openai.com/v1/responses`를 호출합니다.
+성공·오류 본문을 SDK가 먼저 메모리에 읽지 않도록 HTTP 스트림을 직접 제한합니다.
+자동 재시도·리디렉션·도구 호출·v1/다른 모델 fallback은 없고, `store=false`, `truncation=disabled`입니다.
+`store=false`가 제공자의 모든 데이터 보관 정책을 해제한다는 뜻은 아닙니다.
+환경 프록시를 자동 사용하지 않으며 TLS 검증을 유지합니다. 연결 기한은 3초,
+전체 제공자 대기는 기존 20초(최대 25초) 및 남은 HTTP 예산으로 제한합니다.
+
+AI 전용 프롬프트 버전은 `app/v2/prompt.py`, 구조화된 출력 스키마는
+`app/v2/structured_output.py`에서 관리합니다. 원문·기존 문서·근거는 모두 입력 자료로 취급합니다.
+모델 내부 `changes`는 `{field,value}` 배열이며 생략 의미를 유지해 BE의 기존 객체로 변환합니다.
+중복 필드·null·잘못된 대상/버전/근거·원문에 없는 evidence는 실패하며 결과를 부분 채택하지 않습니다.
+`requestId`는 서버가 원래 요청에서 붙입니다. 새 shared fixture revision이나 BE DTO 변경은 없습니다.
+모델 입력은 `content`, `recordedAt`, `timezone`, `candidates`만 포함합니다.
+`requestId`·`careSpaceId`·`recordId`는 외부 제공자에게 보내지 않고 서버에 유지하며,
+후보·근거 ID는 응답 참조 검증에 필요하므로 그대로 전달합니다.
+
+제공자 JSON envelope는 비압축 2 MiB, 모델 JSON 텍스트는 512 KiB 이내로 읽습니다.
+BE 응답의 기존 바이트·UTF-16·개수 제한은 변환 후 다시 적용합니다.
+출력 토큰 기본값 4096은 추론 토큰을 포함하며 환경 설정 상한은 32768입니다.
+입력을 잘라내거나 후보를 제외하지 않습니다. 최대 계약 입력에서 20초 성공을 보장하는 설정은 아닙니다.
+모델 거절·미완성·출력 초과·계약 위반은 `502 INVALID_AI_RESPONSE`, 제공자 인증·요율·통신 오류는
+`502 AI_UNAVAILABLE`, 시간 초과는 `504 AI_TIMEOUT`입니다. HTTP 200 안의 유효한 제공자
+오류 객체도 `AI_UNAVAILABLE`로 구분합니다. 잘못된 오류 객체는 `INVALID_AI_RESPONSE`입니다.
+수신 기록은 보존하며 자동 재호출하지 않습니다.
+로그/진단에는 고정 오류 분류, 지연, 토큰 수만 남기고 원문·생성 결과·키·제공자 오류 본문은 남기지 않습니다.
+
+### 합성 데이터 실제 API 평가
+
+공통 fixture는 형식·연동 계약 검증용이고 `evals/v2_cases.py`는 AI 전용 의미 평가용입니다.
+고정된 19개 합성 사례로 5유형·4작업, 상대 날짜, 중복, 충돌, 대상 모호성, 필드 삭제,
+담당자 미확정, 프롬프트 주입, 직접 입력 근거, 후보 100개를 검사합니다.
+정답은 모델 실행 전에 정의하며 모델 결과에 맞춰 바꾸지 않습니다. 자유 문장의 완전한 사실성·안전성을
+자동으로 판정하는 평가는 아니며 소규모 사례 통과가 전체 품질이나 운영 지연을 보장하지 않습니다.
+
+평가 revision `synthetic-v2-20261023.1`은 기존 `create-guidance`의 방문일을 안내 수신일로
+단정하던 정답을 교정하고, 수신일이 명확한 `create-guidance-received-date`를 추가합니다.
+원문에 근거한 채점 기준 보정이며 모델 출력에 맞춘 점수 조정이 아닙니다. 기존 revision의
+18개 사례·17/18 결과와 보고서는 그대로 보존하며 새 기준의 실제 API 평가는 별도 실행입니다.
+
+```bash
+uv run --locked python -m scripts.evaluate_v2 --live --max-calls 20 --output test-results/v2-live.json
+# 명시적 반복 평가: 매 시도 새 requestId, 자동 실패 재시도와는 별개
+uv run --locked python -m scripts.evaluate_v2 --live --repeat 2 --max-calls 38 --output test-results/v2-live-repeat.json
+```
+
+이 명령은 유료 호출입니다. `--live` 없이는 실행하지 않으며 한 실행 최대 60회·반복 최대 3회입니다.
+평가기는 고정 합성 데이터만 사용하고 임시 SQLite 저장소를 만들어 로컬 서버 수신 기록과 분리합니다.
+`.env`의 모델 설정과 키는 사용하지만 `AI_V2_PROVIDER=stub`이어도 평가에서만 openai를 선택합니다.
+API 설정/인증/통신 오류 또는 시간 초과가 발생하면 다음 사례·반복 호출을 중단하고 결과를 보고합니다.
+CI와 pytest는 실제 API를 호출하지 않으며 외부 네트워크·잔액이 필요하지 않습니다.
+보고서에는 데이터셋·프롬프트·스키마 해시, 모델 설정, 계약/의미 검사, 실패 검사명, 지연과 토큰만 기록합니다.
+원문·생성 문장·키는 기록하지 않으며 `test-results/`는 Git에서 제외합니다. 기존 보고서를 덮어쓰지 않습니다.
+유료 호출 전에 출력 경로를 배타적으로 예약하므로 같은 경로의 동시 실행은 호출 전에 거부됩니다.
+완성된 보고서만 원자적으로 교체합니다. 중단·저장 실패 시 예약 파일을 남기며, 진행 중 표시가 있는
+경로를 자동 재사용하거나 삭제하지 않습니다. 상태를 확인한 뒤 새 보고서 경로로 명시적으로 실행합니다.
+측정값은 호출 번호가 일치할 때만 기록합니다. 취소 작업이 끝나지 않아 측정값이 없으면
+`provider: null`과 `usageMissingCalls`로 표시하며 이전 호출의 지연·토큰을 재사용하지 않습니다.
+토큰 수가 없는 시간 초과 등은 비용 0으로 해석하지 않습니다. 실제 과금은 OpenAI Usage에서 확인합니다.
+
+API 기준: [Responses](https://developers.openai.com/api/reference/resources/responses/methods/create),
+[Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs),
+[GPT-6 Luna](https://developers.openai.com/api/docs/models/gpt-6-luna).
 
 | AI 전용 설정 | 기본값 / 상한 | 적용 |
 | --- | --- | --- |
@@ -199,8 +283,8 @@ CPU 작업과 저장소 작업도 각각 4개까지만 제출합니다. 응답 �
 응답 전송이 막히거나 연결이 끊어지면 두 번째 오류 본문을 붙이지 않고 전송을 중단합니다.
 
 이는 초기 로컬·통합 실행 설정입니다. 프로세스·인스턴스 수에 따라 총 동시 실행 수가 늘어납니다.
-스레드의 강제 종료나 프로세스 전체 메모리 상한을 보장하지 않으며, 실제 제공자 어댑터의
-스트림 읽기·토큰·출력 한도, 서버/프록시 연결 제한과 운영 자원 예산은 실제 모델 연결·배포에서 검증합니다.
+스레드의 강제 종료나 프로세스 전체 메모리 상한을 보장하지 않습니다. 제공자 스트림·출력·토큰은
+어댑터에서 제한하며, 서버/프록시 연결 제한과 운영 자원 예산은 배포 전에 별도로 검증합니다.
 컨테이너 사용 시 DB를 영속 볼륨에 두고 같은 호스트의 모든 프로세스가 같은 파일을 사용해야 합니다.
 BE 업무 DB에 연결하지 않으며, 저장소 보관·정리 정책 확정 전 자동 삭제는 없습니다.
 요청 크기·동시성 제한은 수신 기록의 누적 디스크 용량 상한이 아닙니다. 외부·운영 공개 전에는
@@ -315,7 +399,7 @@ app/
     resources.py  대기열 없는 진입·작업 슬롯과 워커 수명 관리
     transport.py  응답 전송 시간 제한과 연결 종료 정리
     config.py     v2 전용 설정
-    runtime.py    수신 저장소·가짜 제공자 조립
+    runtime.py    수신 저장소·stub/OpenAI 제공자 조립
   security.py     내부 키 인증
   services.py     타임아웃·분석 결과 검증
   providers.py    분석 제공자 인터페이스·stub
