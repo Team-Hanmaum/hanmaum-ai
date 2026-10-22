@@ -3,7 +3,7 @@
 from pathlib import Path
 from typing import Literal, Self
 
-from pydantic import Field, SecretBytes, model_validator
+from pydantic import AliasChoices, Field, SecretBytes, SecretStr, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -15,7 +15,14 @@ class V2Settings(BaseSettings):
         extra="ignore",
         hide_input_in_errors=True,
     )
-    provider: Literal["disabled", "stub"] = "disabled"
+    provider: Literal["disabled", "stub", "openai"] = "disabled"
+    openai_api_key: SecretStr | None = Field(
+        default=None, validation_alias=AliasChoices("OPENAI_API_KEY", "openai_api_key")
+    )
+    model: str = Field(default="gpt-6-luna", pattern=r"^[a-zA-Z0-9._-]{1,128}$")
+    reasoning_effort: Literal["none", "low", "medium", "high", "xhigh", "max"] = "low"
+    service_tier: Literal["default"] = "default"
+    max_output_tokens: int = Field(default=4096, ge=256, le=32768)
     receipt_db_path: Path | None = None
     hmac_keys: dict[str, SecretBytes] = Field(default_factory=dict)
     active_hmac_key_version: str | None = None
@@ -27,7 +34,7 @@ class V2Settings(BaseSettings):
 
     @model_validator(mode="after")
     def enabled_configuration(self) -> Self:
-        if self.provider == "stub":
+        if self.provider != "disabled":
             if (
                 self.receipt_db_path is None
                 or not self.receipt_db_path.is_absolute()
@@ -39,4 +46,10 @@ class V2Settings(BaseSettings):
                 )
             if self.store_lock_timeout_seconds >= self.worker_timeout_seconds:
                 raise ValueError("SQLite lock wait must be below the worker deadline")
+        if self.provider == "openai":
+            key = self.openai_api_key.get_secret_value() if self.openai_api_key else ""
+            if not key or not key.isascii() or any(c.isspace() for c in key):
+                raise ValueError("OpenAI requires a separate nonblank API key")
+            if any(key.encode() == secret.get_secret_value() for secret in self.hmac_keys.values()):
+                raise ValueError("OpenAI and HMAC keys must be separate")
         return self

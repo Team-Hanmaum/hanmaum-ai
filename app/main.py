@@ -28,6 +28,11 @@ def create_app(
     if v2_runtime.settings.provider == "stub" and "app_env" not in settings.model_fields_set:
         raise ValueError("v2 stub requires explicit APP_ENV=local or test")
     internal_key = settings.ai_internal_api_key.get_secret_value().encode("utf-8")
+    if (
+        v2_runtime.settings.provider == "openai"
+        and v2_runtime.settings.openai_api_key.get_secret_value().encode() == internal_key
+    ):
+        raise ValueError("OpenAI and internal API keys must be separate")
     if v2_runtime.service is not None and any(
         key.get_secret_value() == internal_key for key in v2_runtime.settings.hmac_keys.values()
     ):

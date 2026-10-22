@@ -20,6 +20,9 @@ def isolated_settings(monkeypatch):
     # v1 tests must remain independent of a developer's optional local v2 configuration.
     monkeypatch.setenv("AI_V2_PROVIDER", "disabled")
     monkeypatch.setenv("AI_V2_HMAC_KEYS", "{}")
+    monkeypatch.setenv(
+        "OPENAI_API_KEY", ""
+    )  # Never load a developer's paid credential in CI tests.
 
 
 @pytest.fixture
