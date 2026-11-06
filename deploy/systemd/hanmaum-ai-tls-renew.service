@@ -1,0 +1,11 @@
+[Unit]
+Description=Renew Hanmaum AI internal TLS leaf certificate
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+UMask=0077
+WorkingDirectory=/opt/hanmaum-ai/current
+ExecStart=/usr/bin/python3 -m deploy.renew_tls
+TimeoutStartSec=300

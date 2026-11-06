@@ -56,6 +56,13 @@ jobs:
       - name: Run tests
         run: uv run --locked pytest --junitxml=test-results/pytest.xml
 
+      - name: Validate deployment and isolated TLS container
+        run: |
+          for script in deploy/*.sh; do bash -n "$script"; done
+          uv run --locked python deploy/validate.py
+          docker build --tag hanmaum-ai:ci .
+          uv run --locked python -m deploy.smoke hanmaum-ai:ci
+
       - name: Upload test results
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
