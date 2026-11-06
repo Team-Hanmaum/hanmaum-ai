@@ -1,0 +1,131 @@
+name: Deploy AI
+
+on:
+  workflow_dispatch:
+    inputs:
+      initialize_ai:
+        description: '최초 AI 설정 (새 수신 저장소·내부 TLS 생성, 기존 데이터 재생성 불가)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    if: github.repository == 'Team-Hanmaum/hanmaum-ai' && github.ref == 'refs/heads/dev'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image: ${{ steps.publish.outputs.image }}
+    env:
+      IMAGE_TAG: ghcr.io/team-hanmaum/hanmaum-ai:${{ github.sha }}
+    steps:
+      - name: Checkout exact manual release
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Reject stale releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 deploy/release.py latest
+      - name: Set up uv
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          version: '0.12.19'
+      - name: Verify source and deployment configuration
+        run: |
+          uv python install
+          uv sync --locked --dev
+          uv run --locked ruff check .
+          uv run --locked ruff format --check .
+          uv run --locked python scripts/fixture_manifest.py
+          uv run --locked pytest
+          for script in deploy/*.sh; do bash -n "$script"; done
+          python3 deploy/validate.py
+      - name: Build the selected commit
+        run: |
+          docker build --tag "$IMAGE_TAG" \
+            --label "org.opencontainers.image.source=https://github.com/Team-Hanmaum/hanmaum-ai" \
+            --label "org.opencontainers.image.revision=$GITHUB_SHA" .
+      - name: Verify TLS, readiness and persistent storage without model calls
+        run: python3 -m deploy.smoke "$IMAGE_TAG"
+      - name: Publish verified image
+        id: publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          printf '%s' "$GH_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+          docker push "$IMAGE_TAG"
+          image="$(docker image inspect "$IMAGE_TAG" --format '{{index .RepoDigests 0}}')"
+          [[ "$image" =~ ^ghcr.io/team-hanmaum/hanmaum-ai@sha256:[0-9a-f]{64}$ ]]
+          printf 'image=%s\n' "$image" >> "$GITHUB_OUTPUT"
+      - name: Remove runner registry credentials
+        if: always()
+        run: docker logout ghcr.io
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    environment: production
+    concurrency:
+      group: hanmaum-ai-production
+      queue: max
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      packages: read
+      id-token: write
+    env:
+      AWS_REGION: ap-southeast-2
+      LIGHTSAIL_INSTANCE: hanmaum-server-01
+      DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+      AI_IMAGE: ${{ needs.build.outputs.image }}
+      AI_MEMORY_LIMIT: ${{ vars.AI_MEMORY_LIMIT }}
+      INITIALIZE_AI: ${{ inputs.initialize_ai && 'true' || 'false' }}
+    steps:
+      - name: Checkout the same release
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Obtain temporary AWS permissions
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+          role-duration-seconds: 3600
+          mask-aws-account-id: true
+      - name: Open SSH only for this runner
+        run: |
+          python3 deploy/firewall.py open --state "$RUNNER_TEMP/ai-firewall.json" \
+            --region "$AWS_REGION" --instance "$LIGHTSAIL_INSTANCE"
+      - name: Upload and activate AI release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+          DEPLOY_SSH_KNOWN_HOSTS: ${{ secrets.DEPLOY_SSH_KNOWN_HOSTS }}
+          AI_INTERNAL_API_KEY: ${{ secrets.AI_INTERNAL_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          AI_V2_HMAC_KEYS: ${{ secrets.AI_V2_HMAC_KEYS }}
+          AI_V2_ACTIVE_HMAC_KEY_VERSION: ${{ vars.AI_V2_ACTIVE_HMAC_KEY_VERSION }}
+          AI_V2_MODEL: ${{ vars.AI_V2_MODEL }}
+          AI_V2_REASONING_EFFORT: ${{ vars.AI_V2_REASONING_EFFORT }}
+          AI_V2_MAX_OUTPUT_TOKENS: ${{ vars.AI_V2_MAX_OUTPUT_TOKENS }}
+        run: bash deploy/send-release.sh
+      - name: Remove only this runner's temporary SSH rule
+        if: always()
+        run: python3 deploy/firewall.py close --state "$RUNNER_TEMP/ai-firewall.json"
+      - name: Deployment summary
+        if: success()
+        run: |
+          {
+            echo "AI release: $GITHUB_SHA"
+            echo 'Internal TLS and authenticated readiness passed.'
+            echo 'No model request was made. BE activation and end-to-end verification remain separate.'
+          } >> "$GITHUB_STEP_SUMMARY"

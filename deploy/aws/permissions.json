@@ -1,0 +1,19 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ReadLightsailFirewall",
+      "Effect": "Allow",
+      "Action": "lightsail:GetInstancePortStates",
+      "Resource": "*",
+      "Condition": {"StringEquals": {"aws:RequestedRegion": "ap-southeast-2"}}
+    },
+    {
+      "Sid": "ChangeOnlyHanmaumInstanceFirewall",
+      "Effect": "Allow",
+      "Action": ["lightsail:OpenInstancePublicPorts", "lightsail:CloseInstancePublicPorts"],
+      "Resource": "arn:aws:lightsail:ap-southeast-2:642122109209:Instance/709c0e8a-8a33-42f3-833e-374d96aa9be3",
+      "Condition": {"StringEquals": {"aws:RequestedRegion": "ap-southeast-2"}}
+    }
+  ]
+}

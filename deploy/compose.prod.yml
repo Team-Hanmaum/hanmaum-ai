@@ -1,0 +1,72 @@
+name: hanmaum-ai-prod
+
+services:
+  ai:
+    image: ${AI_IMAGE:?Use an immutable GHCR digest}
+    pull_policy: never
+    restart: unless-stopped
+    init: true
+    user: "10001:10001"
+    mem_limit: ${AI_MEMORY_LIMIT:?Set the measured AI memory budget}
+    pids_limit: 128
+    read_only: true
+    tmpfs:
+      - /tmp:size=67108864,mode=1777
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    env_file:
+      - path: ../runtime.env
+        format: raw
+    command:
+      - /app/.venv/bin/uvicorn
+      - app.main:create_app
+      - --factory
+      - --host
+      - "0.0.0.0"
+      - --port
+      - "8443"
+      - --workers
+      - "1"
+      - --no-access-log
+      - --no-proxy-headers
+      - --ssl-certfile
+      - /run/tls/server.crt
+      - --ssl-keyfile
+      - /run/tls/server.key
+    # No host ports: both authentication and verified TLS are required internally.
+    volumes:
+      - type: bind
+        source: ${AI_STATE_DIR:?}/data
+        target: /var/lib/hanmaum-ai
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${AI_STATE_DIR:?}/tls
+        target: /run/tls
+        read_only: true
+        bind:
+          create_host_path: false
+      - ./healthcheck.py:/opt/hanmaum-ai/healthcheck.py:ro
+    networks:
+      be-link:
+        aliases: [hanmaum-ai]
+      egress: {}
+    healthcheck:
+      test: [CMD, /app/.venv/bin/python, /opt/hanmaum-ai/healthcheck.py]
+      interval: 15s
+      timeout: 5s
+      start_period: 30s
+      retries: 8
+    stop_grace_period: 40s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  be-link:
+    external: true
+    name: hanmaum-ai-link
+  # Only the AI container joins this project-owned network for provider HTTPS.
+  egress: {}
