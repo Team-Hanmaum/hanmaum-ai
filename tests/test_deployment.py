@@ -1,6 +1,8 @@
 """Deployment invariants, using only synthetic secrets and fake external operations."""
 
 import json
+import runpy
+import sys
 from pathlib import Path
 from unittest.mock import Mock
 
@@ -90,6 +92,58 @@ def test_stale_release_and_network_failure_stop_deployment(monkeypatch):
     with pytest.raises(ValueError, match="Cannot verify") as error:
         release.require_latest("a" * 40, "synthetic-token")
     assert "synthetic-token" not in str(error.value)
+
+
+@pytest.mark.parametrize("unavailable", [False, True])
+def test_release_cli_reports_latest_rejection_without_credentials(monkeypatch, unavailable):
+    response = Mock()
+    response.__enter__ = Mock(return_value=response)
+    response.__exit__ = Mock(return_value=False)
+    response.read.return_value = json.dumps({"object": {"sha": "a" * 40}}).encode()
+    fetch = Mock(
+        return_value=response, side_effect=OSError("synthetic-token") if unavailable else None
+    )
+    monkeypatch.setattr(release.urllib.request, "urlopen", fetch)
+    monkeypatch.setattr(
+        release.os, "environ", {"GITHUB_SHA": "b" * 40, "GH_TOKEN": "synthetic-token"}
+    )
+    monkeypatch.setattr(sys, "argv", ["release.py", "latest"])
+    expected = (
+        "Cannot verify current dev; deployment stopped"
+        if unavailable
+        else "Stale release; start a NEW workflow on current dev"
+    )
+    with pytest.raises(SystemExit) as error:
+        runpy.run_path(release.__file__, run_name="__main__")
+    assert error.value.code == expected
+
+
+@pytest.mark.parametrize("failure", ["runtime", "metadata", "missing-key", "file-exists"])
+def test_release_cli_configuration_errors_do_not_echo_values(tmp_path, monkeypatch, failure):
+    values = environment() | {
+        "GITHUB_SHA": "a" * 40,
+        "GITHUB_RUN_ID": "1",
+        "GITHUB_RUN_ATTEMPT": "1",
+        "AI_IMAGE": "ghcr.io/team-hanmaum/hanmaum-ai@sha256:" + "b" * 64,
+        "AI_MEMORY_LIMIT": "512m",
+        "GITHUB_ACTOR": "test-actor",
+    }
+    expected = "Invalid deployment configuration; check the documented settings"
+    if failure == "runtime":
+        values["AI_V2_HMAC_KEYS"] = "synthetic-invalid-secret"
+        expected = "AI_V2_HMAC_KEYS must be a JSON key map"
+    elif failure == "metadata":
+        values["AI_MEMORY_LIMIT"] = "synthetic-invalid-value"
+        expected = "Invalid release metadata"
+    elif failure == "missing-key":
+        del values["GITHUB_SHA"]
+    else:
+        (tmp_path / "runtime.env").touch()
+    monkeypatch.setattr(release.os, "environ", values)
+    monkeypatch.setattr(sys, "argv", ["release.py", "write", str(tmp_path)])
+    with pytest.raises(SystemExit) as error:
+        runpy.run_path(release.__file__, run_name="__main__")
+    assert error.value.code == expected
 
 
 def test_initialized_missing_store_never_recreated(tmp_path, monkeypatch):
@@ -191,3 +245,45 @@ def test_tls_with_long_validity_is_not_restarted(tmp_path, monkeypatch):
     renew_tls.renew(tmp_path)
     verify.assert_called_once_with(tmp_path)
     recreate.assert_not_called()
+
+
+@pytest.mark.parametrize("failure", ["first-rename", "second-rename", "compose"])
+def test_tls_renewal_failures_preserve_original_certificates(tmp_path, monkeypatch, failure):
+    tls = tmp_path / "tls"
+    tls.mkdir()
+    original = {
+        "server.crt": "original-cert",
+        "server.key": "original-key",
+        "ca.crt": "original-ca",
+    }
+    for name, content in original.items():
+        (tls / name).write_text(content)
+
+    def issue_leaf(_ca, directory):
+        for name in original:
+            (directory / name).write_text("replacement")
+
+    rename = Path.rename
+
+    def fail_rename(source, target):
+        if (failure == "first-rename" and source == tls) or (
+            failure == "second-rename" and source.name == "tls" and target == tls
+        ):
+            raise OSError("synthetic rename failure")
+        return rename(source, target)
+
+    recreate = Mock(
+        side_effect=[RuntimeError("failed readiness"), None] if failure == "compose" else None
+    )
+    monkeypatch.setattr(renew_tls, "current_release", lambda _: tmp_path / "release")
+    monkeypatch.setattr(renew_tls, "run", Mock())
+    monkeypatch.setattr(renew_tls.subprocess, "run", Mock(return_value=Mock(returncode=1)))
+    monkeypatch.setattr(renew_tls, "issue_leaf", issue_leaf)
+    monkeypatch.setattr(renew_tls, "verify_tls", Mock())
+    monkeypatch.setattr(renew_tls, "compose", recreate)
+    monkeypatch.setattr(Path, "rename", fail_rename)
+    with pytest.raises((OSError, RuntimeError)):
+        renew_tls.renew(tmp_path)
+    assert {path.name: path.read_text() for path in tls.iterdir()} == original
+    assert recreate.call_count == {"first-rename": 0, "second-rename": 1, "compose": 2}[failure]
+    assert not list(tmp_path.glob("renew-*"))

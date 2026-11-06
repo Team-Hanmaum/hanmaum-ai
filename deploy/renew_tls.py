@@ -36,14 +36,17 @@ def renew(root):
         issue_leaf(root / "ca", work / "tls")
         verify_tls(work)
         previous = work / "previous"
-        (root / "tls").rename(previous)
-        (work / "tls").rename(root / "tls")
         try:
+            (root / "tls").rename(previous)
+            (work / "tls").rename(root / "tls")
             compose(
                 current, "up", "-d", "--force-recreate", "--wait", "--wait-timeout", "120", "ai"
             )
         except Exception:
-            shutil.rmtree(root / "tls")
+            if not previous.exists():
+                raise  # The original directory was never moved; leave it untouched.
+            if (root / "tls").exists():
+                shutil.rmtree(root / "tls")
             previous.rename(root / "tls")
             try:
                 compose(

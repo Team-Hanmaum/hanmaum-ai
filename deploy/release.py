@@ -162,7 +162,10 @@ def main():
 if __name__ == "__main__":
     try:
         main()
-    except (ValueError, KeyError, OSError):
+    except ValueError as error:
+        # Validation messages contain field names/rejection reasons, never input values.
+        raise SystemExit(str(error)) from None
+    except (KeyError, OSError):
         raise SystemExit(
             "Invalid deployment configuration; check the documented settings"
         ) from None
