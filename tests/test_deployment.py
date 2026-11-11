@@ -105,7 +105,7 @@ def test_release_cli_reports_latest_rejection_without_credentials(monkeypatch, u
     )
     monkeypatch.setattr(release.urllib.request, "urlopen", fetch)
     monkeypatch.setattr(
-        release.os, "environ", {"GITHUB_SHA": "b" * 40, "GH_TOKEN": "synthetic-token"}
+        release.os, "environ", {"RELEASE_SHA": "b" * 40, "GH_TOKEN": "synthetic-token"}
     )
     monkeypatch.setattr(sys, "argv", ["release.py", "latest"])
     expected = (
@@ -121,7 +121,7 @@ def test_release_cli_reports_latest_rejection_without_credentials(monkeypatch, u
 @pytest.mark.parametrize("failure", ["runtime", "metadata", "missing-key", "file-exists"])
 def test_release_cli_configuration_errors_do_not_echo_values(tmp_path, monkeypatch, failure):
     values = environment() | {
-        "GITHUB_SHA": "a" * 40,
+        "RELEASE_SHA": "a" * 40,
         "GITHUB_RUN_ID": "1",
         "GITHUB_RUN_ATTEMPT": "1",
         "AI_IMAGE": "ghcr.io/team-hanmaum/hanmaum-ai@sha256:" + "b" * 64,
@@ -136,7 +136,7 @@ def test_release_cli_configuration_errors_do_not_echo_values(tmp_path, monkeypat
         values["AI_MEMORY_LIMIT"] = "synthetic-invalid-value"
         expected = "Invalid release metadata"
     elif failure == "missing-key":
-        del values["GITHUB_SHA"]
+        del values["RELEASE_SHA"]
     else:
         (tmp_path / "runtime.env").touch()
     monkeypatch.setattr(release.os, "environ", values)

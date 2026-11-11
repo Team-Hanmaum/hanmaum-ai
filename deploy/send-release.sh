@@ -3,7 +3,7 @@ set -euo pipefail
 umask 077
 : "${RUNNER_TEMP:?}" "${DEPLOY_HOST:?}" "${GH_TOKEN:?}"
 : "${DEPLOY_SSH_PRIVATE_KEY:?}" "${DEPLOY_SSH_KNOWN_HOSTS:?}"
-[[ "$GITHUB_SHA" =~ ^[0-9a-f]{40}$ && "$(git rev-parse HEAD)" == "$GITHUB_SHA" ]]
+[[ "$RELEASE_SHA" =~ ^[0-9a-f]{40}$ && "$(git rev-parse HEAD)" == "$RELEASE_SHA" ]]
 python3 -c 'import ipaddress,os; assert ipaddress.ip_address(os.environ["DEPLOY_HOST"]).version == 4'
 work="$(mktemp -d "$RUNNER_TEMP/hanmaum-ai-upload.XXXXXXXXXX")"
 remote=""
@@ -28,7 +28,7 @@ ssh-keygen -y -P '' -f "$work/key" > /dev/null
 ssh-keygen -F "$DEPLOY_HOST" -f "$work/known_hosts" > /dev/null
 mkdir "$work/payload"
 # No untracked files, developer .env, or repository credentials are uploaded.
-git archive "$GITHUB_SHA" deploy | tar -x -C "$work/payload"
+git archive "$RELEASE_SHA" deploy | tar -x -C "$work/payload"
 python3 deploy/release.py write "$work/payload"
 printf '%s' "$GH_TOKEN" > "$work/payload/registry-token"
 for attempt in {1..12}; do

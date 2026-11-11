@@ -1,10 +1,40 @@
 # Lightsail AI 운영 배포
 
 기존 Sydney Lightsail `hanmaum-server-01`에 별도 Compose 프로젝트 `hanmaum-ai-prod`로 배포한다.
-기준 브랜치는 `dev`, 실행은 Actions의 **Deploy AI → Run workflow**다. push/merge 자동 배포는 없다.
-CD의 build job이 같은 커밋을 다시 검증하고 통과한 이미지 digest만 deploy에 전달한다.
-과거 실행 재실행은 현재 dev와 다르면 거부한다.
+기준 브랜치는 `dev`다. dev push의 **AI CI**가 성공하면 **Deploy AI**가 자동 실행된다.
+Actions의 **Deploy AI → Run workflow → dev** 수동 실행과 최초 초기화 옵션도 유지한다.
+CD는 배포할 커밋을 먼저 선택하고, build job이 그 커밋을 다시 검증하여 통과한 이미지 digest만 deploy에 전달한다.
+과거 실행 재실행은 현재 dev와 다르면 배포하지 않는다.
 이 문서는 절차이며 AWS 설정·실제 배포·모델 품질·BE 통합 검증의 완료 기록이 아니다.
+
+## 자동 배포 조건과 실행 흐름
+
+1. `dev`에 PR을 머지하면 해당 push의 `AI CI`가 실행된다.
+2. `workflow_run.completed`로 CD가 시작되면, 읽기 권한만 가진 prepare job이 이벤트를 검증한다.
+   같은 저장소의 `AI CI`·`push`·`dev`·`completed`·`success`인 경우에만 후보 커밋을 선택한다.
+   PR(같은 저장소의 PR 포함), 다른 브랜치·저장소, 실패·취소·건너뛴 CI는 배포 대상으로 선택하지 않는다.
+3. CI의 `head_sha`가 현재 원격 dev와 같을 때만 build/deploy로 전달한다. 자동 실행의
+   `GITHUB_SHA`는 CD 기본 브랜치 커밋일 수 있으므로 배포 대상 대신 사용하지 않는다.
+   checkout·이미지 태그/라벨·아카이브·release.json·서버 적용에는 선택된 `RELEASE_SHA`를 사용한다.
+4. 기존 Ruff·pytest·fixture·배포 설정·격리 TLS 컨테이너 검증 후 GHCR에 이미지를 게시한다.
+5. production 환경 규칙과 배포 대기열을 거쳐 Lightsail에 반영하고 TLS/readiness를 확인한다.
+   최초 초기화는 자동 실행에서 항상 비활성화한다. 초기 DB·CA가 없으면 자동 생성하지 않고 중단한다.
+
+부적격 이벤트에는 선택 SHA를 출력하지 않아 이미지 쓰기 권한과 배포 대기열에 진입하지 않는다.
+prepare 시점에 이미 오래된 실행은 정상 건너뛰며, GitHub 조회 실패는 배포 선택 실패로 처리한다.
+선택 후 dev가 바뀌는 경우도 build 시작·배포 대기 후·서버 잠금 획득 후·활성화 직전에 다시 검사한다.
+뒤늦은 과거 실행은 중단하며 실행 중인 배포를 강제 취소하지 않는다.
+같은 최신 dev의 수동 재실행 또는 CI 재실행은 다시 배포할 수 있으며, 수신 기록은 보존한다.
+
+수동 실행은 CI 완료 이벤트 없이도 선택한 최신 dev를 동일한 build 검증에 통과시킨 후 배포한다.
+`initialize_ai`는 `workflow_dispatch`에서만 적용하며, 일반 재배포에서는 선택하지 않는다.
+production 환경의 승인 규칙이 있다면 자동 실행도 승인을 기다린다. 이 변경으로 환경 보호 규칙을 해제하지 않는다.
+정상 배포 확인은 모델 API를 호출하지 않는다. 프롬프트·모델 변경의 실제 품질 평가는 PR에서 별도로 확인한다.
+
+자동 시작은 이 workflow가 기본 브랜치인 dev에 반영된 뒤부터 적용된다.
+로컬 이벤트 테스트만으로 GitHub 이벤트 연결·AWS 자동 배포가 완료됐다고 판단하지 않는다.
+최초 머지 후 같은 SHA의 `AI CI` 성공 → `Deploy AI` 실행 → build/deploy 성공과 서버 release SHA를 확인한다.
+이벤트의 SHA·권한 기준은 [GitHub workflow_run 문서](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#workflow_run)를 따른다.
 
 ## 구성
 
@@ -113,6 +143,7 @@ Secrets 저장만으로 컨테이너 값은 바뀌지 않으며 다음 성공한
 ## 4. 최초 배포
 
 1. PR 검토·필수 CI 후 dev에 머지한다. workflow가 기본 브랜치에 있어야 수동 버튼이 나타난다.
+   초기 설정이 없는 서버에는 이 시점의 자동 배포가 실패할 수 있으며, 자동 초기화로 우회하지 않는다.
 2. BE 배포가 없는 시점에 **Deploy AI → Run workflow → dev** 선택.
 3. 최초 한 번만 `initialize_ai` 체크하여 CA·인증서·새 수신 기록 저장소를 만든다.
    이후 배포는 체크하지 않는다. 초기화된 DB가 유실되면 체크해도 재생성하지 않는다.
