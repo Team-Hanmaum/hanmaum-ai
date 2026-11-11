@@ -95,13 +95,14 @@ def compare_stable(previous, candidate):
 
 def metadata(environment):
     value = {
-        "sha": environment["GITHUB_SHA"],
-        "id": f"{environment['GITHUB_SHA']}-{environment['GITHUB_RUN_ID']}"
+        "sha": environment["RELEASE_SHA"],
+        "id": f"{environment['RELEASE_SHA']}-{environment['GITHUB_RUN_ID']}"
         f"-{environment['GITHUB_RUN_ATTEMPT']}",
         "image": environment["AI_IMAGE"],
         "memory": environment["AI_MEMORY_LIMIT"],
         "actor": environment["GITHUB_ACTOR"],
-        "initialize": environment.get("INITIALIZE_AI") == "true",
+        "initialize": environment.get("GITHUB_EVENT_NAME") == "workflow_dispatch"
+        and environment.get("INITIALIZE_AI") == "true",
     }
     validate_metadata(value)
     return value
@@ -122,6 +123,10 @@ def validate_metadata(value):
         raise ValueError("Invalid release metadata")
 
 
+class StaleRelease(ValueError):
+    """A valid selection superseded by a newer dev commit; safe to skip at selection."""
+
+
 def require_latest(sha, token):
     request = urllib.request.Request(
         f"https://api.github.com/repos/{REPOSITORY}/git/ref/heads/dev",
@@ -138,7 +143,7 @@ def require_latest(sha, token):
     except Exception:
         raise ValueError("Cannot verify current dev; deployment stopped") from None
     if head != sha:
-        raise ValueError("Stale release; start a NEW workflow on current dev")
+        raise StaleRelease("Stale release; start a NEW workflow on current dev")
 
 
 def main():
@@ -147,7 +152,7 @@ def main():
     parser.add_argument("directory", type=Path, nargs="?")
     args = parser.parse_args()
     if args.command == "latest":
-        require_latest(os.environ["GITHUB_SHA"], os.environ["GH_TOKEN"])
+        require_latest(os.environ["RELEASE_SHA"], os.environ["GH_TOKEN"])
     else:
         if args.directory is None:
             parser.error("write requires the private payload directory")
