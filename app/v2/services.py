@@ -9,8 +9,8 @@ from app.v2.diagnostics import FailureEvent, record_failure
 from app.v2.provider_errors import InvalidProviderOutput
 from app.v2.receipts import ReceiptGate, store_unavailable
 from app.v2.resources import Capacity, Workers, timed_out
-from app.v2.schemas import AnalysisRequest, AnalysisResponse
-from app.v2.validation import parse_request, validate_response
+from app.v2.schemas import AnalysisRequest
+from app.v2.validation import validate_response
 
 # Keep strong references even after a caller times out or disconnects. Completion
 # consumes exceptions so asyncio never logs provider messages in an unhandled-task error.
@@ -60,11 +60,6 @@ class AnalysisService:
         self.cpu = Workers(4)
         self.storage = Workers(4)
         self.tasks: set[asyncio.Task] = set()
-
-    async def analyze(self, raw: bytes | str) -> AnalysisResponse:
-        """Internal entry; HTTP authenticates and parses via bounded workers separately."""
-        request = parse_request(raw)
-        return await self.analyze_request(request)
 
     async def analyze_request(self, request: AnalysisRequest, *, deadline=None, admission=None):
         loop = asyncio.get_running_loop()

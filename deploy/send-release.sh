@@ -27,8 +27,18 @@ printf '%s\n' "$DEPLOY_SSH_KNOWN_HOSTS" > "$work/known_hosts"
 ssh-keygen -y -P '' -f "$work/key" > /dev/null
 ssh-keygen -F "$DEPLOY_HOST" -f "$work/known_hosts" > /dev/null
 mkdir "$work/payload"
-# No untracked files, developer .env, or repository credentials are uploaded.
-git archive "$RELEASE_SHA" deploy | tar -x -C "$work/payload"
+# Archive only the selected commit's host-side deployment files.
+host_files=(
+  deploy/activate.sh
+  deploy/compose.prod.yml
+  deploy/healthcheck.py
+  deploy/host.py
+  deploy/release.py
+  deploy/renew_tls.py
+  deploy/systemd/hanmaum-ai-tls-renew.service
+  deploy/systemd/hanmaum-ai-tls-renew.timer
+)
+git archive "$RELEASE_SHA" -- "${host_files[@]}" | tar -x -C "$work/payload"
 python3 deploy/release.py write "$work/payload"
 printf '%s' "$GH_TOKEN" > "$work/payload/registry-token"
 for attempt in {1..12}; do

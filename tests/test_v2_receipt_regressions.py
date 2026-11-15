@@ -8,17 +8,6 @@ from contextlib import closing
 from datetime import UTC, datetime
 
 import pytest
-from test_v2_receipts import (
-    KEY_VERSION,
-    RULE,
-    FakeProvider,
-    digester,
-    raw,
-    rows,
-    service,
-    store_at,
-    submit,
-)
 
 from app.errors import AnalysisFailure
 from app.v2.comparison import ComparisonUnavailable, Fingerprint, canonicalize_v2
@@ -26,6 +15,18 @@ from app.v2.diagnostics import FailureEvent, failure_counts, record_failure
 from app.v2.receipts import SCHEMA, SCHEMA_VERSION, Receipt
 from app.v2.services import _abandoned_tasks, _provider_tasks
 from app.v2.validation import parse_request
+from tests.support.v2_fixtures import raw
+from tests.support.v2_receipts import (
+    KEY_VERSION,
+    RULE,
+    FakeProvider,
+    analyze_raw,
+    digester,
+    rows,
+    service,
+    store_at,
+    submit,
+)
 
 BOUNDARIES = [
     ("0001-01-01T00:00:00+01:00", "0001-01-01T01:00:00+02:00", "0000-12-31T23:00:00.000000Z"),
@@ -203,7 +204,7 @@ async def test_wait_does_not_depend_on_provider_cancellation_cleanup(
     store = store_at(tmp_path / "receipts.sqlite3", initialize=True)
     provider = StubbornProvider()
     instance = service(store, provider, timeout_seconds=0.1)
-    caller = asyncio.create_task(instance.analyze(raw()))
+    caller = asyncio.create_task(analyze_raw(instance, raw()))
     try:
         async with asyncio.timeout(3):
             await entered.wait()
@@ -316,8 +317,8 @@ async def test_failure_paths_have_safe_diagnostics_and_counts(
         elif failure == "missing_key":
             comparison.fingerprint(request, key_version=secret)
         else:
-            await service(store, provider, comparison=comparison, timeout_seconds=0.01).analyze(
-                raw()
+            await analyze_raw(
+                service(store, provider, comparison=comparison, timeout_seconds=0.01), raw()
             )
     assert failure_counts()[(event.value, kind)] == before + 1
     records = [record for record in caplog.records if record.name == "app.v2.diagnostics"]

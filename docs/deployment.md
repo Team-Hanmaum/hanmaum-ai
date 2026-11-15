@@ -5,7 +5,7 @@ AI는 Sydney Lightsail의 `hanmaum-server-01`에서 독립 Compose 프로젝트 
 ## 자동·수동 배포
 
 1. `dev` push의 [AI CI](../.github/workflows/ci.yml)가 성공하면 [Deploy AI](../.github/workflows/deploy.yml)가 시작된다. 같은 저장소의 성공한 `dev` push만 선택한다.
-2. CI의 `head_sha`가 현재 `dev`와 일치하면 해당 커밋을 재검증하고 GHCR에 게시한다. 빌드·전송·서버 적용은 같은 `RELEASE_SHA`와 이미지 digest를 사용한다. 최신 `dev` 여부는 배포 대기 이후와 서버 활성화 전에도 확인한다.
+2. CI의 `head_sha`가 현재 `dev`와 일치하면 해당 커밋을 재검증하고 GHCR에 게시한다. 빌드·전송·서버 적용은 같은 `RELEASE_SHA`와 이미지 digest를 사용한다. 전송에는 선택한 커밋의 호스트 실행 파일만 포함한다. 최신 `dev` 여부는 배포 대기 이후와 서버 활성화 전에도 확인한다.
 3. `production` 환경 규칙과 배포 잠금을 거쳐 Lightsail에 반영한다. 같은 SHA의 CI와 Deploy AI 결과, 서버의 적용 SHA, TLS/readiness를 확인한다.
 
 수동 실행은 **Deploy AI → Run workflow → dev**를 사용한다. 검증 절차는 자동 배포와 같다. `initialize_ai`는 새 서버를 처음 준비할 때만 수동으로 선택한다. 기존 수신 DB가 유실된 상태에서는 초기화로 빈 파일을 만들지 않는다.

@@ -127,6 +127,7 @@ hanmaum-ai/
 ├── evals/                      # 합성 회귀·독립 평가 사례와 채점 기준
 ├── scripts/                    # 공통 fixture 무결성 검사·생성, 모델 평가 실행
 ├── tests/                      # API·계약·수신 기록·평가·배포 자동 테스트
+│   ├── support/                # 여러 테스트에서 사용하는 설정·요청·가짜 응답
 │   └── fixtures/               # v1·v2 합성 입력과 기대값
 │       └── v2/                 # BE와 공유하는 사례, 본문, revision·manifest
 ├── .env.example                # 로컬 설정 예시

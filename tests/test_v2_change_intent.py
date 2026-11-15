@@ -3,50 +3,12 @@
 import json
 
 import pytest
-from test_v2_holdout import handcrafted_response
 
 from app.v2.validation import parse_request, validate_response
 from evals.v2_cases import grade
 from evals.v2_change_intent import REVISION, cases
 from scripts.evaluate_v2 import digest
-
-
-def answer(case):
-    if case["caseId"].startswith("holdout-"):
-        return handcrafted_response(case)
-    candidates = case["request"]["candidates"]
-    if candidates:
-        item = candidates[0]
-        suggestion = {
-            "operation": "UPDATE",
-            "type": "SCHEDULE",
-            "targetItemId": item["itemId"],
-            "expectedVersion": item["version"],
-            "relationKind": "UNDETERMINED",
-            "reviewReasons": ["VALUE_UNCLEAR"],
-            "changes": {},
-            "basisReferences": [
-                {"itemId": item["itemId"], "basisIds": [item["basis"][0]["basisId"]]}
-            ],
-        }
-    else:
-        changes = {"sourceName": "가상센터"}
-        if case["caseId"] == "create-guidance-received-date":
-            changes["receivedDate"] = "2026-10-22"
-        suggestion = {
-            "operation": "CREATE",
-            "type": "GUIDANCE",
-            "targetItemId": None,
-            "expectedVersion": None,
-            "relationKind": "NEW",
-            "reviewReasons": [],
-            "changes": changes,
-            "basisReferences": [],
-        }
-    suggestion.update(
-        candidateItemIds=[], clearFields=[], title="합성 검토", evidence=case["request"]["content"]
-    )
-    return {"requestId": case["request"]["requestId"], "suggestions": [suggestion]}
+from tests.support.v2_answers import answer
 
 
 @pytest.mark.parametrize("case", cases(), ids=lambda c: c["caseId"])

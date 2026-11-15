@@ -38,7 +38,7 @@ v2의 stub과 OpenAI 제공자는 같은 중복 차단 경로를 사용한다. �
 진단은 고정 실패 분류만 로그와 프로세스별 메모리 카운터에 기록한다. 원문·제안·요청 ID·키·DB 경로·예외 원문은 기록하지 않는다.
 
 ```sh
-uv run --locked pytest tests/test_v2_receipts.py tests/test_v2_receipt_review.py tests/test_v2_http.py
+uv run --locked pytest tests/test_v2_receipts.py tests/test_v2_receipt_regressions.py tests/test_v2_http.py
 uv run --locked python scripts/fixture_manifest.py
 ```
 

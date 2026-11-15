@@ -44,6 +44,7 @@ async def evaluate(selected, config, database, repeats=1):
         receipts=ReceiptGate(store, RequestDigester(keys={"eval": key}, active_key_version="eval")),
         provider=provider,
         timeout_seconds=config.provider_timeout_seconds,
+        worker_timeout_seconds=config.worker_timeout_seconds,
     )
     rows = []
     try:
