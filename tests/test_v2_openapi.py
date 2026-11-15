@@ -4,11 +4,12 @@ import json
 
 import pytest
 from fastapi import FastAPI
-from test_v2_http import AUTH, Provider, build, client, raw, row_count
 
 from app.api import router as v1_router
 from app.v2.runtime import StubProvider
 from app.v2.validation import parse_request, validate_response
+from tests.support.v2_fixtures import raw
+from tests.support.v2_http import AUTH, Provider, build, client, row_count
 
 
 @pytest.mark.anyio

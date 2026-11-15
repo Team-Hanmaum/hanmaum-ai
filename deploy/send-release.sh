@@ -27,8 +27,8 @@ printf '%s\n' "$DEPLOY_SSH_KNOWN_HOSTS" > "$work/known_hosts"
 ssh-keygen -y -P '' -f "$work/key" > /dev/null
 ssh-keygen -F "$DEPLOY_HOST" -f "$work/known_hosts" > /dev/null
 mkdir "$work/payload"
-# No untracked files, developer .env, or repository credentials are uploaded.
-git archive "$RELEASE_SHA" deploy | tar -x -C "$work/payload"
+# Archive the selected commit so newly tracked deploy files ship with it.
+git archive "$RELEASE_SHA" -- deploy | tar -x -C "$work/payload"
 python3 deploy/release.py write "$work/payload"
 printf '%s' "$GH_TOKEN" > "$work/payload/registry-token"
 for attempt in {1..12}; do

@@ -8,9 +8,9 @@ from copy import deepcopy
 
 import httpx
 import pytest
-from test_v2_openai import Stream, envelope, response, settings
 
 from app.v2.schemas import AnalysisResponse
+from app.v2.services import AnalysisService
 from app.v2.validation import parse_request
 from evals.v2_cases import GRADER_VERSION, cases, expected, grade
 from scripts.evaluate_v2 import (
@@ -22,6 +22,7 @@ from scripts.evaluate_v2 import (
     reserve_report,
     summarize,
 )
+from tests.support.v2_openai import Stream, envelope, response, settings
 
 
 @pytest.mark.parametrize("case", cases(), ids=lambda case: case["caseId"])
@@ -101,6 +102,14 @@ def test_summary_does_not_count_failed_or_timed_out_calls_as_success():
 async def test_runner_executes_real_service_with_mock_transport(tmp_path, monkeypatch):
     from app.v2.openai_provider import OpenAIProvider
 
+    config = settings(tmp_path, worker_timeout_seconds=0.75)
+
+    def build_service(**options):
+        service = AnalysisService(**options)
+        assert service.worker_timeout_seconds == config.worker_timeout_seconds
+        return service
+
+    monkeypatch.setattr("scripts.evaluate_v2.AnalysisService", build_service)
     monkeypatch.setattr(
         "scripts.evaluate_v2.OpenAIProvider",
         lambda config: OpenAIProvider(
@@ -124,7 +133,7 @@ async def test_runner_executes_real_service_with_mock_transport(tmp_path, monkey
         ),
     )
     selected = [c for c in cases() if c["caseId"] == "no-care-information"]
-    rows, calls_count = await evaluate(selected, settings(tmp_path), tmp_path / "eval.sqlite3")
+    rows, calls_count = await evaluate(selected, config, tmp_path / "eval.sqlite3")
     assert calls_count == 1 and rows[0]["semanticPassed"]
 
 

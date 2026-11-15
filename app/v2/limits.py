@@ -34,10 +34,7 @@ def encode_json(value: object, maximum: int = RESPONSE_BYTES) -> bytes:
     for chunk in encoder.iterencode(value):
         if len(chunk) > maximum - len(result):
             raise ValueError("Encoded JSON exceeds byte limit")
-        encoded = chunk.encode("utf-8")
-        if len(encoded) > maximum - len(result):
-            raise ValueError("Encoded JSON exceeds byte limit")
-        result.extend(encoded)
+        result.extend(chunk.encode("ascii"))
     return bytes(result)
 
 

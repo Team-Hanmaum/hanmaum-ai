@@ -4,14 +4,13 @@ import json
 from copy import deepcopy
 
 import pytest
-from test_v2_change_intent import answer
-from test_v2_holdout import handcrafted_response
 
 from app.v2.schemas import CHANGE_FIELDS
 from app.v2.validation import parse_request, validate_response
 from evals.v2_cases import cases, grade
 from evals.v2_holdout import cases as holdout_cases
 from scripts.evaluate_v2 import dataset, digest, summarize
+from tests.support.v2_answers import answer, handcrafted_response
 
 
 @pytest.mark.parametrize("field,value", [("status", "COMPLETED"), ("description", "추가 변경")])

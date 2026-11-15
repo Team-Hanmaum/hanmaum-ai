@@ -122,7 +122,7 @@
 - 관련 변경만 스테이징하고 프로젝트의 Ruff 설정을 따른다.
 - 필요하면 `uv run --locked ruff format .`로 포맷한다. 린트 자동 수정이 필요하면 `uv run --locked ruff check --fix .`를 실행하고 변경 결과를 확인한다.
 - 기존 pre-commit은 Python·의존성 관련 변경에서 `uv run --locked ruff check .`와 `uv run --locked ruff format --check .`를 실행한다. 자동 수정은 하지 않으며, 필요한 pytest 검증은 별도로 수행한다.
-- 제목: `type: 작업 내용 (#이슈번호)`. 본문에 변경 이유·주요 구현·검증 결과를 작성한다.
+- 커밋 메시지는 `type: 핵심 변경 내용 (#이슈번호)` 형식으로 한 줄만 작성한다.
 - 검증을 통과시키기 위해 Git 훅을 우회하지 않는다.
 
 ## Pull Request

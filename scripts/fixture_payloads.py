@@ -52,7 +52,7 @@ def materialize(root, recipes, name, ancestors=()):
     if "baseRecipe" in recipe:
         data = json.loads(materialize(root, recipes, recipe["baseRecipe"], (*ancestors, name)))
     else:
-        data = deepcopy(read_json(bundle_path(root, recipe["baseFile"])))
+        data = read_json(bundle_path(root, recipe["baseFile"]))
     for operation in recipe.get("operations", []):
         kind = operation["op"]
         if kind == "fillStringTotal":
@@ -100,7 +100,8 @@ def measurements(raw, side):
     if side not in ("request", "response"):
         raise ValueError(f"Unsupported payload side: {side!r}")
     data = json.loads(raw)
-    result = {f"{side}.bytes": len(raw), f"{side}.stringUnits": string_units(data)}
+    total_units = string_units(data)
+    result = {f"{side}.bytes": len(raw), f"{side}.stringUnits": total_units}
     if side == "request":
         candidates = data["candidates"]
         basis = [b for candidate in candidates for b in candidate["basis"]]
@@ -141,7 +142,7 @@ def measurements(raw, side):
     return {
         "byteLength": len(raw),
         "sha256": hashlib.sha256(raw).hexdigest(),
-        "stringUnits": string_units(data),
+        "stringUnits": total_units,
         "measurements": result,
     }
 

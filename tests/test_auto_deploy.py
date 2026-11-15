@@ -254,6 +254,6 @@ def test_workflow_propagates_selected_sha_and_only_eligible_jobs_receive_write_p
     assert "needs.prepare.outputs.sha" in build["env"]["IMAGE_TAG"]
     assert "github.event_name == 'workflow_dispatch'" in deploy["env"]["INITIALIZE_AI"]
     upload = (ROOT / "deploy/send-release.sh").read_text()
-    assert 'git archive "$RELEASE_SHA" deploy' in upload
+    assert 'git archive "$RELEASE_SHA" -- deploy | tar -x -C "$work/payload"' in upload
     assert '"$(git rev-parse HEAD)" == "$RELEASE_SHA"' in upload
     assert "GITHUB_SHA" not in upload

@@ -26,76 +26,24 @@ from app.v2.comparison import (
     canonicalize_v2,
 )
 from app.v2.receipts import Receipt, ReceiptGate, SQLiteReceiptStore
-from app.v2.services import AnalysisService
 from app.v2.validation import parse_request
+from tests.support.v2_fixtures import ROOT, raw
+from tests.support.v2_receipts import (
+    KEY,
+    KEY_VERSION,
+    RULE,
+    FakeProvider,
+    analyze_raw,
+    digester,
+    rows,
+    service,
+    store_at,
+    submit,
+)
 
-ROOT = Path(__file__).parent / "fixtures/v2"
 CASES = json.loads((ROOT / "cases/receipts.json").read_bytes())
 DEFERRED_HTTP = {"B-uncomparable-record": "503 mapping covered in test_v2_http.py"}
 INTERNAL_CASES = [case for case in CASES if case["caseId"] not in DEFERRED_HTTP]
-KEY = b"synthetic-receipt-test-key-only-001"
-RULE = "fixture-rule-1"
-KEY_VERSION = "fixture-key-1"
-
-
-def raw(relative="payloads/requests/base.json"):
-    return (ROOT / relative).read_bytes()
-
-
-def digester(**overrides):
-    config = {
-        "keys": {KEY_VERSION: SecretBytes(KEY)},
-        "active_key_version": KEY_VERSION,
-        "active_rule_version": RULE,
-        "rules": {RULE: canonicalize_v2},
-    }
-    return RequestDigester(**(config | overrides))
-
-
-def store_at(path, *, initialize=False, lock_timeout_seconds=2):
-    store = SQLiteReceiptStore(path, lock_timeout_seconds=lock_timeout_seconds)
-    if initialize:
-        store.initialize()
-    return store
-
-
-def rows(path):
-    with closing(sqlite3.connect(path)) as connection:
-        return connection.execute("SELECT * FROM receipts").fetchall()
-
-
-class FakeProvider:
-    def __init__(self, config=None):
-        self.config = config or {"mode": "RETURN", "bodyFile": "payloads/responses/update.json"}
-        self.calls = 0
-
-    async def analyze(self, request):
-        self.calls += 1
-        if self.config["mode"] == "UNAVAILABLE":
-            raise RuntimeError("sensitive-provider-detail")
-        if self.config["mode"] == "TIMEOUT":
-            await asyncio.Event().wait()
-        return raw(self.config["bodyFile"])
-
-
-def service(store, provider, comparison=None, **kwargs):
-    return AnalysisService(
-        receipts=ReceiptGate(store, comparison or digester()), provider=provider, **kwargs
-    )
-
-
-async def submit(instance, provider, payload):
-    before = provider.calls
-    try:
-        result = await instance.analyze(payload)
-        outcome = {"httpStatus": 200, "body": result.model_dump(mode="json")}
-    except AnalysisFailure as exc:
-        assert exc.message.strip()
-        outcome = {"httpStatus": exc.status_code, "code": exc.code}
-    except ComparisonUnavailable as exc:
-        assert not hasattr(exc, "status_code") and not hasattr(exc, "code")
-        outcome = {"outcome": "BLOCKED"}
-    return outcome | {"providerCalls": provider.calls - before}
 
 
 def expected_result(expected):
@@ -232,7 +180,7 @@ async def test_uncomparable_internal_block_preserved_http_mapping_still_deferred
     changed = digester(keys={"new-key": SecretBytes(b"new-" + KEY)}, active_key_version="new-key")
     provider = FakeProvider()
     with pytest.raises(ComparisonUnavailable):
-        await service(store, provider, changed).analyze(raw())
+        await analyze_raw(service(store, provider, changed), raw())
     assert provider.calls == 0
     assert rows(store.path) == before
     # The new 503 fixture is deliberately not emulated here by translating exceptions.
@@ -346,7 +294,7 @@ async def test_provider_mutable_copy_does_not_change_validation_basis(tmp_path):
 
     store = store_at(tmp_path / "receipts.sqlite3", initialize=True)
     with pytest.raises(AnalysisFailure, match="INVALID_AI_RESPONSE"):
-        await service(store, MutatingProvider()).analyze(raw())
+        await analyze_raw(service(store, MutatingProvider()), raw())
     assert len(rows(store.path)) == 1
 
 
@@ -365,7 +313,7 @@ async def test_cancelled_provider_keeps_receipt_while_in_progress(tmp_path):
     store = store_at(tmp_path / "receipts.sqlite3", initialize=True)
     provider = WaitingProvider()
     instance = service(store, provider)
-    task = asyncio.create_task(instance.analyze(raw()))
+    task = asyncio.create_task(analyze_raw(instance, raw()))
     try:
         await asyncio.wait_for(started.wait(), 5)
         result = await submit(service(store_at(store.path), provider), provider, raw())
@@ -438,7 +386,7 @@ async def test_registered_data_contains_only_identity_metadata_and_digest(tmp_pa
     store = store_at(tmp_path / "receipts.sqlite3", initialize=True)
     request = parse_request(raw())
     provider = FakeProvider()
-    result = await service(store, provider).analyze(raw())
+    result = await analyze_raw(service(store, provider), raw())
     stored = rows(store.path)
     assert len(stored) == 1 and len(stored[0]) == 5
     assert stored[0][:4] == ("v2", str(request.request_id), RULE, KEY_VERSION)
@@ -582,7 +530,7 @@ async def test_cancelled_registration_worker_may_commit_but_never_call_provider(
 
     provider = FakeProvider()
     instance = service(PausingStore(path, lock_timeout_seconds=2), provider)
-    task = asyncio.create_task(instance.analyze(raw()))
+    task = asyncio.create_task(analyze_raw(instance, raw()))
     try:
         assert await asyncio.to_thread(entered.wait, 5)
         task.cancel()
@@ -623,7 +571,7 @@ async def test_provider_errors_cannot_supply_arbitrary_public_error_details(tmp_
 
     store = store_at(tmp_path / "receipts.sqlite3", initialize=True)
     with pytest.raises(AnalysisFailure) as caught:
-        await service(store, UnsafeProvider()).analyze(raw())
+        await analyze_raw(service(store, UnsafeProvider()), raw())
     assert caught.value.code == "AI_UNAVAILABLE" and caught.value.status_code == 502
     assert KEY.decode() not in str(caught.value) + caught.value.message + caplog.text
 
@@ -632,7 +580,7 @@ async def test_provider_errors_cannot_supply_arbitrary_public_error_details(tmp_
 async def test_disabled_provider_does_not_require_or_create_receipt_store(tmp_path):
     store = store_at(tmp_path / "missing.sqlite3")
     with pytest.raises(AnalysisFailure, match="AI_NOT_CONFIGURED"):
-        await service(store, None).analyze(raw())
+        await analyze_raw(service(store, None), raw())
     assert not store.path.exists()
 
 
@@ -715,6 +663,6 @@ async def test_failing_canonicalizer_blocks_without_exposing_input(tmp_path, cap
     provider = FakeProvider()
     instance = service(store, provider, digester(rules={RULE: broken_rule}))
     with pytest.raises(ComparisonUnavailable) as caught:
-        await instance.analyze(raw())
+        await analyze_raw(instance, raw())
     assert KEY.decode() not in str(caught.value) + caplog.text
     assert provider.calls == 0 and rows(store.path) == []

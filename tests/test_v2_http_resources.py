@@ -9,20 +9,7 @@ from uuid import UUID
 
 import pytest
 import uvicorn
-from pydantic import SecretBytes, ValidationError
-from test_v2_http import (
-    AUTH,
-    KEY,
-    Provider,
-    StubbornProvider,
-    assert_outcome,
-    build,
-    client,
-    generated,
-    headers,
-    raw,
-    row_count,
-)
+from pydantic import ValidationError
 
 from app.config import Settings
 from app.errors import AnalysisFailure
@@ -33,23 +20,20 @@ from app.v2.receipts import SQLiteReceiptStore
 from app.v2.resources import Capacity, Workers
 from app.v2.transport import V2Transport
 from app.v2.validation import parse_request, validate_response
-
-
-def scope(payload=None):
-    return {
-        "type": "http",
-        "asgi": {"version": "3.0"},
-        "http_version": "1.1",
-        "method": "POST",
-        "scheme": "http",
-        "path": "/v2/analyses",
-        "raw_path": b"/v2/analyses",
-        "query_string": b"",
-        "root_path": "",
-        "server": ("test", 80),
-        "client": ("test", 1),
-        "headers": [(k.lower().encode(), v.encode()) for k, v in headers(payload).items()],
-    }
+from tests.support.v2_fixtures import generated, raw
+from tests.support.v2_http import (
+    AUTH,
+    KEY,
+    Provider,
+    StubbornProvider,
+    assert_outcome,
+    build,
+    client,
+    enabled_settings,
+    headers,
+    row_count,
+    scope,
+)
 
 
 @pytest.mark.anyio
@@ -338,16 +322,6 @@ async def test_response_is_rechecked_after_uuid_normalization(tmp_path, caplog):
 def test_invalid_resource_or_enabled_configuration_is_rejected(values):
     with pytest.raises(ValidationError):
         V2Settings(_env_file=None, **values)
-
-
-def enabled_settings(path):
-    return V2Settings(
-        _env_file=None,
-        provider="stub",
-        receipt_db_path=path,
-        hmac_keys={"test": SecretBytes(KEY)},
-        active_hmac_key_version="test",
-    )
 
 
 @pytest.mark.anyio

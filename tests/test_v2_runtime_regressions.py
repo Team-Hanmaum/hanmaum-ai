@@ -7,8 +7,6 @@ from uuid import uuid4
 
 import pytest
 from pydantic import SecretBytes
-from test_v2_http import KEY, Provider, assert_outcome, build, client, headers, raw, row_count
-from test_v2_http_resources import enabled_settings, scope
 
 from app.config import Settings
 from app.main import create_app
@@ -17,6 +15,18 @@ from app.v2.diagnostics import FailureEvent, failure_counts
 from app.v2.resources import Capacity
 from app.v2.schemas import AnalysisResponse
 from app.v2.transport import V2Transport
+from tests.support.v2_fixtures import raw
+from tests.support.v2_http import (
+    KEY,
+    Provider,
+    assert_outcome,
+    build,
+    client,
+    enabled_settings,
+    headers,
+    row_count,
+    scope,
+)
 
 
 @pytest.mark.anyio
