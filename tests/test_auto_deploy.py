@@ -2,7 +2,6 @@
 
 import json
 import runpy
-import shlex
 from pathlib import Path
 from unittest.mock import Mock
 
@@ -255,16 +254,6 @@ def test_workflow_propagates_selected_sha_and_only_eligible_jobs_receive_write_p
     assert "needs.prepare.outputs.sha" in build["env"]["IMAGE_TAG"]
     assert "github.event_name == 'workflow_dispatch'" in deploy["env"]["INITIALIZE_AI"]
     upload = (ROOT / "deploy/send-release.sh").read_text()
-    assert 'git archive "$RELEASE_SHA" -- "${host_files[@]}"' in upload
-    assert set(shlex.split(upload.split("host_files=(\n", 1)[1].split("\n)", 1)[0])) == {
-        "deploy/activate.sh",
-        "deploy/compose.prod.yml",
-        "deploy/healthcheck.py",
-        "deploy/host.py",
-        "deploy/release.py",
-        "deploy/renew_tls.py",
-        "deploy/systemd/hanmaum-ai-tls-renew.service",
-        "deploy/systemd/hanmaum-ai-tls-renew.timer",
-    }
+    assert 'git archive "$RELEASE_SHA" -- deploy | tar -x -C "$work/payload"' in upload
     assert '"$(git rev-parse HEAD)" == "$RELEASE_SHA"' in upload
     assert "GITHUB_SHA" not in upload
